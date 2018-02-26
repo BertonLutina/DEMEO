@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">StuCre</string>
+    <string name="button">SIGN IN</string>
+    <string name="open_drawer">Open navigation drawer</string>
+    <string name="close_drawer">Close navigation drawer</string>
+    <string name="facebook_application_id" translatable="false">APP_ID</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fbAPP_ID</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_maps">Map</string>
+</resources>

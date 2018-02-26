@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+        <item android:id="@+id/course"
+            android:title="Course"
+            android:icon="@drawable/booksstack"></item>
+        <item android:id="@+id/em"
+            android:title="Electives Modules"
+            android:icon="@drawable/educationccertificate"></item>
+        <item android:id="@+id/electives"
+            android:title="Electives"
+            android:icon="@drawable/educationccertificate"></item>
+        <item android:id="@+id/options"
+            android:title="Options"
+            android:icon="@drawable/educationccertificate"></item>
+    </menu>

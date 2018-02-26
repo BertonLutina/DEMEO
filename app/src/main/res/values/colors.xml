@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2f393c</color>
+    <color name="colorPrimaryDark">#242b2d</color>
+    <color name="colorAccent">#2f393c</color>
+    <color name="colorCourse">#242b2d</color>
+    <color name="colorD">#242b2d</color>
+    <color name="colorEM">#242b2d</color>
+    <color name="colorE">#242b2d</color>
+    <color name="colorO">#242b2d</color>
+    <color name="colorA">#242b2d</color>
+    <color name="colorP">#242b2d</color>
+</resources>

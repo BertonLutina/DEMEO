@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.stucre.MainActivity">
+
+    <ImageView
+        android:id="@+id/loginBlur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="6dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/graduatedsmartphone"/>
+
+    <ImageView
+        android:id="@+id/loginOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/linearLayout"
+        android:layout_alignParentStart="true"
+        android:background="#f022292b"
+        android:scaleType="fitXY" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="106dp"
+        app:srcCompat="@drawable/loggo" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/relativeLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentStart="false"
+        android:orientation="vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp">
+
+
+
+        <Button
+            android:id="@+id/Signinbtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login with Google"
+            android:layout_marginBottom="10dp"
+            android:background="#96c71610"
+            android:textColor="#FFFF"
+            />
+
+        <Button
+            android:id="@+id/SigninFacebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="login with Facebook"
+            android:layout_marginBottom="10dp"
+            android:background="#963b5998"
+            android:textColor="#FFFF"/>
+
+        <Button
+            android:id="@+id/SigninEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="login with EMail"
+            android:background="#96ea9f0d"
+            android:textColor="#FFFF"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:id="@+id/linearLayout">
+
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="90dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/odiseewhite2" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/assokul" />
+    </LinearLayout>
+
+
+</RelativeLayout>
