@@ -57,7 +57,7 @@ public class duties extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
+                mViewPager.setCurrentItem(tab.getPosition(),true);
             }
 
             @Override

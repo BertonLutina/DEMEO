@@ -14,8 +14,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class DutiesFase1 extends android.support.v4.app.ListFragment {
@@ -24,33 +32,60 @@ public class DutiesFase1 extends android.support.v4.app.ListFragment {
 
   }
 
+  final ArrayList<String> mCoursenames = new ArrayList<String>();
+
   FirebaseDatabase database = FirebaseDatabase.getInstance();
-  DatabaseReference myRef = database.getReference("message");
+  DatabaseReference dutiesFase1 = database.getReference("Bedrijfskunde/TI/Duties/fase 1");
 
 
-
-
-  String [] menuItems = {"Basisbegrippen van recht","Inleiding tot het Europees en internationaal recht","Geschiedenis van het publiekrecht en de politiek","Economie","Ethische en rechtsfilosofische stromingen","Rechtsmethodiek","Mensenrechten",
-          "Strafrecht","Verbintenissenrecht","Sociale psychologie",
-          "Staatsrecht"};
 
   ArrayAdapter<String>adapter;
+
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, menuItems);
-    setListAdapter(adapter);
+
+   dutiesFase1.addValueEventListener(new ValueEventListener() {
+     @Override
+     public void onDataChange(DataSnapshot dataSnapshot) {
+       Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+
+       for (DataSnapshot child: children) {
+         Object value = child.child("COURSE").getValue(Object.class);
+         mCoursenames.add(value.toString());
+         adapter.notifyDataSetChanged();
+
+       }
+
+
+
+     }
+
+
+     @Override
+     public void onCancelled(DatabaseError databaseError) {
+
+     }
+   });
+
+    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_multichoice, mCoursenames);
+
+
+   if(adapter.isEmpty()){
+
+    setListAdapter(adapter);}
+
     return super.onCreateView(inflater, container, savedInstanceState);
+
   }
 
 
 
 
-    @Override
+  @Override
   public void onStart() {
     super.onStart();
-
     getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
   }
 }
