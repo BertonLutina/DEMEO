@@ -7,21 +7,24 @@ package app.stucre;
 public class Vak {
 
 
-    private int id;
+    private String id;
     private String course;
     private String credit;
 
-    public Vak(int id,String course, String credit) {
+    public Vak() {
+    }
+
+    public Vak(String id, String course, String credit) {
         this.id = id;
         this.course = course;
         this.credit = credit;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

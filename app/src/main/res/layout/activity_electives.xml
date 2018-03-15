@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:id="@+id/drawer"
+    android:id="@+id/drawerE"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_height="match_parent"
     tools:context="app.stucre.Courses">
@@ -52,12 +52,10 @@
     </android.support.design.widget.AppBarLayout>
 
     <ListView
-        android:id="@+id/android:list"
+        android:id="@+id/list_electives"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/appBarLayout"></ListView>
-
-
 
 </RelativeLayout>
 <android.support.design.widget.NavigationView

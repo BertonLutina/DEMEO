@@ -47,13 +47,13 @@ public class courseAdapter extends BaseAdapter {
 
         //Set text for Textview
         tvCourse.setText(Vakken.get(position).getCourse());
-        tvCredit.setText(Vakken.get(position).getCredit()+ " SP");
+        tvCredit.setText(Vakken.get(position).getCredit());
 
         v.setTag(Vakken.get(position).getId());
 
 
 
 
-        return null;
+        return v;
     }
 }

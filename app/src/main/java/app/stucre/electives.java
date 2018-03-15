@@ -22,7 +22,7 @@ public class electives extends AppCompatActivity {
         setContentView(R.layout.activity_electives);
 
         ElectivesFase3 electivesFase3 = new ElectivesFase3();
-        getSupportFragmentManager().beginTransaction().add(R.id.drawer,electivesFase3).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.drawerE,electivesFase3).commit();
 
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             Window window = this.getWindow();
@@ -34,11 +34,7 @@ public class electives extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarElectives);
         setSupportActionBar(toolbar);
 
-        dLayout = (DrawerLayout)findViewById(R.id.drawer);
-
-
-
-
+        dLayout = (DrawerLayout)findViewById(R.id.drawerE);
 
 
         dToggle = new ActionBarDrawerToggle(this,dLayout,R.string.open_drawer,R.string.close_drawer);

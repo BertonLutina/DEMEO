@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,14 +33,15 @@ public class DutiesFase1 extends android.support.v4.app.ListFragment {
 
   }
 
-  final ArrayList<String> mCoursenames = new ArrayList<String>();
+  private List<Vak> Vakken = new ArrayList<>();
+  private courseAdapter cA;
 
   FirebaseDatabase database = FirebaseDatabase.getInstance();
   DatabaseReference dutiesFase1 = database.getReference("Bedrijfskunde/TI/Duties/fase 1");
 
 
 
-  ArrayAdapter<String>adapter;
+
 
 
   @Override
@@ -52,9 +54,11 @@ public class DutiesFase1 extends android.support.v4.app.ListFragment {
        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
 
        for (DataSnapshot child: children) {
-         Object value = child.child("COURSE").getValue(Object.class);
-         mCoursenames.add(value.toString());
-         adapter.notifyDataSetChanged();
+         Object course_id = child.child("COURSE_ID").getValue(Object.class);
+         Object course = child.child("COURSE").getValue(Object.class);
+         Object credit = child.child("CREDITS").getValue(Object.class);
+         Vakken.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp."));
+         cA.notifyDataSetChanged();
 
        }
 
@@ -69,12 +73,8 @@ public class DutiesFase1 extends android.support.v4.app.ListFragment {
      }
    });
 
-    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_multichoice, mCoursenames);
-
-
-   if(adapter.isEmpty()){
-
-    setListAdapter(adapter);}
+    cA  = new courseAdapter(getContext(),Vakken);
+    setListAdapter(cA);
 
     return super.onCreateView(inflater, container, savedInstanceState);
 

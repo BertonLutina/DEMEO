@@ -1,5 +1,7 @@
 package app.stucre;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +21,9 @@ public class options extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
 
+        OptionsIntership optionsIntership = new OptionsIntership();
+        getSupportFragmentManager().beginTransaction().add(R.id.drawerO,optionsIntership).commit();
+
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -29,10 +34,7 @@ public class options extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarOptions);
         setSupportActionBar(toolbar);
 
-        dLayout = (DrawerLayout)findViewById(R.id.drawer);
-
-
-
+        dLayout = (DrawerLayout)findViewById(R.id.drawerO);
 
         dToggle = new ActionBarDrawerToggle(this,dLayout,R.string.open_drawer,R.string.close_drawer);
 

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark">
+    android:background="#fff">
 
     <TextView
         android:id="@+id/text1"
@@ -10,7 +10,10 @@
         android:layout_height="wrap_content"
         android:text="heeee"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="24sp"
+        android:textSize="18sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
         android:textStyle="bold"
         />
 
@@ -19,7 +22,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="berre"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:paddingLeft="10dp"
+        android:paddingBottom="5dp"
+        android:textColor="#d26428"
+        android:layout_marginBottom="5dp"
+        android:background="#19242b2d"/>
 
 </LinearLayout>
