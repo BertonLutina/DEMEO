@@ -1,5 +1,7 @@
 package app.stucre;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +21,9 @@ public class electives extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_electives);
 
+        ElectivesFase3 electivesFase3 = new ElectivesFase3();
+        getSupportFragmentManager().beginTransaction().add(R.id.drawer,electivesFase3).commit();
+
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -34,6 +39,8 @@ public class electives extends AppCompatActivity {
 
 
 
+
+
         dToggle = new ActionBarDrawerToggle(this,dLayout,R.string.open_drawer,R.string.close_drawer);
 
         dLayout.addDrawerListener(dToggle);
@@ -42,6 +49,8 @@ public class electives extends AppCompatActivity {
         // These lines are needed to display the top-left hamburger button
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
     }
 
     @Override

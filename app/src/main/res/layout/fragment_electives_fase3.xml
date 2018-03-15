@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     tools:context="app.stucre.ElectivesFase3"
     android:background="@color/colorPrimaryDark"
+    android:id="@+id/fragmentElectives"
     >
 
     <!-- TODO: Update blank fragment layout -->
