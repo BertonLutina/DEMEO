@@ -34,6 +34,8 @@ public class options extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarOptions);
         setSupportActionBar(toolbar);
 
+
+
         dLayout = (DrawerLayout)findViewById(R.id.drawerO);
 
         dToggle = new ActionBarDrawerToggle(this,dLayout,R.string.open_drawer,R.string.close_drawer);

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="app.stucre.Course">
+    tools:context="app.stucre.Courses">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -47,57 +47,68 @@
                 android:scaleType="fitXY" />
 
 
-
-
             <Button
                 android:id="@+id/dButton"
-                android:layout_width="170dp"
-                android:layout_height="100dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_above="@+id/eButton"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="28dp"
-                android:layout_marginStart="24dp"
+                android:layout_marginBottom="32dp"
+                android:layout_marginStart="62dp"
                 android:background="#b8d26428"
-                android:text="D"
+                android:text="Duties"
                 android:textColor="@android:color/white"
-                android:textSize="18sp"/>
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/emButton"
-                android:layout_width="140dp"
-                android:layout_height="186dp"
-                android:layout_alignParentEnd="true"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_alignTop="@+id/dButton"
-                android:layout_marginEnd="13dp"
+                android:layout_marginStart="49dp"
+                android:layout_toEndOf="@+id/dButton"
                 android:background="#b8455458"
-                android:text="EM"
+                android:paddingLeft="2dp"
+                android:text="Electives Modules"
                 android:textColor="@android:color/white"
-                android:textSize="18sp"/>
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/eButton"
-                android:layout_width="140dp"
-                android:layout_height="186dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_alignBottom="@+id/loginBlur"
                 android:layout_alignStart="@+id/dButton"
-                android:layout_marginBottom="135dp"
+                android:layout_marginBottom="184dp"
                 android:background="#b8455458"
                 android:elevation="2dp"
-                android:text="E"
+                android:text="Electives"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/oButton"
-                android:layout_width="170dp"
-                android:layout_height="100dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_alignBottom="@+id/eButton"
                 android:layout_alignEnd="@+id/emButton"
                 android:background="#b8d26428"
-                android:text="O"
+                android:text="Options"
                 android:textColor="@android:color/white"
-                android:textSize="18sp"
+                android:textSize="13sp"
                 />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_above="@+id/dButton"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="27dp"
+                android:background="#812f393c"
+                android:gravity="center"
+                android:text="Select your course"
+                android:textColor="#d26428"
+                android:textSize="18sp" />
 
         </RelativeLayout>
 
@@ -113,17 +124,6 @@
             app:titleTextColor="#ffffff">
 
         </android.support.v7.widget.Toolbar>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/toolbar2"
-            android:background="#812f393c"
-            android:gravity="center"
-            android:text="Select your course"
-            android:textColor="#d26428"
-            android:textSize="18sp" />
 
     </RelativeLayout>
 

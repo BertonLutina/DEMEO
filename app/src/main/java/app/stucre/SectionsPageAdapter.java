@@ -17,15 +17,11 @@ public class SectionsPageAdapter extends FragmentPagerAdapter {
 
     final int pageCount;
 
-
-
     public SectionsPageAdapter(FragmentManager fm, int pageCounter) {
 
         super(fm);
         this.pageCount = pageCounter;
     }
-
-
 
     @Override
     public Fragment getItem(int position) {

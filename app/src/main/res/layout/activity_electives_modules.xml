@@ -7,7 +7,7 @@
     android:id="@+id/drawer"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_height="match_parent"
-    tools:context="app.stucre.Course">
+    tools:context="app.stucre.Courses">
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -16,22 +16,12 @@
     android:layout_height="match_parent"
     tools:context="app.stucre.electivesModules">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="81dp"
-        android:text="Electives Modules"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="17dp" />
-
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:id="@+id/appBarLayout">
+
     <android.support.v7.widget.Toolbar
         app:title="Electives Course"
         app:titleTextColor="#ffffff"
@@ -41,29 +31,27 @@
         android:minHeight="?attr/actionBarSize"
         android:textAlignment="center"
         android:id="@+id/toolbarEM"
-        ></android.support.v7.widget.Toolbar>
+        >
+
+    </android.support.v7.widget.Toolbar>
+
     <android.support.design.widget.TabLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#d26428">
-
-        <android.support.design.widget.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Option A"
-            android:id="@+id/OptionA"/>
+        android:background="#d26428"
+        android:id="@+id/tabselectivesmodules"/>
 
 
-
-        <android.support.design.widget.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Option B"
-            android:id="@+id/OptoinB"/>
-    </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/appBarLayout" />
 </RelativeLayout>
+
 <android.support.design.widget.NavigationView
 android:layout_width="match_parent"
 android:layout_height="match_parent"
