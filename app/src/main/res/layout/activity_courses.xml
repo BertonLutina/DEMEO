@@ -31,11 +31,10 @@
                 android:id="@+id/loginBlur"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="6dp"
+                android:layout_centerVertical="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/graduatedsmartphone"/>
+                android:src="@drawable/graduatedsmartphone" />
 
             <ImageView
                 android:id="@+id/loginOverlay"
@@ -43,7 +42,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:background="#f022292b"
+                android:background="#8822292b"
                 android:scaleType="fitXY" />
 
 
@@ -55,7 +54,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="32dp"
                 android:layout_marginStart="62dp"
-                android:background="#b8d26428"
+                android:background="#e3d26428"
                 android:text="Duties"
                 android:textColor="@android:color/white"
                 android:textSize="13sp" />
@@ -67,7 +66,7 @@
                 android:layout_alignTop="@+id/dButton"
                 android:layout_marginStart="49dp"
                 android:layout_toEndOf="@+id/dButton"
-                android:background="#b8455458"
+                android:background="#ed455458"
                 android:paddingLeft="2dp"
                 android:text="Electives Modules"
                 android:textColor="@android:color/white"
@@ -79,8 +78,8 @@
                 android:layout_height="120dp"
                 android:layout_alignBottom="@+id/loginBlur"
                 android:layout_alignStart="@+id/dButton"
-                android:layout_marginBottom="184dp"
-                android:background="#b8455458"
+                android:layout_marginBottom="183dp"
+                android:background="#ef455458"
                 android:elevation="2dp"
                 android:text="Electives"
                 android:textColor="@android:color/white"
@@ -92,23 +91,13 @@
                 android:layout_height="120dp"
                 android:layout_alignBottom="@+id/eButton"
                 android:layout_alignEnd="@+id/emButton"
-                android:background="#b8d26428"
+                android:background="#f0d26428"
                 android:text="Options"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
                 />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_above="@+id/dButton"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="27dp"
-                android:background="#812f393c"
-                android:gravity="center"
-                android:text="Select your course"
-                android:textColor="#d26428"
-                android:textSize="18sp" />
+
 
         </RelativeLayout>
 
@@ -117,10 +106,9 @@
             android:id="@+id/toolbar2"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#2f393c"
+            android:background="#c12f393c"
             android:minHeight="?attr/actionBarSize"
-            android:textAlignment="center"
-            app:title="Course"
+            app:title="Select your course"
             app:titleTextColor="#ffffff">
 
         </android.support.v7.widget.Toolbar>
