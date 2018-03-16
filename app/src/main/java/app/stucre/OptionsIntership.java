@@ -55,7 +55,7 @@ public class OptionsIntership extends Fragment {
                                 Object course_id = kid.child("COURSE_ID").getValue(Object.class);
                                 Object course = kid.child("COURSE").getValue(Object.class);
                                 Object credit = kid.child("CREDITS").getValue(Object.class);
-                                    Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination :out of Europe"));
+                                    Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: out of Europe"));
                                 cA.notifyDataSetChanged();
 
 
@@ -68,7 +68,7 @@ public class OptionsIntership extends Fragment {
                                 Object course_id = kid.child("COURSE_ID").getValue(Object.class);
                                 Object course = kid.child("COURSE").getValue(Object.class);
                                 Object credit = kid.child("CREDITS").getValue(Object.class);
-                                Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination : in or out of Europe"));
+                                Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: in or out of Europe"));
                                 cA.notifyDataSetChanged();
 
 
