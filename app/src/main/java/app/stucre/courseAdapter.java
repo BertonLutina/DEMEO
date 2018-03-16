@@ -44,10 +44,12 @@ public class courseAdapter extends BaseAdapter {
         View v = View.inflate(mContext, R.layout.list_item,null);
         TextView tvCourse = (TextView)v.findViewById(R.id.text1);
         TextView tvCredit = (TextView)v.findViewById(R.id.text2);
+        TextView tvId = (TextView) v.findViewById(R.id.text3);
 
         //Set text for Textview
         tvCourse.setText(Vakken.get(position).getCourse());
         tvCredit.setText(Vakken.get(position).getCredit());
+        tvId.setText(Vakken.get(position).getId());
 
         v.setTag(Vakken.get(position).getId());
 
