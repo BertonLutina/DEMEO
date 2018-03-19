@@ -32,6 +32,7 @@
             app:title="Duties"
             app:titleTextColor="#ffffff">
 
+
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
@@ -43,12 +44,42 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
+
+    <SearchView
+        android:id="@+id/duties_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/appBarLayout"
+        android:imeOptions="normal"
+        android:inputType="text"
+        android:queryHint="heee"
+
+        />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/appBarLayout" />
+        android:layout_height="530dp"
+        android:layout_below="@+id/duties_search"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/countCreditOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="bottom"
+        android:autoSizeMaxTextSize="@dimen/activity_horizontal_margin"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="bottom"
+        android:padding="13dp"
+        android:text="0"
+        android:textAlignment="center"
+        android:textColor="#d26428"
+        android:textSize="30dp" />
 
 </RelativeLayout>
 

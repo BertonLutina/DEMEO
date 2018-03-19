@@ -6,10 +6,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.app.ListFragment;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,6 +37,8 @@ public class DutiesFase1 extends android.support.v4.app.ListFragment {
 
   private List<Vak> Vakken = new ArrayList<>();
   private courseAdapter cA;
+  SearchView searchView;
+
 
   FirebaseDatabase database = FirebaseDatabase.getInstance();
   DatabaseReference dutiesFase1 = database.getReference("Bedrijfskunde/TI/Duties/fase 1");
@@ -47,6 +51,8 @@ public class DutiesFase1 extends android.support.v4.app.ListFragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+    View v = super.onCreateView(inflater, container, savedInstanceState);
+    //searchView = (SearchView) searchView.findViewById(R.id.duties_search);
 
    dutiesFase1.addValueEventListener(new ValueEventListener() {
      @Override
@@ -75,8 +81,31 @@ public class DutiesFase1 extends android.support.v4.app.ListFragment {
 
     cA  = new courseAdapter(getContext(),Vakken);
     setListAdapter(cA);
+/*
+    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      @Override
+      public boolean onQueryTextSubmit(String query) {
+        return false;
+      }
 
-    return super.onCreateView(inflater, container, savedInstanceState);
+      @Override
+      public boolean onQueryTextChange(String newText) {
+
+
+        return false;
+      }
+    });
+
+    getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+      }
+    });*/
+
+    return v;
+
+
 
   }
 

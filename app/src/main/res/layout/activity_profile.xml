@@ -7,7 +7,7 @@
     android:id="@+id/drawer"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_height="match_parent"
-    tools:context="app.stucre.Course"
+    tools:context="app.stucre.Courses"
     android:background="@color/colorPrimary">
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -50,8 +50,9 @@
             android:id="@+id/loggo"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_marginTop="30dp"
             android:src="@drawable/loggo" />
 
     </RelativeLayout>
@@ -83,16 +84,6 @@
         android:layout_marginBottom="24dp"
         android:orientation="vertical"
         android:id="@+id/relativeLayout2">
-
-        <ImageView
-            android:id="@+id/LogoOdisee"
-            android:layout_width="90dp"
-            android:layout_height="20dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/odiseewhite2"
-            />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/floatingActionButton3"

@@ -27,6 +27,8 @@ public class ElectivesModulesOptionB extends ListFragment{
 
     }
 
+    final static int maxCredit =  60;
+    private int countCredit = 0 ;
     private List<Vak> Vakken = new ArrayList<>();
     private courseAdapter cA;
 
