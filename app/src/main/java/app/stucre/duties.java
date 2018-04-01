@@ -19,6 +19,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.support.v4.app.Fragment;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.ToxicBakery.viewpager.transforms.DepthPageTransformer;
+import com.ToxicBakery.viewpager.transforms.FlipVerticalTransformer;
+import com.ToxicBakery.viewpager.transforms.ForegroundToBackgroundTransformer;
 
 public class duties extends AppCompatActivity {
 
@@ -27,12 +37,14 @@ public class duties extends AppCompatActivity {
     private SectionsPageAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
+
+
     private static final String TAG = "duties";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_duties);
-
 
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             Window window = this.getWindow();
@@ -52,6 +64,7 @@ public class duties extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         final SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         mViewPager.setAdapter(adapter);
+        mViewPager.setPageTransformer(true,new DepthPageTransformer());
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -93,6 +106,8 @@ public class duties extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        menu.clear();
         getMenuInflater().inflate(R.menu.nav_d_bar,menu);
         return true;
     }

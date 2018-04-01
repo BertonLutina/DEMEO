@@ -67,6 +67,7 @@
         android:id="@+id/list_electives"
         android:layout_width="match_parent"
         android:layout_height="530dp"
+        android:layout_above="@id/countCreditOptions"
         android:layout_below="@+id/electives_search"
         android:layout_alignParentStart="true"></ListView>
 

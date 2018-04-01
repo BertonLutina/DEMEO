@@ -17,5 +17,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="yourStyle" parent="Base.Theme.AppCompat">
+        <item name="colorAccent">#86401a</item> <!-- for uncheck state -->
+        <item name="android:textColorSecondary">@color/colorCourse</item> <!-- for check state -->
+    </style>
+
 
 </resources>

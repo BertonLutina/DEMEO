@@ -1,6 +1,7 @@
 package app.stucre;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,15 +33,16 @@ import com.jgabrielfreitas.core.BlurImageView;
 
 import org.w3c.dom.Text;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     //BlurImageView loginBlur;
     Button signInButton;
+    Button signInButtonFacebook;
+    private static int SPLASH_DELAY = 3000;
+
     //TextView statusTextView;
     GoogleApiClient mGoogleApiClient;
 
-    private static final String TAG = "SignInActivity";
-    private static final int RC_SIGN_IN = 9001;
 
 
     @Override
@@ -48,69 +50,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent loadIntro = new Intent(MainActivity.this, Intro.class);
+                startActivity(loadIntro);
+                finish();
+            }
+        },SPLASH_DELAY);
+
         //Blur BackgroundImageView
         //loginBlur = (BlurImageView) findViewById(R.id.loginBlur);
         //loginBlur.setBlur(5);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
 
-        signInButton = (Button) findViewById(R.id.Signinbtn);
-        signInButton.setOnClickListener(this);
 
     }
 
 
-    @Override
-    public void onClick(View v) {
 
-        switch (v.getId()){
-
-            case R.id.Signinbtn :
-                signIn();
-                break;
-        }
-
-    }
-
-    private void signIn() {
-        Intent signItent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signItent, RC_SIGN_IN);
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == RC_SIGN_IN){
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG,"handleSignInREsult:" + result.isSuccess());
-
-        if(result.isSuccess()){
-            GoogleSignInAccount acct = result.getSignInAccount();
-           // statusTextView.setText("Hello:" + acct.getDisplayName());
-            Intent main_to_course = new Intent(this, Courses.class);
-            startActivity(main_to_course);
-        }else {
-
-        }
-    }
-
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 
 }

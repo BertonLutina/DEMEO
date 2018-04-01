@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ElectivesModulesOptionA extends ListFragment {
+public class ElectivesModulesOptionA extends ListFragment  {
 
 
     private List<Vak> Vakken = new ArrayList<>();
@@ -56,7 +56,8 @@ public class ElectivesModulesOptionA extends ListFragment {
                             Object course_id = kid.child("COURSE_ID").getValue(Object.class);
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
-                            Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2"));
+                            Object creditPunten = kid.child("CREDITS").getValue(Object.class);
+                            Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2",creditPunten.toString()));
                             cA.notifyDataSetChanged();
 
                         }
@@ -69,7 +70,8 @@ public class ElectivesModulesOptionA extends ListFragment {
                             Object course_id = kid.child("COURSE_ID").getValue(Object.class);
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
-                            Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3"));
+                            Object creditPunten = kid.child("CREDITS").getValue(Object.class);
+                            Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3",creditPunten.toString()));
                             cA.notifyDataSetChanged();
 
                         }
@@ -86,7 +88,7 @@ public class ElectivesModulesOptionA extends ListFragment {
             }
         });
 
-        cA = new courseAdapter(getContext(),Vakken);
+        cA = new courseAdapter(getActivity(),Vakken);
         setListAdapter(cA);
 
         // Inflate the layout for this fragment

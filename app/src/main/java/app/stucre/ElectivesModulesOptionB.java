@@ -59,7 +59,8 @@ public class ElectivesModulesOptionB extends ListFragment{
                             Object course_id = kid.child("COURSE_ID").getValue(Object.class);
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
-                            Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2"));
+                            Object creditPunten = kid.child("CREDITS").getValue(Object.class);
+                            Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2",creditPunten.toString()));
                             cA.notifyDataSetChanged();
 
                         }
@@ -72,7 +73,8 @@ public class ElectivesModulesOptionB extends ListFragment{
                             Object course_id = kid.child("COURSE_ID").getValue(Object.class);
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
-                            Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3"));
+                            Object creditPunten = kid.child("CREDITS").getValue(Object.class);
+                            Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3",creditPunten.toString()));
                             cA.notifyDataSetChanged();
 
                         }

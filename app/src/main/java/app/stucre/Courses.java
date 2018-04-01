@@ -54,6 +54,7 @@ public class Courses extends AppCompatActivity {
         Button oButton = findViewById(R.id.oButton);
 
 
+
         // button click to navigate to the course page
         dButton.setOnClickListener(new View.OnClickListener() {
             @Override

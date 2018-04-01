@@ -55,7 +55,8 @@ public class OptionsIntership extends Fragment {
                                 Object course_id = kid.child("COURSE_ID").getValue(Object.class);
                                 Object course = kid.child("COURSE").getValue(Object.class);
                                 Object credit = kid.child("CREDITS").getValue(Object.class);
-                                    Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: out of Europe"));
+                                Object creditPunten = kid.child("CREDITS").getValue(Object.class);
+                                    Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: out of Europe",creditPunten.toString()));
                                 cA.notifyDataSetChanged();
 
 
@@ -68,7 +69,8 @@ public class OptionsIntership extends Fragment {
                                 Object course_id = kid.child("COURSE_ID").getValue(Object.class);
                                 Object course = kid.child("COURSE").getValue(Object.class);
                                 Object credit = kid.child("CREDITS").getValue(Object.class);
-                                Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: in or out of Europe"));
+                                Object creditPunten = kid.child("CREDITS").getValue(Object.class);
+                                Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: in or out of Europe",creditPunten.toString()));
                                 cA.notifyDataSetChanged();
 
 
@@ -79,7 +81,8 @@ public class OptionsIntership extends Fragment {
                         Object course_id = child.child("COURSE_ID").getValue(Object.class);
                         Object course = child.child("COURSE").getValue(Object.class);
                         Object credit = child.child("CREDITS").getValue(Object.class);
-                        Vakken.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp."));
+                        Object creditPunten = child.child("CREDITS").getValue(Object.class);
+                        Vakken.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
                         cA.notifyDataSetChanged();
                     }
 

@@ -27,9 +27,11 @@ public class DutiesFase3 extends ListFragment {
 
     private List<Vak> Vakken = new ArrayList<>();
     private courseAdapter cA;
+    private int count = 0;
+
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference dutiesFase3 = database.getReference("Bedrijfskunde/TI/Duties/fase 3");
-    ArrayAdapter<String> adapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,7 +46,8 @@ public class DutiesFase3 extends ListFragment {
                         Object course_id = child.child("COURSE_ID").getValue(Object.class);
                         Object course = child.child("COURSE").getValue(Object.class);
                         Object credit = child.child("CREDITS").getValue(Object.class);
-                        Vakken.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp."));
+                        Object creditPunten = child.child("CREDITS").getValue(Object.class);
+                        Vakken.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
                         cA.notifyDataSetChanged();
 
 
@@ -57,7 +60,7 @@ public class DutiesFase3 extends ListFragment {
             }
         });
 
-        cA  = new courseAdapter(getContext(),Vakken);
+        cA  = new courseAdapter(getActivity(),Vakken);
         setListAdapter(cA);
         return super.onCreateView(inflater, container, savedInstanceState);
     }

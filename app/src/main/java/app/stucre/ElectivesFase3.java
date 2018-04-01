@@ -62,7 +62,8 @@ public class ElectivesFase3 extends Fragment {
                     Object course_id = child.child("COURSE_ID").getValue(Object.class);
                     Object course = child.child("COURSE").getValue(Object.class);
                     Object credit = child.child("CREDITS").getValue(Object.class);
-                    Vakken.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp."));
+                    Object creditPunten = (Integer)child.child("CREDITS").getValue(Object.class);
+                    Vakken.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
                     cA.notifyDataSetChanged();
 
 

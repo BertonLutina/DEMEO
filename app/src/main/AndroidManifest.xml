@@ -33,7 +33,6 @@
         <activity android:name=".AccountActivity" />
         <activity android:name=".forgottenPassword" />
 
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -65,7 +64,8 @@
                 <data android:scheme="@string/facebook_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".Courses"></activity>
+        <activity android:name=".Courses" />
+        <activity android:name=".Intro"></activity>
     </application>
 
 </manifest>
