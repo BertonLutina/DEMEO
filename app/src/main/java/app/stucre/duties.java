@@ -1,7 +1,9 @@
 package app.stucre;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
@@ -33,6 +35,7 @@ import com.ToxicBakery.viewpager.transforms.ForegroundToBackgroundTransformer;
 public class duties extends AppCompatActivity {
 
     private DrawerLayout dLayout;
+    private NavigationView nav_duties;
     private ActionBarDrawerToggle dToggle;
     private SectionsPageAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -84,7 +87,9 @@ public class duties extends AppCompatActivity {
             }
         });
 
+        CheckBox checkBox = (CheckBox)findViewById(R.id.checkbox1);
         dLayout = (DrawerLayout)findViewById(R.id.drawer);
+
 
 
         dToggle = new ActionBarDrawerToggle(this,dLayout,R.string.open_drawer,R.string.close_drawer);
@@ -97,6 +102,39 @@ public class duties extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        nav_duties = (NavigationView) findViewById(R.id.nav_duties);
+
+        nav_duties.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                int id = item.getItemId();
+
+                switch (id) {
+                    case R.id.course:
+                        Intent course = new Intent(duties.this, Courses.class);
+                        startActivity(course);
+                        return false;
+                    case R.id.em:
+                        Intent em = new Intent(duties.this, electivesModules.class);
+                        startActivity(em);
+                        return false;
+                    case R.id.electives:
+                        Intent electives = new Intent(duties.this, electives.class);
+                        startActivity(electives);
+                        return false;
+                    case R.id.options:
+                        Intent options = new Intent(duties.this, options.class);
+                        startActivity(options);
+                        return false;
+
+                }
+
+
+                    return false;
+            }
+        });
+
 
 
 
@@ -107,7 +145,7 @@ public class duties extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        menu.clear();
+        //menu.clear();
         getMenuInflater().inflate(R.menu.nav_d_bar,menu);
         return true;
     }
@@ -119,8 +157,34 @@ public class duties extends AppCompatActivity {
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.course:
+                Intent course = new Intent(duties.this,Courses.class );
+                startActivity(course);
+                return false;
+            case R.id.em:
+                Intent em = new Intent(duties.this,electivesModules.class );
+                startActivity(em);
+                return false;
+            case R.id.electives:
+                Intent electives = new Intent(duties.this,electives.class );
+                startActivity(electives);
+                return false;
+            case R.id.options:
+                Intent options = new Intent(duties.this,options.class );
+                startActivity(options);
+                return false;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+
     }
+
+
 
 
 

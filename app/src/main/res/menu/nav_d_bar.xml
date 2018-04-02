@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view"
+    tools:context='.duties'>
+    <group android:checkableBehavior="single">
         <item android:id="@+id/course"
             android:title="Course"
             android:icon="@drawable/booksstack"></item>
+    </group>
+    <group android:checkableBehavior="single">
+        <item android:title="Navigate through the courses">
+        <menu>
         <item android:id="@+id/em"
             android:title="Electives Modules"
             android:icon="@drawable/educationccertificate"></item>
@@ -14,4 +21,7 @@
         <item android:id="@+id/options"
             android:title="Options"
             android:icon="@drawable/educationccertificate"></item>
+        </menu>
+        </item>
+    </group>
     </menu>

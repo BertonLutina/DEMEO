@@ -1,7 +1,5 @@
 package app.stucre;
 
-import android.widget.CheckBox;
-
 /**
  * Created by TI_Laptop-008 on 15/03/2018.
  */

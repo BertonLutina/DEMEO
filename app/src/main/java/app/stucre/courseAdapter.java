@@ -1,33 +1,24 @@
 package app.stucre;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
-import android.test.ApplicationTestCase;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ExpandableListAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.appevents.internal.Constants;
+import com.todddavies.components.progressbar.ProgressWheel;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +38,9 @@ public class courseAdapter extends BaseAdapter implements ListAdapter,Filterable
     LayoutInflater inflater;
     ViewHolder holder;
     int count = 0;
+    private boolean IsChecked = false;
+    private ProgressWheel pwone;
+    private ProgressCircle pwcircle;
 
 
 
@@ -104,7 +98,6 @@ public class courseAdapter extends BaseAdapter implements ListAdapter,Filterable
             holder.checkBoxList = (CheckBox) v.findViewById(R.id.checkbox1);
             holder.radioGroup = (RadioGroup)v.findViewById(R.id.radioGroup1);
 
-
             v.setTag(holder);
         }else
 
@@ -114,25 +107,14 @@ public class courseAdapter extends BaseAdapter implements ListAdapter,Filterable
             holder.tvCourse.setText(vakken.getCourse());
             holder.tvCredit.setText(vakken.getCredit());
             holder.tvId.setText(vakken.getId());
+            holder.checkBoxList.setTag(position);
 
 
-           /* if(holder.rSee.isChecked()){
-
-                Toast.makeText(mContext,"See",Toast.LENGTH_SHORT).show();
-
-            }else if (holder.rSelect.isChecked()){
-                Toast.makeText(mContext,"Select",Toast.LENGTH_SHORT).show();
-            }*/
-
-            if(vakken.isChecked()){
+        boolean isChecked = false;
+        if(vakken.isChecked()){
                 holder.checkBoxList.setChecked(true);
-
-
-
             }else{
                 holder.checkBoxList.setChecked(false);
-
-
             }
 
             holder.checkBoxList.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -147,6 +129,10 @@ public class courseAdapter extends BaseAdapter implements ListAdapter,Filterable
                     TextView tId = (TextView) vCheck.findViewById(R.id.text3);
                     LinearLayout Las = (LinearLayout) vCheck.findViewById(R.id.linearLayout1);
                     ListView listView = (ListView) vCheck.findViewById(R.id.dutiesfase1);
+                    pwone = (ProgressWheel) vCheck.findViewById(R.id.progressBar2);
+                    //pwcircle = (ProgressCircle) vCheck.findViewById(R.id.progressBar2);
+
+
 
                     ToevoegenVakken = new ArrayList<>();
                     //View itemVak = (View) buttonView.findViewById(R.id.countCreditOptions).getParent();
@@ -157,8 +143,22 @@ public class courseAdapter extends BaseAdapter implements ListAdapter,Filterable
                         String punten = Integer.toString(count);
                         setPoint.setText(punten+ "/60");
                         Toast.makeText(mContext, "Credit new: " + count , Toast.LENGTH_SHORT).show();
+                        //pwone.incrementProgress(count);
+                        if (pwone.getProgress() == 60){
+                            pwone.setRimColor(Color.WHITE);
+                            pwone.setBarColor(Color.WHITE);
+                            pwone.setText("60");
+                            pwone.setTextColor(Color.YELLOW);
+                            Toast.makeText(mContext, "You have Reached the 60 credit " , Toast.LENGTH_SHORT).show();
+                        }{
+                        pwone.setProgress(count);}
+
+                        //pwcircle.incrementProgress(count);
+
+                        Las.setBackgroundColor(Color.rgb(34,41,43));
+                        tCourse.setTextColor(Color.WHITE);
                         tCredits.setTextColor(Color.WHITE);
-                        tId.setTextColor(Color.rgb(0, 128, 0));
+                        tId.setTextColor(Color.WHITE);
 
 
 
@@ -169,6 +169,10 @@ public class courseAdapter extends BaseAdapter implements ListAdapter,Filterable
                         count -= Integer.parseInt(vakken.getCreditPunten().toString());
                         String punten = Integer.toString(count);
                         setPoint.setText(punten + "/60");
+                        //pwone.incrementProgress(count);
+
+                        pwone.setProgress(count);
+                        //pwcircle.incrementProgress(count);
                         Toast.makeText(mContext, "Credit before: " + count , Toast.LENGTH_SHORT).show();
                         Las.setBackgroundColor(Color.WHITE);
                         tCourse.setTextColor(Color.rgb(34,41,43));
@@ -178,6 +182,8 @@ public class courseAdapter extends BaseAdapter implements ListAdapter,Filterable
                     }
                 }
             });
+
+
 
 
 

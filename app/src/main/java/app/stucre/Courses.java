@@ -32,7 +32,7 @@ public class Courses extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
 
-        DrawerLayout dLayout = findViewById(R.id.drawer);
+        final DrawerLayout dLayout = findViewById(R.id.drawer);
 
 
 
@@ -92,6 +92,8 @@ public class Courses extends AppCompatActivity {
 
             }
         });
+
+
     }
 
     @Override
@@ -101,4 +103,6 @@ public class Courses extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
