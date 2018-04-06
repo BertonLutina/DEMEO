@@ -63,6 +63,8 @@ public class electivesModules extends AppCompatActivity {
             }
         });
 
+        mViewPager.setOffscreenPageLimit(3);
+
         dLayout = (DrawerLayout)findViewById(R.id.drawer);
 
         dToggle = new ActionBarDrawerToggle(this,dLayout,R.string.open_drawer,R.string.close_drawer);

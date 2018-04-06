@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,20 +25,28 @@ import java.util.List;
 
 public class OptionsIntership extends Fragment {
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference optionsFase3 = database.getReference("Bedrijfskunde/TI/Options/fase 3");
-    private List<Vak> Vakken = new ArrayList<>();
-    private courseAdapter cA;
+    private RecyclerView recyclerViewOF3;
+    private RecyclerView.Adapter cAOF3;
+
+    private List<Vak> VakkenOF3;
 
     public OptionsIntership(){
 
     }
 
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference optionsFase3 = database.getReference("Bedrijfskunde/TI/Options/fase 3");
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_options, container, false);
-        ListView listViewO = (ListView) view.findViewById(R.id.list_options);
+        View view = inflater.inflate(R.layout.fragment_options_intership, container, false);
+
+        recyclerViewOF3 = (RecyclerView) getActivity().findViewById(R.id.list_options);
+        recyclerViewOF3.setHasFixedSize(true);
+        recyclerViewOF3.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        VakkenOF3 = new ArrayList<>();
         optionsFase3.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -56,10 +66,7 @@ public class OptionsIntership extends Fragment {
                                 Object course = kid.child("COURSE").getValue(Object.class);
                                 Object credit = kid.child("CREDITS").getValue(Object.class);
                                 Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                                    Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: out of Europe",creditPunten.toString()));
-                                cA.notifyDataSetChanged();
-
-
+                                    VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: out of Europe",creditPunten.toString()));
                             }}
                         else if (TextUtils.equals(vakken_hm ,"Option 5 : Intership mobility in Europe : SHORT"))
                         {
@@ -70,10 +77,7 @@ public class OptionsIntership extends Fragment {
                                 Object course = kid.child("COURSE").getValue(Object.class);
                                 Object credit = kid.child("CREDITS").getValue(Object.class);
                                 Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                                Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: in or out of Europe",creditPunten.toString()));
-                                cA.notifyDataSetChanged();
-
-
+                                VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: in or out of Europe",creditPunten.toString()));
                             }
                         }
                     }
@@ -82,8 +86,7 @@ public class OptionsIntership extends Fragment {
                         Object course = child.child("COURSE").getValue(Object.class);
                         Object credit = child.child("CREDITS").getValue(Object.class);
                         Object creditPunten = child.child("CREDITS").getValue(Object.class);
-                        Vakken.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
-                        cA.notifyDataSetChanged();
+                        VakkenOF3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
                     }
 
                 }
@@ -95,8 +98,9 @@ public class OptionsIntership extends Fragment {
             }
         });
 
-        cA  = new courseAdapter(getContext(),Vakken);
-        listViewO.setAdapter(cA);
+        cAOF3= new courseAdapter(getContext(),VakkenOF3);
+        recyclerViewOF3.setAdapter(cAOF3);
+        cAOF3.notifyDataSetChanged();
 
         // Inflate the layout for this fragment
         return view;
@@ -104,8 +108,8 @@ public class OptionsIntership extends Fragment {
 
     @Override
     public void onStart() {
-        ListView listViewO = (ListView) getActivity().findViewById(R.id.list_options);
+
         super.onStart();
-        listViewO.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        //listViewO.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
 }

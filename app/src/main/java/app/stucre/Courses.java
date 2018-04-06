@@ -5,6 +5,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,15 +49,16 @@ public class Courses extends AppCompatActivity {
 
 
         // instantianton
-        Button dButton = findViewById(R.id.dButton);
-        Button emButton = findViewById(R.id.emButton);
-        Button eButton = findViewById(R.id.eButton);
-        Button oButton = findViewById(R.id.oButton);
+        CardView dCardview = findViewById(R.id.dCardview);
+        CardView eMCardview = findViewById(R.id.eMCardview);
+        CardView eCardview = findViewById(R.id.eCardview);
+        CardView oCardview = findViewById(R.id.oCardview);
+
 
 
 
         // button click to navigate to the course page
-        dButton.setOnClickListener(new View.OnClickListener() {
+        dCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -65,7 +67,7 @@ public class Courses extends AppCompatActivity {
 
             }
         });
-        emButton.setOnClickListener(new View.OnClickListener() {
+        eMCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -74,7 +76,7 @@ public class Courses extends AppCompatActivity {
 
             }
         });
-        eButton.setOnClickListener(new View.OnClickListener() {
+        eCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -83,7 +85,7 @@ public class Courses extends AppCompatActivity {
 
             }
         });
-        oButton.setOnClickListener(new View.OnClickListener() {
+        oCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

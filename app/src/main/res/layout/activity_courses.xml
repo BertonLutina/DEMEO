@@ -6,117 +6,193 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="app.stucre.Courses">
+    tools:context="app.stucre.Courses"
+    >
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#efefef"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="app.stucre.Course">
+        tools:context="app.stucre.Course"
+        android:background="#263238"
+        >
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:gravity="fill_horizontal"
-            android:orientation="horizontal"
-            >
-
-            <ImageView
-                android:id="@+id/loginBlur"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/graduatedsmartphone" />
-
-            <ImageView
-                android:id="@+id/loginOverlay"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="#8822292b"
-                android:scaleType="fitXY" />
-
-            <RelativeLayout
-                android:layout_width="340dp"
-                android:layout_height="280dp"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true">
-
-                <Button
-                    android:id="@+id/dButton"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="27dp"
-                    android:layout_marginTop="9dp"
-                    android:background="#e3d26428"
-                    android:text="Duties"
-                    android:textColor="@android:color/white"
-                    android:textSize="13sp" />
-
-                <Button
-                    android:id="@+id/emButton"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_alignTop="@+id/dButton"
-                    android:layout_marginStart="49dp"
-                    android:layout_toEndOf="@+id/dButton"
-                    android:background="#ed455458"
-                    android:paddingLeft="2dp"
-                    android:text="Electives Modules"
-                    android:textColor="@android:color/white"
-                    android:textSize="13sp" />
-
-                <Button
-                    android:id="@+id/eButton"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignStart="@+id/dButton"
-                    android:background="#ef455458"
-                    android:elevation="2dp"
-                    android:text="Electives"
-                    android:textColor="@android:color/white"
-                    android:textSize="13sp" />
-
-                <Button
-                    android:id="@+id/oButton"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_alignBottom="@+id/eButton"
-                    android:layout_alignEnd="@+id/emButton"
-                    android:background="#f0d26428"
-                    android:text="Options"
-                    android:textColor="@android:color/white"
-                    android:textSize="13sp" />
-
-            </RelativeLayout>
+        <GridLayout
+            android:layout_width="360dp"
+            android:layout_height="400dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:alignmentMode="alignMargins"
+            android:columnCount="2"
+            android:layoutMode="clipBounds"
+            android:rowCount="3"
+            android:orientation="horizontal">
 
 
+            <android.support.v7.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_rowWeight="1"
+                app:cardBackgroundColor="#d26428"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                android:id="@+id/dCardview">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_margin="16dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/duties" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Duties"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_rowWeight="1"
+                app:cardBackgroundColor="@color/Orange"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                android:id="@+id/eMCardview">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_margin="16dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/em" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Electives Modules"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_rowWeight="1"
+                app:cardBackgroundColor="@color/Orange"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                android:id="@+id/eCardview"
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_margin="16dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/options" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Electives"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_rowWeight="1"
+                app:cardBackgroundColor="@color/Orange"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                android:id="@+id/oCardview">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_margin="16dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/em_two" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Options"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
 
-
-        </RelativeLayout>
+        </GridLayout>
 
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar2"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#c12f393c"
+            android:background="#e32f393c"
             android:minHeight="?attr/actionBarSize"
-            app:title="Select your course"
+            app:title="Course"
+            android:textAlignment="center"
             app:titleTextColor="#ffffff">
 
         </android.support.v7.widget.Toolbar>

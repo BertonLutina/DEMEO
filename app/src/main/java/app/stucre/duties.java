@@ -67,9 +67,9 @@ public class duties extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         final SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         mViewPager.setAdapter(adapter);
+
         mViewPager.setPageTransformer(true,new DepthPageTransformer());
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -87,7 +87,8 @@ public class duties extends AppCompatActivity {
             }
         });
 
-        CheckBox checkBox = (CheckBox)findViewById(R.id.checkbox1);
+        mViewPager.setOffscreenPageLimit(3);
+
         dLayout = (DrawerLayout)findViewById(R.id.drawer);
 
 

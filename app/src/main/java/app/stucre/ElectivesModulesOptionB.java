@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,25 +23,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ElectivesModulesOptionB extends ListFragment{
+public class ElectivesModulesOptionB extends Fragment{
+
+    private RecyclerView recyclerViewEmB;
+    private RecyclerView.Adapter cAEMB;
+
+    private List<Vak> VakkenEmB;
 
     public ElectivesModulesOptionB(){
 
     }
 
-    final static int maxCredit =  60;
-    private int countCredit = 0 ;
-    private List<Vak> Vakken = new ArrayList<>();
-    private courseAdapter cA;
-
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference EMdatabases = database.getReference("Bedrijfskunde/TI/ElectivesModules/Option B : Manage Internet and Cloud");
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_electives_modules_option_b, container, false);
+
+        recyclerViewEmB = (RecyclerView) view.findViewById(R.id.emoptionB);
+        recyclerViewEmB.setHasFixedSize(true);
+        recyclerViewEmB.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        VakkenEmB = new ArrayList<>();
 
         EMdatabases.addValueEventListener(new ValueEventListener() {
             @Override
@@ -60,8 +67,8 @@ public class ElectivesModulesOptionB extends ListFragment{
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2",creditPunten.toString()));
-                            cA.notifyDataSetChanged();
+                            VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2",creditPunten.toString()));
+
 
                         }
 
@@ -74,8 +81,8 @@ public class ElectivesModulesOptionB extends ListFragment{
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            Vakken.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3",creditPunten.toString()));
-                            cA.notifyDataSetChanged();
+                            VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3",creditPunten.toString()));
+
 
                         }
 
@@ -91,17 +98,20 @@ public class ElectivesModulesOptionB extends ListFragment{
             }
         });
 
-        cA = new courseAdapter(getContext(),Vakken);
-        setListAdapter(cA);
+        cAEMB = new courseAdapter(getContext(),VakkenEmB);
+        recyclerViewEmB.setAdapter(cAEMB);
+        cAEMB.notifyDataSetChanged();
+
+        //listViewEmb.setAdapter(cA);
 
 
         // Inflate the layout for this fragment
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        //listViewEmb.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
 }
