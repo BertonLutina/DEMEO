@@ -37,7 +37,6 @@ public class duties extends AppCompatActivity {
     private DrawerLayout dLayout;
     private NavigationView nav_duties;
     private ActionBarDrawerToggle dToggle;
-    private SectionsPageAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
 
@@ -103,6 +102,7 @@ public class duties extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         nav_duties = (NavigationView) findViewById(R.id.nav_duties);
 
         nav_duties.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -147,7 +147,7 @@ public class duties extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         //menu.clear();
-        getMenuInflater().inflate(R.menu.nav_d_bar,menu);
+        //getMenuInflater().inflate(R.menu.nav_a_bar,menu);
         return true;
     }
 

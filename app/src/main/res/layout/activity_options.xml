@@ -10,16 +10,12 @@
     android:layout_height="match_parent"
     tools:context="app.stucre.Courses">
 
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="app.stucre.options">
-    >
-
-
-
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -29,7 +25,6 @@
 
         <android.support.v7.widget.Toolbar
             app:title="Options"
-            android:gravity="center_horizontal"
             app:titleTextColor="#ffffff"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -40,14 +35,10 @@
             ></android.support.v7.widget.Toolbar>
 
             <android.support.design.widget.TabLayout
+                android:id="@+id/tabsOptions"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimary">
-
-                <android.support.design.widget.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Intership" />
 
 
             </android.support.design.widget.TabLayout>
@@ -67,17 +58,12 @@
             android:id="@+id/searchOptions"
             />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list_options"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pagerOptions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/searchOptions"
-            />
-
-
-
-
+            android:layout_alignParentStart="true" />
 
 
     </RelativeLayout>

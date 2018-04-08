@@ -49,6 +49,13 @@ public class ElectivesModulesOptionA extends Fragment {
         recyclerViewEmA.setLayoutManager(new LinearLayoutManager(getContext()));
 
         VakkenEmA = new ArrayList<>();
+        VakkenEmA.add(new Vak("OH3101","Software Engineering 4", "6 sp","6"));
+        VakkenEmA.add(new Vak("OH3102","Application Development 4", "6 sp","6"));
+        VakkenEmA.add(new Vak("OH3103","Database Development 4", "6 sp","6"));
+        VakkenEmA.add(new Vak("HBI03C","Software Engineering 5: Software testing", "4 sp","60"));
+        VakkenEmA.add(new Vak("HBI84B","Application Development 5", "4 sp","4"));
+        VakkenEmA.add(new Vak("OH3107","Usability and Interaction Design", "4 sp","4"));
+        VakkenEmA.add(new Vak("OH3107","Integration project software", "9 sp","9"));
 
         EMdatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -69,7 +76,7 @@ public class ElectivesModulesOptionA extends Fragment {
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            VakkenEmA.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2",creditPunten.toString()));
+                            //VakkenEmA.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2",creditPunten.toString()));
 
 
                         }
@@ -83,7 +90,7 @@ public class ElectivesModulesOptionA extends Fragment {
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            VakkenEmA.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3",creditPunten.toString()));
+                            //VakkenEmA.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3",creditPunten.toString()));
 
                         }
 

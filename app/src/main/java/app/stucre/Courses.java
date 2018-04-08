@@ -13,10 +13,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 
 public class Courses extends AppCompatActivity {
 
+
     private ActionBarDrawerToggle dToggle;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

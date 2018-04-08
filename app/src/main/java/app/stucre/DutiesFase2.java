@@ -10,13 +10,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.SearchView;
+import android.support.v7.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,10 +32,10 @@ import com.todddavies.components.progressbar.ProgressWheel;
 
 import java.util.ArrayList;
 import java.util.List;
-public class DutiesFase2 extends Fragment {
+public class DutiesFase2 extends Fragment implements android.support.v7.widget.SearchView.OnQueryTextListener {
 
   private RecyclerView recyclerViewDF2;
-  private RecyclerView.Adapter cA2;
+  private courseAdapter cA2;
 
   private List<Vak> Vakken2 = new ArrayList<>();
 
@@ -54,6 +57,19 @@ public class DutiesFase2 extends Fragment {
     recyclerViewDF2.setLayoutManager(new LinearLayoutManager(getContext()));
 
     Vakken2 = new ArrayList<>();
+    Vakken2.add(new Vak("HBI02C","ICT Organisation 4", "4 sp","4"));
+    Vakken2.add(new Vak("HBI25B","ICT Organisation 3", "4 sp","4"));
+    Vakken2.add(new Vak("HBI34B","Mobile en internet 3", "3 sp ","3"));
+    Vakken2.add(new Vak("HBI36B","System Management 3", "3 sp","3"));
+    Vakken2.add(new Vak("HBI38B","Network Management 3", "3 sp","3"));
+    Vakken2.add(new Vak("HBI68B","Communicatietraining 4", "4 sp","3"));
+    Vakken2.add(new Vak("HBI69B","Information management 3", "3sp","3"));
+    Vakken2.add(new Vak("HBI70B","Information management 4", "3sp","3"));
+    Vakken2.add(new Vak("HBI71B","Database development 3", "3 sp","3"));
+    Vakken2.add(new Vak("HBI73B","Application development 3", "3 sp","3"));
+    Vakken2.add(new Vak("OH3100","Software Engineering 3", "3 sp","3"));
+    Vakken2.add(new Vak("OH4100","Communicatietraining 3", "6 sp","6"));
+
 
     dutiesFase2.addValueEventListener(new ValueEventListener() {
       @Override
@@ -68,7 +84,7 @@ public class DutiesFase2 extends Fragment {
           Object course = child.child("COURSE").getValue(Object.class);
           Object credit = child.child("CREDITS").getValue(Object.class);
           Object creditPunten = child.child("CREDITS").getValue(Object.class);
-          Vakken2.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+          //Vakken2.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
 
 
         }
@@ -85,6 +101,7 @@ public class DutiesFase2 extends Fragment {
     recyclerViewDF2.setAdapter(cA2);
     cA2.notifyDataSetChanged();
 
+    setHasOptionsMenu(true);
 
     return vFase2;
 
@@ -98,13 +115,63 @@ public class DutiesFase2 extends Fragment {
   }
 
 
+  @Override
+  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.duties_menu_bar,menu);
 
+    MenuItem item = menu.findItem(R.id.menu_search);
+    SearchView search_fase2 = (SearchView) item.getActionView();
+
+    search_fase2.setOnQueryTextListener(this);
+
+    item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+      @Override
+      public boolean onMenuItemActionExpand(MenuItem item) {
+        return true;
+      }
+
+      @Override
+      public boolean onMenuItemActionCollapse(MenuItem item) {
+        cA2.setFilter(Vakken2);
+        return true;
+      }
+    });
+    super.onCreateOptionsMenu(menu, inflater);
+  }
 
   @Override
   public void onStart() {
 
     super.onStart();
     //Ldutiesfase2.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+  }
+
+  @Override
+  public boolean onQueryTextSubmit(String query) {
+    return false;
+  }
+
+  @Override
+  public boolean onQueryTextChange(String newText) {
+    final List<Vak> filteredVakken = filter(Vakken2,newText);
+    cA2.setFilter(filteredVakken);
+    cA2.notifyDataSetChanged();
+    return true;
+  }
+
+  private List<Vak> filter(List<Vak> vakken1, String query) {
+    query = query.toLowerCase();
+    final List<Vak> filteredVakken = new ArrayList<>();
+
+    for (Vak vakken : vakken1){
+      final String text = vakken.getCourse().toLowerCase();
+      if(text.contains(query)){
+        filteredVakken.add(vakken);
+      }
+    }
+
+    return filteredVakken;
 
   }
 }

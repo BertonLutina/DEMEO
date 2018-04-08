@@ -27,7 +27,6 @@
 
     <android.support.v7.widget.Toolbar
         app:title="Electives"
-        android:gravity="center_horizontal"
         app:titleTextColor="#fff"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -42,10 +41,6 @@
         android:layout_height="match_parent"
         android:background="@color/colorPrimary">
 
-        <android.support.design.widget.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fase 3" />
 
 
     </android.support.design.widget.TabLayout>
@@ -60,16 +55,16 @@
         android:layout_below="@+id/appBarLayout"
         android:imeOptions="normal"
         android:inputType="text"
-        android:queryHint="heee"
+        android:queryHint="Search"
         android:id="@+id/electives_search"
         />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_electives"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pagerElectives"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/electives_search"
-        android:layout_alignParentStart="true"></android.support.v7.widget.RecyclerView>
+        android:layout_alignParentStart="true" />
 
 
 

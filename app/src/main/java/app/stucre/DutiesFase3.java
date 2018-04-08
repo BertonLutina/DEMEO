@@ -11,13 +11,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.SearchView;
+import android.support.v7.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,10 +33,10 @@ import com.todddavies.components.progressbar.ProgressWheel;
 
 import java.util.ArrayList;
 import java.util.List;
-public class DutiesFase3 extends Fragment {
+public class DutiesFase3 extends Fragment implements android.support.v7.widget.SearchView.OnQueryTextListener{
 
     private RecyclerView recyclerViewDF3;
-    private RecyclerView.Adapter cA3;
+    private courseAdapter cA3;
 
     private List<Vak> Vakken3 = new ArrayList<>();
 
@@ -55,6 +58,10 @@ public class DutiesFase3 extends Fragment {
         recyclerViewDF3.setLayoutManager(new LinearLayoutManager(getContext()));
 
         Vakken3 = new ArrayList<>();
+        Vakken3.add(new Vak("HBI04C","IM 5 - Big Data", "3 sp","3"));
+        Vakken3.add(new Vak("HBI07C","Business Ethics", "3 sp","3"));
+        Vakken3.add(new Vak("HBI12C","ICT 5: Creative Entrepreneurship", "3 sp","3"));
+
 
         dutiesFase3.addValueEventListener(new ValueEventListener() {
             @Override
@@ -67,7 +74,7 @@ public class DutiesFase3 extends Fragment {
                         Object course = child.child("COURSE").getValue(Object.class);
                         Object credit = child.child("CREDITS").getValue(Object.class);
                         Object creditPunten = child.child("CREDITS").getValue(Object.class);
-                        Vakken3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+                        //Vakken3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
 
 
                 }
@@ -83,7 +90,7 @@ public class DutiesFase3 extends Fragment {
         recyclerViewDF3.setAdapter(cA3);
         cA3.notifyDataSetChanged();
 
-
+        setHasOptionsMenu(true);
         return vFase3;
     }
 
@@ -100,5 +107,57 @@ public class DutiesFase3 extends Fragment {
 
         super.onStart();
         //Ldutiesfase3.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.duties_menu_bar,menu);
+
+        MenuItem item = menu.findItem(R.id.menu_search);
+        SearchView search_fase3 = (SearchView) item.getActionView();
+
+        search_fase3.setOnQueryTextListener(this);
+
+        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                cA3.setFilter(Vakken3);
+                return true;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<Vak> filteredVakken = filter(Vakken3,newText);
+        cA3.setFilter(filteredVakken);
+        cA3.notifyDataSetChanged();
+        return false;
+    }
+
+    private List<Vak> filter(List<Vak> vakken1, String query) {
+        query = query.toLowerCase();
+        final List<Vak> filteredVakken = new ArrayList<>();
+
+        for (Vak vakken : vakken1){
+            final String text = vakken.getCourse().toLowerCase();
+            if(text.contains(query)){
+                filteredVakken.add(vakken);
+            }
+        }
+
+        return filteredVakken;
+
     }
 }

@@ -4,6 +4,7 @@
     <item
         android:id="@+id/app_bar_search"
         android:title="@string/options_search"
+        android:iconTint="@color/com_facebook_device_auth_text"
         android:icon="@drawable/ic_search"
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />

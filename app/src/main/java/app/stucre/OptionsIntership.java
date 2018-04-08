@@ -42,11 +42,20 @@ public class OptionsIntership extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_options_intership, container, false);
 
-        recyclerViewOF3 = (RecyclerView) getActivity().findViewById(R.id.list_options);
+        recyclerViewOF3 = (RecyclerView) view.findViewById(R.id.optionsFase3);
         recyclerViewOF3.setHasFixedSize(true);
         recyclerViewOF3.setLayoutManager(new LinearLayoutManager(getContext()));
 
         VakkenOF3 = new ArrayList<>();
+        VakkenOF3.add(new Vak("OBI07A","Intercommunautaire stagemobiliteit","24 sp","24"));
+        VakkenOF3.add(new Vak("HBI89B","Stagemobiliteit in Vlaanderen","24 sp", "2"));
+        VakkenOF3.add(new Vak("HBI90B","Stagemobiliteit in Europa","24 sp","24"));
+        VakkenOF3.add(new Vak("HBI91B","Stagemobiliteit buiten Europa","24 sp","24"));
+        VakkenOF3.add(new Vak("OS3000","Buiten Europa: voorbereid op stage","3 sp","3"));
+        VakkenOF3.add(new Vak("HBI92B","Studiemobiliteit in of buiten Europa", "3 sp", "3"));
+        VakkenOF3.add(new Vak("OBI05A","Option 5 : Werkplekleren: ICT Partner Training","12","12"));
+        VakkenOF3.add(new Vak("OBI06A", "Option 5 : Stageproject","12","12"));
+
         optionsFase3.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -66,7 +75,7 @@ public class OptionsIntership extends Fragment {
                                 Object course = kid.child("COURSE").getValue(Object.class);
                                 Object credit = kid.child("CREDITS").getValue(Object.class);
                                 Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                                    VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: out of Europe",creditPunten.toString()));
+                                    //VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: out of Europe",creditPunten.toString()));
                             }}
                         else if (TextUtils.equals(vakken_hm ,"Option 5 : Intership mobility in Europe : SHORT"))
                         {
@@ -77,7 +86,7 @@ public class OptionsIntership extends Fragment {
                                 Object course = kid.child("COURSE").getValue(Object.class);
                                 Object credit = kid.child("CREDITS").getValue(Object.class);
                                 Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                                VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: in or out of Europe",creditPunten.toString()));
+                                //VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: in or out of Europe",creditPunten.toString()));
                             }
                         }
                     }
@@ -86,7 +95,7 @@ public class OptionsIntership extends Fragment {
                         Object course = child.child("COURSE").getValue(Object.class);
                         Object credit = child.child("CREDITS").getValue(Object.class);
                         Object creditPunten = child.child("CREDITS").getValue(Object.class);
-                        VakkenOF3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+                        //VakkenOF3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
                     }
 
                 }

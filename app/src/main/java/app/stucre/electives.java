@@ -2,6 +2,9 @@ package app.stucre;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,13 +19,13 @@ public class electives extends AppCompatActivity {
     private DrawerLayout dLayout;
     private ActionBarDrawerToggle dToggle;
 
+    private ViewPager mViewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_electives);
 
-        ElectivesFase3 electivesFase3 = new ElectivesFase3();
-        getSupportFragmentManager().beginTransaction().add(R.id.drawerE,electivesFase3).commit();
 
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             Window window = this.getWindow();
@@ -34,6 +37,14 @@ public class electives extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarElectives);
         setSupportActionBar(toolbar);
 
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabselectives);
+        tabLayout.addTab(tabLayout.newTab().setText("Fase 3"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        mViewPager = (ViewPager) findViewById(R.id.pagerElectives);
+        final ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
+        mViewPager.setAdapter(viewPageAdapter);
+
         dLayout = (DrawerLayout)findViewById(R.id.drawerE);
 
 
@@ -41,6 +52,9 @@ public class electives extends AppCompatActivity {
 
         dLayout.addDrawerListener(dToggle);
         dToggle.syncState();
+
+
+
 
         // These lines are needed to display the top-left hamburger button
         getSupportActionBar().setHomeButtonEnabled(true);

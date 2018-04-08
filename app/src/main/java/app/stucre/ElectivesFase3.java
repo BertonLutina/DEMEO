@@ -30,6 +30,7 @@ public class ElectivesFase3 extends Fragment {
     private RecyclerView.Adapter cAEF3;
 
     private List<Vak> VakkenEF3;
+    Vak test;
 
     public ElectivesFase3(){
 
@@ -41,14 +42,22 @@ public class ElectivesFase3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_electives_fase3, container, false);
 
-        recyclerViewEF3 = (RecyclerView) getActivity().findViewById(R.id.list_electives);
+        recyclerViewEF3 = (RecyclerView) view.findViewById(R.id.electivesFase3);
         recyclerViewEF3.setHasFixedSize(true);
         recyclerViewEF3.setLayoutManager(new LinearLayoutManager(getContext()));
 
         VakkenEF3 = new ArrayList<>();
+        VakkenEF3.add(new Vak("HBI33A","Sales and Customer interaction", "3 sp","3"));
+        VakkenEF3.add(new Vak("HBI47B","Content management", "3 sp","3"));
+        VakkenEF3.add(new Vak("HBI53B","Advanced Switching", "6 sp","6"));
+        VakkenEF3.add(new Vak("HBI54B","Advanced Routing", "6 sp","6"));
+        VakkenEF3.add(new Vak("OBI01A","ICT Partner Training", "3 sp","3"));
+        VakkenEF3.add(new Vak("OBI02A","ICT Partner Training B", "4 sp","4"));
+        VakkenEF3.add(new Vak("OBI03A","ICT Partner Training C", "5 sp","5"));
+        VakkenEF3.add(new Vak("OBI04A","ICT Partner Training D", "6 sp","6"));
+
 
         electivFase3.addValueEventListener(new ValueEventListener() {
             @Override
@@ -61,7 +70,7 @@ public class ElectivesFase3 extends Fragment {
                     Object course = child.child("COURSE").getValue(Object.class);
                     Object credit = child.child("CREDITS").getValue(Object.class);
                     Object creditPunten = child.child("CREDITS").getValue(Object.class);
-                    VakkenEF3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+                    //VakkenEF3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
 
 
                 }
