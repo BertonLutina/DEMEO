@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -29,6 +30,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
 
   private RecyclerView recyclerViewDF1;
   private courseAdapter cA1;
+  private CardView fase1;
 
   private List<Vak> Vakken1;
   public SearchView searchViewFase1;
@@ -103,6 +105,24 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
       cA1.notifyDataSetChanged();
       setHasOptionsMenu(true);
 
+    cA1.setOnItemClickListener(new courseAdapter.OnItemClickListener() {
+      @Override
+      public void onItemClick(int position) {
+
+        String plaats = Vakken1.get(position).getCourse();
+        Toast.makeText(getContext(),"select"+ plaats, Toast.LENGTH_SHORT).show();
+      }
+    });
+
+    cA1.setOnItemLongClickListener(new courseAdapter.onItemLongClickListerner() {
+      @Override
+      public boolean onItemLongClick(int position) {
+        String plaats = Vakken1.get(position).getCourse();
+        Toast.makeText(getContext(),"select"+ plaats, Toast.LENGTH_SHORT).show();
+        return true;
+      }
+    });
+
 
     /// SearchView voor het zoeken en filteren van de vakken.//
 
@@ -129,6 +149,8 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
+
+
   }
 
   @Override
@@ -143,7 +165,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
     item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
       @Override
       public boolean onMenuItemActionExpand(MenuItem item) {
-        Toast.makeText(getContext(),"search course fase 1",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(),"search and filter course in fase 3",Toast.LENGTH_SHORT).show();
 
 
         return true;
@@ -181,17 +203,26 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
     return true;
   }
 
+  // Here we will take the list and filter
   private List<Vak> filter(List<Vak> vakken1, String query) {
+    //change the string in lowercase
     query = query.toLowerCase();
+
+    // create a new ArrayList called filteredVakken give final instate of public
     final List<Vak> filteredVakken = new ArrayList<>();
 
+    // Search in your collection of your current Object
     for (Vak vakken : vakken1){
+      // create a string "Text" and put all the course  of the collection of the object
       final String text = vakken.getCourse().toLowerCase();
+      //search if form the first it match withe the courses
       if(text.contains(query)){
+        // put it in the nieuw Arraylist youve made filteredVakken Arraylist
         filteredVakken.add(vakken);
       }
     }
 
+    // return the filtered Arraylist
     return filteredVakken;
 
   }

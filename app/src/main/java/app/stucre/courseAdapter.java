@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +23,8 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
 
     private Context context;
     private List <Vak> Vakken;
+    private OnItemClickListener mListener;
+    private onItemLongClickListerner mLongListener;
 
 
 
@@ -46,6 +49,22 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
         holder.bind(vak);
     }
 
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    public interface onItemLongClickListerner{
+        boolean onItemLongClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
+    public void setOnItemLongClickListener(onItemLongClickListerner listener) {
+        mLongListener = listener;
+    }
+
     @Override
     public int getItemCount() {
         return Vakken.size();
@@ -62,6 +81,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
         public TextView tvCourse;
         public TextView tvCredit;
         public TextView tvId ;
+        public ImageView vakImage;
         public ImageView check;
 
 
@@ -73,7 +93,36 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
             tvCourse = (TextView) itemView.findViewById(R.id.text1);
             tvCredit = (TextView) itemView.findViewById(R.id.text2);
             tvId = (TextView) itemView.findViewById(R.id.text3);
-            check = (ImageView) itemView.findViewById(R.id.Beschikbaarvakken);
+            check = (ImageView) itemView.findViewById(R.id.checkImage);
+            vakImage = (ImageView) itemView.findViewById(R.id.Beschikbaarvakken);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mListener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            mListener.onItemClick(position);
+                        }
+                    }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if(mLongListener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            mLongListener.onItemLongClick(position);
+                        }
+                    }
+                    return true;
+                }
+            });
+
+
+
 
         }
 
@@ -81,7 +130,9 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
             tvCourse.setText(vak.getCourse());
             tvId.setText(vak.getId());
             tvCredit.setText(vak.getCredit());
-            check.setImageResource(R.drawable.bookssstack);
+            check.setImageResource(R.drawable.check_only);
+            vakImage.setImageResource(R.drawable.bookssstack);
+
         }
     }
 

@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/app_bar_search"
+        android:id="@+id/menu_search_Options"
         android:title="@string/options_search"
         android:iconTint="@color/com_facebook_device_auth_text"
         android:icon="@drawable/ic_search"

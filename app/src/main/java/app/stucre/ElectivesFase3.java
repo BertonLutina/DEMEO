@@ -7,11 +7,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,10 +29,10 @@ import java.util.List;
 
 
 
-public class ElectivesFase3 extends Fragment {
+public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextListener {
 
     private RecyclerView recyclerViewEF3;
-    private RecyclerView.Adapter cAEF3;
+    private courseAdapter cAEF3;
 
     private List<Vak> VakkenEF3;
     Vak test;
@@ -86,14 +91,97 @@ public class ElectivesFase3 extends Fragment {
         recyclerViewEF3.setAdapter(cAEF3);
         cAEF3.notifyDataSetChanged();
 
+
+        setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         return view;
 
     }
+
+
 
     @Override
     public void onStart() {
         super.onStart();
         //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
+
+    // Implements methode from Search.OnQueryListener
+
+
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+    // Use
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        //create a new ArrayList filteredVakken and put the filter methode in the arraylist.
+        final List<Vak> filteredVakken = filter(VakkenEF3,newText);
+        // Here is the magic setfilter methode will change everything the methode comes from the courseAdapter
+        cAEF3.setFilter(filteredVakken);
+        // Refresh data
+        cAEF3.notifyDataSetChanged();
+        return false;
+    }
+
+
+
+    // Menu option to create the Search bar in the actinBar and add the Loop Icon
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.electives_menu_bar,menu);
+        MenuItem item = menu.findItem(R.id.menu_search_electives);
+
+        SearchView dutiesSearch = (SearchView) item.getActionView();
+        dutiesSearch.setOnQueryTextListener(this);
+
+        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                Toast.makeText(getContext(),"search course fase 3",Toast.LENGTH_SHORT).show();
+
+
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                Toast.makeText(getContext(),"close search",Toast.LENGTH_SHORT).show();
+                cAEF3.setFilter(VakkenEF3);
+                cAEF3.notifyDataSetChanged();
+                return true;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // Create a methode filter and give the paramter a Arraylist and a String
+    // Here we will take the list and filter
+    private List<Vak> filter(List<Vak> vakken1, String query) {
+        //change the string in lowercase
+        query = query.toLowerCase();
+
+        // create a new ArrayList called filteredVakken give final instate of public
+        final List<Vak> filteredVakken = new ArrayList<>();
+
+        // Search in your collection of your current Object
+        for (Vak vakken : vakken1){
+            // create a string "Text" and put all the course  of the collection of the object
+            final String text = vakken.getCourse().toLowerCase();
+            //search if form the first it match withe the courses
+            if(text.contains(query)){
+                // put it in the nieuw Arraylist youve made filteredVakken Arraylist
+                filteredVakken.add(vakken);
+            }
+        }
+
+        // return the filtered Arraylist
+        return filteredVakken;
+
+    }
+
+
 }

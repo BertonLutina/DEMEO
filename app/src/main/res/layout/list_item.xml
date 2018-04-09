@@ -16,7 +16,6 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         app:cardCornerRadius="2dp"
         android:id="@+id/listCardview"
-        android:clickable="true"
         >
 
         <LinearLayout

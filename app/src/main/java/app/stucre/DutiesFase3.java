@@ -121,12 +121,16 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
         item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
+                Toast.makeText(getContext(),"search and filter course in fase 3",Toast.LENGTH_SHORT).show();
+
                 return true;
             }
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
+                Toast.makeText(getContext(),"close search",Toast.LENGTH_SHORT).show();
                 cA3.setFilter(Vakken3);
+                cA3.notifyDataSetChanged();
                 return true;
             }
         });
@@ -146,17 +150,26 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
         return false;
     }
 
+    // Here we will take the list and filter
     private List<Vak> filter(List<Vak> vakken1, String query) {
+        //change the string in lowercase
         query = query.toLowerCase();
+
+        // create a new ArrayList called filteredVakken give final instate of public
         final List<Vak> filteredVakken = new ArrayList<>();
 
+        // Search in your collection of your current Object
         for (Vak vakken : vakken1){
+            // create a string "Text" and put all the course  of the collection of the object
             final String text = vakken.getCourse().toLowerCase();
+            //search if form the first it match withe the courses
             if(text.contains(query)){
+                // put it in the nieuw Arraylist youve made filteredVakken Arraylist
                 filteredVakken.add(vakken);
             }
         }
 
+        // return the filtered Arraylist
         return filteredVakken;
 
     }
