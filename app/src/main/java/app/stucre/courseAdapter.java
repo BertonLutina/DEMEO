@@ -1,6 +1,9 @@
 package app.stucre;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +86,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
         public TextView tvId ;
         public ImageView vakImage;
         public ImageView check;
+        public CardView cardViewList;
 
 
 
@@ -95,6 +99,8 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
             tvId = (TextView) itemView.findViewById(R.id.text3);
             check = (ImageView) itemView.findViewById(R.id.checkImage);
             vakImage = (ImageView) itemView.findViewById(R.id.Beschikbaarvakken);
+            cardViewList = (CardView) itemView.findViewById(R.id.listCardview);
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -103,6 +109,11 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
                         int position = getAdapterPosition();
                         if(position != RecyclerView.NO_POSITION){
                             mListener.onItemClick(position);
+                            check.setVisibility(View.VISIBLE);
+                            tvCourse.setTypeface(null, Typeface.BOLD_ITALIC);
+                            tvCourse.setTextSize(18);
+                            cardViewList.setCardBackgroundColor(Color.rgb(211,211,211));
+
                         }
                     }
                 }
@@ -115,6 +126,10 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
                         int position = getAdapterPosition();
                         if(position != RecyclerView.NO_POSITION){
                             mLongListener.onItemLongClick(position);
+                            check.setVisibility(View.INVISIBLE);
+                            tvCourse.setTypeface(null, Typeface.NORMAL);
+                            tvCourse.setTextSize(16);
+                            cardViewList.setCardBackgroundColor(Color.WHITE);
                         }
                     }
                     return true;

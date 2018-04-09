@@ -65,7 +65,7 @@
                     android:textAlignment="textStart"
                     android:textColor="@drawable/select_item_listviewtext"
                     android:textSize="16sp"
-                    android:textStyle="bold"
+
 
                     />
 

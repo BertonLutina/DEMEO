@@ -1,5 +1,6 @@
 package app.stucre;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,9 @@ import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +39,9 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
   private List<Vak> Vakken1;
   public SearchView searchViewFase1;
 
+  int count = 0;
+
+
   public DutiesFase1 (){
 
     }
@@ -46,6 +53,11 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
     View vFase1 = inflater.inflate(R.layout.fragment_duties_fase1, container, false);
+    LinearLayout linearLayout = (LinearLayout) vFase1.findViewById(R.id.linearLayout1);
+
+
+
+
 
     recyclerViewDF1 = (RecyclerView) vFase1.findViewById(R.id.dutiesfase1);
     recyclerViewDF1.setHasFixedSize(true);
@@ -109,8 +121,12 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
       @Override
       public void onItemClick(int position) {
 
+
         String plaats = Vakken1.get(position).getCourse();
-        Toast.makeText(getContext(),"select"+ plaats, Toast.LENGTH_SHORT).show();
+        String point = Vakken1.get(position).getCreditPunten();
+
+        count += Integer.parseInt(point);
+        Toast.makeText(getContext(),count+" sp .press long to deselect", Toast.LENGTH_SHORT).show();
       }
     });
 
@@ -118,7 +134,10 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
       @Override
       public boolean onItemLongClick(int position) {
         String plaats = Vakken1.get(position).getCourse();
-        Toast.makeText(getContext(),"select"+ plaats, Toast.LENGTH_SHORT).show();
+        String point = Vakken1.get(position).getCreditPunten();
+
+        count -= Integer.parseInt(point);
+        Toast.makeText(getContext(),count+" sp . press short to select", Toast.LENGTH_SHORT).show();
         return true;
       }
     });
