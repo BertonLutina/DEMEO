@@ -1,12 +1,9 @@
 package app.stucre;
 
-import android.content.Context;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,12 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.ListView;
-import android.widget.RadioGroup;
+import android.widget.LinearLayout;
 import android.support.v7.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -32,12 +25,21 @@ import com.todddavies.components.progressbar.ProgressWheel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
+
 public class DutiesFase2 extends Fragment implements android.support.v7.widget.SearchView.OnQueryTextListener {
 
   private RecyclerView recyclerViewDF2;
   private courseAdapter cA2;
 
   private List<Vak> Vakken2 = new ArrayList<>();
+
+    private ProgressWheel progressWheelFase2;
+    private View dutiesLayout;
+
+  private int count = 0;
+
 
   public DutiesFase2(){
 
@@ -56,52 +58,24 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
     recyclerViewDF2.setHasFixedSize(true);
     recyclerViewDF2.setLayoutManager(new LinearLayoutManager(getContext()));
 
-    Vakken2 = new ArrayList<>();
-    Vakken2.add(new Vak("HBI02C","ICT Organisation 4", "4 sp","4"));
-    Vakken2.add(new Vak("HBI25B","ICT Organisation 3", "4 sp","4"));
-    Vakken2.add(new Vak("HBI34B","Mobile en internet 3", "3 sp ","3"));
-    Vakken2.add(new Vak("HBI36B","System Management 3", "3 sp","3"));
-    Vakken2.add(new Vak("HBI38B","Network Management 3", "3 sp","3"));
-    Vakken2.add(new Vak("HBI68B","Communicatietraining 4", "4 sp","3"));
-    Vakken2.add(new Vak("HBI69B","Information management 3", "3sp","3"));
-    Vakken2.add(new Vak("HBI70B","Information management 4", "3sp","3"));
-    Vakken2.add(new Vak("HBI71B","Database development 3", "3 sp","3"));
-    Vakken2.add(new Vak("HBI73B","Application development 3", "3 sp","3"));
-    Vakken2.add(new Vak("OH3100","Software Engineering 3", "3 sp","3"));
-    Vakken2.add(new Vak("OH4100","Communicatietraining 3", "6 sp","6"));
+      // Test data
+        Vakken();
+
+      //Real Data
+      //VakkenDatabase();
 
 
-    dutiesFase2.addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(DataSnapshot dataSnapshot) {
+        cA2 = new courseAdapter(getContext(),Vakken2);
+        recyclerViewDF2.setAdapter(cA2);
+        cA2.notifyDataSetChanged();
 
-        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-
-        for (DataSnapshot child: children) {
-
-
-          Object course_id = child.child("COURSE_ID").getValue(Object.class);
-          Object course = child.child("COURSE").getValue(Object.class);
-          Object credit = child.child("CREDITS").getValue(Object.class);
-          Object creditPunten = child.child("CREDITS").getValue(Object.class);
-          //Vakken2.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
-
-
-        }
-      }
-
-      @Override
-      public void onCancelled(DatabaseError databaseError) {
-
-      }
-    });
-
-
-    cA2 = new courseAdapter(getContext(),Vakken2);
-    recyclerViewDF2.setAdapter(cA2);
-    cA2.notifyDataSetChanged();
+        clickOnVakken();
 
     setHasOptionsMenu(true);
+
+      dutiesLayout = getActivity().findViewById(R.id.slideUpCreditsView);
+      LinearLayout lay = dutiesLayout.findViewById(R.id.Progress_bar_points);
+      progressWheelFase2 = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
 
     return vFase2;
 
@@ -140,6 +114,8 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
         return true;
       }
     });
+
+
     super.onCreateOptionsMenu(menu, inflater);
   }
 
@@ -186,5 +162,109 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
     // return the filtered Arraylist
     return filteredVakken;
 
+  }
+
+  private void Vakken(){
+      Vakken2 = new ArrayList<>();
+      Vakken2.add(new Vak("HBI02C","ICT Organisation 4", "4 sp","4"));
+      Vakken2.add(new Vak("HBI25B","ICT Organisation 3", "4 sp","4"));
+      Vakken2.add(new Vak("HBI34B","Mobile en internet 3", "3 sp ","3"));
+      Vakken2.add(new Vak("HBI36B","System Management 3", "3 sp","3"));
+      Vakken2.add(new Vak("HBI38B","Network Management 3", "3 sp","3"));
+      Vakken2.add(new Vak("HBI68B","Communicatietraining 4", "4 sp","4"));
+      Vakken2.add(new Vak("HBI69B","Information management 3", "3sp","3"));
+      Vakken2.add(new Vak("HBI70B","Information management 4", "3sp","3"));
+      Vakken2.add(new Vak("HBI71B","Database development 3", "3 sp","3"));
+      Vakken2.add(new Vak("HBI73B","Application development 3", "3 sp","3"));
+      Vakken2.add(new Vak("OH3100","Software Engineering 3", "3 sp","3"));
+      Vakken2.add(new Vak("OH4100","Communicatietraining 3", "6 sp","6"));
+  }
+  private void VakkenDatabase(){
+      dutiesFase2.addValueEventListener(new ValueEventListener() {
+          @Override
+          public void onDataChange(DataSnapshot dataSnapshot) {
+
+              Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+
+              for (DataSnapshot child: children) {
+
+
+                  Object course_id = child.child("COURSE_ID").getValue(Object.class);
+                  Object course = child.child("COURSE").getValue(Object.class);
+                  Object credit = child.child("CREDITS").getValue(Object.class);
+                  Object creditPunten = child.child("CREDITS").getValue(Object.class);
+                  //Vakken2.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+
+
+              }
+          }
+
+          @Override
+          public void onCancelled(DatabaseError databaseError) {
+
+          }
+      });
+  }
+  private void clickOnVakken(){
+      cA2.setOnItemClickListener(new courseAdapter.OnItemClickListener() {
+          @Override
+          public void onItemClick(int position) {
+
+
+              //String plaats = Vakken1.get(position).getCourse();
+              String point = Vakken2.get(position).getCreditPunten();
+              boolean checked = Vakken2.get(position).isChecked();
+
+              if(!checked) {
+                  Vakken2.get(position).setChecked(true);
+                  if( !(count>= 60)){
+                      count += Integer.parseInt(point);
+                      int percent = (360/60) * count;
+                      progressWheelFase2.setProgress(percent);
+                      progressWheelFase2.setText(Integer.toString(count)+" sp");
+                      Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+
+                  }else{
+                      Toasty.error(getContext(),"60 sp is de limiet => Electives Modules", Toast.LENGTH_SHORT).show();
+                  }
+                  if (count == 60) {
+                      progressWheelFase2.setBarColor(Color.	rgb(0,128,0));
+                  }else if(count >= 45 && count < 60){
+                      progressWheelFase2.setBarColor(Color.rgb(255,69,0));
+                  }else if (count >= 30 && count < 45) {
+                      progressWheelFase2.setBarColor(Color.rgb(255,140,0));
+                  }else if (count >= 15 && count < 30) {
+                      progressWheelFase2.setBarColor(Color.rgb(255,165,0));
+                  }else if (count >= 0 && count < 15) {
+                      progressWheelFase2.setBarColor(Color.	rgb(255,215,0));
+                  }
+              }else{
+                  Vakken2.get(position).setChecked(false);
+                  if(!(count < 0)){
+                      count -= Integer.parseInt(point);
+                      int percent = (360/60) * count;
+                      progressWheelFase2.setProgress(percent);
+                      progressWheelFase2.setText(Integer.toString(count)+" sp");
+                      Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
+
+                  }else{
+                      Toasty.error(getContext()," Mag niet onder de 0", Toast.LENGTH_SHORT).show();
+                  }
+                  if (count == 60) {
+                      progressWheelFase2.setBarColor(Color.	rgb(0,128,0));
+                  }else if(count >= 45 && count < 60){
+                      progressWheelFase2.setBarColor(Color.rgb(255,69,0));
+                  }else if (count >= 30 && count < 45) {
+                      progressWheelFase2.setBarColor(Color.rgb(255,140,0));
+                  }else if (count >= 15 && count < 30) {
+                      progressWheelFase2.setBarColor(Color.rgb(255,165,0));
+                  }else if (count >= 0 && count < 15) {
+                      progressWheelFase2.setBarColor(Color.	rgb(255,215,0));
+                  }
+              }
+
+
+          }
+      });
   }
 }

@@ -10,12 +10,21 @@
     android:layout_height="match_parent"
     tools:context="app.stucre.Courses">
 
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="app.stucre.electivesModules">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:alpha="0"
+        android:id="@+id/dim_EM">
+    </FrameLayout>
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -46,22 +55,11 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <SearchView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/appBarLayout"
-        android:imeOptions="normal"
-        android:inputType="text"
-        android:queryHint="heee"
-        android:id="@+id/em_search"
-        />
-
     <android.support.v4.view.ViewPager
         android:id="@+id/pager2"
         android:layout_width="match_parent"
-        android:layout_height="530dp"
-        android:layout_below="@+id/em_search"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/appBarLayout"
         android:layout_alignParentStart="true" />
 
 
@@ -76,4 +74,24 @@ android:layout_gravity="start"
     app:headerLayout="@layout/header_nav">
 
 </android.support.design.widget.NavigationView>
+    <include layout="@layout/slideupview_credit_point"/>
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/frameFlEM"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="30dp"
+            app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+            app:backgroundTint="#ff385d"
+            android:id="@+id/floatBtnEM"/>
+    </FrameLayout>
     </android.support.v4.widget.DrawerLayout>

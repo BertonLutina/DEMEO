@@ -21,7 +21,7 @@
             ProgressWheel:pwTextSize="40sp"
             ProgressWheel:pwRimColor="#fff"
             ProgressWheel:pwBarLength="60dp"
-            ProgressWheel:pwBarColor="@color/Orange"
+            ProgressWheel:pwBarColor="#FFD700"
             ProgressWheel:pwBarWidth="50dp"
             ProgressWheel:pwRimWidth="1dp"
             ProgressWheel:pwText="0 sp"
@@ -118,7 +118,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="106dp"
         app:srcCompat="?android:attr/findOnPageNextDrawable"
-        />
+         />
 
 
 </RelativeLayout>

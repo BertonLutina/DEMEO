@@ -1,6 +1,7 @@
 package app.stucre;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -23,17 +25,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.todddavies.components.progressbar.ProgressWheel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 
 public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQueryTextListener{
 
     private RecyclerView recyclerViewEmB;
     private courseAdapter cAEMB;
-
     private List<Vak> VakkenEmB;
+
+    private ProgressWheel progressWheelEMB;
+    private View dutiesLayout;
+    private int count = 0;
 
     public ElectivesModulesOptionB(){
 
@@ -51,73 +59,28 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
         recyclerViewEmB.setHasFixedSize(true);
         recyclerViewEmB.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        VakkenEmB = new ArrayList<>();
-        VakkenEmB.add(new Vak("OH3104","Mobile and Internet 4", "6 sp","6"));
-        VakkenEmB.add(new Vak("OH3105","System Management 4", "6 sp","6"));
-        VakkenEmB.add(new Vak("OH4101","Network Management 4", "6 sp","6"));
-        VakkenEmB.add(new Vak("HBI87B","System Management 5 : Datacenter and cloud", "4 sp","4"));
-        VakkenEmB.add(new Vak("HBI97B","Security Management 5 and Information Security", "4 sp","6"));
-        VakkenEmB.add(new Vak("OH3108","Mobile & Internet 5: Smart App", "4 sp","4"));
-        VakkenEmB.add(new Vak("OH3109","Integration project Internet and Cloud", "9 sp","9"));
 
-        EMdatabases.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        // Test vakken
+        Vakken();
 
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-
-                for (DataSnapshot fase: children) {
-
-                    String fases = fase.getKey();
-
-                    if (TextUtils.equals(fases,"fase 2")){
-
-                        Iterable<DataSnapshot> kids = fase.getChildren();
-
-                        for (DataSnapshot kid : kids) {
-                            Object course_id = kid.child("COURSE_ID").getValue(Object.class);
-                            Object course = kid.child("COURSE").getValue(Object.class);
-                            Object credit = kid.child("CREDITS").getValue(Object.class);
-                            Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            //VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2",creditPunten.toString()));
-
-
-                        }
-
-                    }else if(TextUtils.equals(fases,"fase 3")){
-
-                        Iterable<DataSnapshot> kids = fase.getChildren();
-
-                        for (DataSnapshot kid : kids) {
-                            Object course_id = kid.child("COURSE_ID").getValue(Object.class);
-                            Object course = kid.child("COURSE").getValue(Object.class);
-                            Object credit = kid.child("CREDITS").getValue(Object.class);
-                            Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            //VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3",creditPunten.toString()));
-
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        // Vakken Van Database
+        //VakkenDatabase();
 
         cAEMB = new courseAdapter(getContext(),VakkenEmB);
         recyclerViewEmB.setAdapter(cAEMB);
         cAEMB.notifyDataSetChanged();
 
+        dutiesLayout = getActivity().findViewById(R.id.slideUpCreditsView);
+        LinearLayout lay = dutiesLayout.findViewById(R.id.Progress_bar_points);
+        progressWheelEMB = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
         setHasOptionsMenu(true);
+
+        // Click
+        clickOnVakken();
 
 
         // Inflate the layout for this fragment
+
         return view;
     }
 
@@ -191,6 +154,131 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
         // return the filtered Arraylist
         return filteredVakken;
 
+    }
+
+    private void Vakken(){
+        VakkenEmB = new ArrayList<>();
+        VakkenEmB.add(new Vak("OH3104","Mobile and Internet 4", "6 sp","6"));
+        VakkenEmB.add(new Vak("OH3105","System Management 4", "6 sp","6"));
+        VakkenEmB.add(new Vak("OH4101","Network Management 4", "6 sp","6"));
+        VakkenEmB.add(new Vak("HBI87B","System Management 5 : Datacenter and cloud", "4 sp","4"));
+        VakkenEmB.add(new Vak("HBI97B","Security Management 5 and Information Security", "4 sp","4"));
+        VakkenEmB.add(new Vak("OH3108","Mobile & Internet 5: Smart App", "4 sp","4"));
+        VakkenEmB.add(new Vak("OH3109","Integration project Internet and Cloud", "9 sp","9"));
+    }
+    private void VakkenDatabase(){
+        EMdatabases.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+
+                for (DataSnapshot fase: children) {
+
+                    String fases = fase.getKey();
+
+                    if (TextUtils.equals(fases,"fase 2")){
+
+                        Iterable<DataSnapshot> kids = fase.getChildren();
+
+                        for (DataSnapshot kid : kids) {
+                            Object course_id = kid.child("COURSE_ID").getValue(Object.class);
+                            Object course = kid.child("COURSE").getValue(Object.class);
+                            Object credit = kid.child("CREDITS").getValue(Object.class);
+                            Object creditPunten = kid.child("CREDITS").getValue(Object.class);
+                            //VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2",creditPunten.toString()));
+
+
+                        }
+
+                    }else if(TextUtils.equals(fases,"fase 3")){
+
+                        Iterable<DataSnapshot> kids = fase.getChildren();
+
+                        for (DataSnapshot kid : kids) {
+                            Object course_id = kid.child("COURSE_ID").getValue(Object.class);
+                            Object course = kid.child("COURSE").getValue(Object.class);
+                            Object credit = kid.child("CREDITS").getValue(Object.class);
+                            Object creditPunten = kid.child("CREDITS").getValue(Object.class);
+                            //VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3",creditPunten.toString()));
+
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void clickOnVakken(){
+        cAEMB.setOnItemClickListener(new courseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+
+
+                //String plaats = Vakken1.get(position).getCourse();
+                String point = VakkenEmB.get(position).getCreditPunten();
+                boolean checked = VakkenEmB.get(position).isChecked();
+
+                if(!checked){
+                    VakkenEmB.get(position).setChecked(true);
+                    if(!(count> 60)) {
+                        count += Integer.parseInt(point);
+                        int percent = (360/60) * (count+1);
+                        Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                        progressWheelEMB.setProgress(percent);
+                        progressWheelEMB.setText(Integer.toString(count)+" sp");
+                    } else{
+                        Toasty.error(getContext()," 60 sp is de limiet => Fase 2", Toast.LENGTH_SHORT).show();
+                    }
+                    if (count == 60) {
+                        progressWheelEMB.setBarColor(Color.	rgb(0,128,0));
+                    }else if(count >= 45 && count < 60){
+                        progressWheelEMB.setBarColor(Color.rgb(255,69,0));
+                    }else if (count >= 30 && count < 45) {
+                        progressWheelEMB.setBarColor(Color.rgb(255,140,0));
+                    }else if (count >= 15 && count < 30) {
+                        progressWheelEMB.setBarColor(Color.rgb(255,165,0));
+                    }else if (count >= 0 && count < 15) {
+                        progressWheelEMB.setBarColor(Color.	rgb(255,215,0));
+                    }
+                }else{
+                    VakkenEmB.get(position).setChecked(false);
+
+                    if(!(count < 0)) {
+                        count -= Integer.parseInt(point);
+                        int percent = (360/60) * (count+1);
+                        Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
+                        progressWheelEMB.setProgress(percent);
+                        progressWheelEMB.setText(Integer.toString(count)+" sp");
+
+                    }else{
+                        Toasty.error(getContext()," MAG niet onder de 0", Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (count == 60) {
+                        progressWheelEMB.setBarColor(Color.	rgb(0,128,0));
+                    }else if(count >= 45 && count < 60){
+                        progressWheelEMB.setBarColor(Color.rgb(255,69,0));
+                    }else if (count >= 30 && count < 45) {
+                        progressWheelEMB.setBarColor(Color.rgb(255,140,0));
+                    }else if (count >= 15 && count < 30) {
+                        progressWheelEMB.setBarColor(Color.rgb(255,165,0));
+                    }else if (count >= 0 && count < 15) {
+                        progressWheelEMB.setBarColor(Color.	rgb(255,215,0));
+                    }
+                }
+
+
+            }
+        });
     }
 
 }

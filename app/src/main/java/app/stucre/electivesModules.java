@@ -1,5 +1,6 @@
 package app.stucre;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -9,8 +10,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.mancj.slideup.SlideUp;
 
 public class electivesModules extends AppCompatActivity {
 
@@ -18,6 +22,11 @@ public class electivesModules extends AppCompatActivity {
     private ActionBarDrawerToggle dToggle;
     private SectionPageAdapter2 mSectionPageAdapter2;
     private ViewPager mViewPager;
+
+    private SlideUp slideUp ;
+    private View slideView;
+    private View dimEM;
+    private FloatingActionButton floatEM;
 
     private static final String TAG ="duties";
 
@@ -32,6 +41,36 @@ public class electivesModules extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(this.getResources().getColor(R.color.colorEM));
         }
+
+        slideView = findViewById(R.id.slideUpCreditsView);
+        dimEM = findViewById(R.id.dim_EM);
+
+        slideUp = new SlideUp(slideView);
+        slideUp.hideImmediately();
+
+        floatEM = findViewById(R.id.floatBtnEM);
+
+        floatEM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slideUp.animateIn();
+                floatEM.hide();
+            }
+        });
+
+        slideUp.setSlideListener(new SlideUp.SlideListener() {
+            @Override
+            public void onSlideDown(float v) {
+                dimEM.setAlpha(1-(v/100));
+            }
+
+            @Override
+            public void onVisibilityChanged(int i) {
+                if(i == View.GONE){
+                    floatEM.show();
+                }
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarEM);
         setSupportActionBar(toolbar);

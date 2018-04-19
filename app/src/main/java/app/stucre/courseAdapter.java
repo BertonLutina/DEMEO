@@ -28,6 +28,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
     private List <Vak> Vakken;
     private OnItemClickListener mListener;
     private onItemLongClickListerner mLongListener;
+    private int focusedItem = 0;
 
 
 
@@ -50,6 +51,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
 
         Vak vak = Vakken.get(position);
         holder.bind(vak);
+
     }
 
     public interface OnItemClickListener{
@@ -90,7 +92,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
 
 
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
 
             super(itemView);
 
@@ -109,13 +111,29 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
                         int position = getAdapterPosition();
                         if(position != RecyclerView.NO_POSITION){
                             mListener.onItemClick(position);
+                            boolean checking =Vakken.get(position).isChecked();
+                            if(checking){
+                            itemView.setSelected(true);
                             check.setVisibility(View.VISIBLE);
                             tvCourse.setTypeface(null, Typeface.BOLD_ITALIC);
-                            tvCourse.setTextSize(18);
-                            cardViewList.setCardBackgroundColor(Color.rgb(211,211,211));
+                            tvCourse.setTextSize(16);
+                            cardViewList.setCardBackgroundColor(Color.rgb(246,246,246));
+
+
+                            }
+                            else {
+                                itemView.setSelected(true);
+                                check.setVisibility(View.INVISIBLE);
+                                tvCourse.setTypeface(null, Typeface.NORMAL);
+                                tvCourse.setTextSize(16);
+                                cardViewList.setCardBackgroundColor(Color.WHITE);
+                            }
+
 
                         }
                     }
+
+
                 }
             });
 
@@ -146,7 +164,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
             tvId.setText(vak.getId());
             tvCredit.setText(vak.getCredit());
             check.setImageResource(R.drawable.check_only);
-            vakImage.setImageResource(R.drawable.bookssstack);
+            vakImage.setImageResource(R.drawable.booksstackofthreeeen);
 
         }
     }

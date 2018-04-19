@@ -1,9 +1,7 @@
 package app.stucre;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,8 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.mancj.slideup.SlideUp;
 
 public class electives extends AppCompatActivity {
 
@@ -20,6 +21,10 @@ public class electives extends AppCompatActivity {
     private ActionBarDrawerToggle dToggle;
 
     private ViewPager mViewPager;
+    private SlideUp slideUp ;
+    private View slideView;
+    private View dimElectives;
+    private FloatingActionButton floatElectives;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,36 @@ public class electives extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(this.getResources().getColor(R.color.colorE));
         }
+
+        slideView = findViewById(R.id.slideUpCreditsView);
+        dimElectives = findViewById(R.id.dim_electives);
+
+        slideUp = new SlideUp(slideView);
+        slideUp.hideImmediately();
+
+        floatElectives = findViewById(R.id.floatBtnElectives);
+
+        floatElectives.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slideUp.animateIn();
+                floatElectives.hide();
+            }
+        });
+
+        slideUp.setSlideListener(new SlideUp.SlideListener() {
+            @Override
+            public void onSlideDown(float v) {
+                dimElectives.setAlpha(1-(v/100));
+            }
+
+            @Override
+            public void onVisibilityChanged(int i) {
+                if(i == View.GONE){
+                    floatElectives.show();
+                }
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarElectives);
         setSupportActionBar(toolbar);

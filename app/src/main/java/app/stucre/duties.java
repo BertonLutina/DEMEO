@@ -2,35 +2,24 @@ package app.stucre;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.support.v4.app.Fragment;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.DepthPageTransformer;
-import com.ToxicBakery.viewpager.transforms.FlipVerticalTransformer;
-import com.ToxicBakery.viewpager.transforms.ForegroundToBackgroundTransformer;
+import com.mancj.slideup.SlideUp;
 
 public class duties extends AppCompatActivity {
 
@@ -38,6 +27,13 @@ public class duties extends AppCompatActivity {
     private NavigationView nav_duties;
     private ActionBarDrawerToggle dToggle;
     private ViewPager mViewPager;
+
+    private SlideUp slideUp ;
+    private View slideView;
+    private View dimDuties;
+    private FloatingActionButton floatDuties;
+
+    private TextView tvCourse;
 
 
 
@@ -48,12 +44,44 @@ public class duties extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_duties);
 
+
+
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(this.getResources().getColor(R.color.colorD));
         }
+
+        slideView = findViewById(R.id.slideUpCreditsView);
+        dimDuties = findViewById(R.id.dim_duties);
+
+        slideUp = new SlideUp(slideView);
+        slideUp.hideImmediately();
+
+        floatDuties = findViewById(R.id.floatBtnDuties);
+
+        floatDuties.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slideUp.animateIn();
+                floatDuties.hide();
+            }
+        });
+
+        slideUp.setSlideListener(new SlideUp.SlideListener() {
+            @Override
+            public void onSlideDown(float v) {
+                dimDuties.setAlpha(1-(v/100));
+            }
+
+            @Override
+            public void onVisibilityChanged(int i) {
+                if(i == View.GONE){
+                    floatDuties.show();
+                }
+            }
+        });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDuties);
         setSupportActionBar(toolbar);
 
@@ -88,6 +116,8 @@ public class duties extends AppCompatActivity {
 
         mViewPager.setOffscreenPageLimit(3);
 
+
+
         dLayout = (DrawerLayout)findViewById(R.id.drawer);
 
 
@@ -102,8 +132,7 @@ public class duties extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        nav_duties = (NavigationView) findViewById(R.id.nav_duties);
+        nav_duties = findViewById(R.id.nav_duties);
 
         nav_duties.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
