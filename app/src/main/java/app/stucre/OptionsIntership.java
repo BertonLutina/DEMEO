@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
     private ProgressWheel progressWheelOptionFase3;
     private View LayoutCredits;
     private int count = 0;
+    private Button btnSend;
 
     public OptionsIntership(){
 
@@ -56,20 +58,22 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
         recyclerViewOF3.setHasFixedSize(true);
         recyclerViewOF3.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // Object aanmaken
+        VakkenOF3 = new ArrayList<>();
 
-        // Test Vakken
-        Vakken();
+        // TestVakken
+        //Vakken();
 
         //Vakken van de DATABASE
-        //VakkenDatabase();
+        VakkenDatabase();
 
         cAOF3= new courseAdapter(getContext(),VakkenOF3);
         recyclerViewOF3.setAdapter(cAOF3);
-        cAOF3.notifyItemRangeChanged(0,VakkenOF3.size());
-        cAOF3.notifyDataSetChanged();
+        //cAOF3.notifyDataSetChanged();
 
         LayoutCredits = getActivity().findViewById(R.id.slideUpCreditsView);
         LinearLayout lay = LayoutCredits.findViewById(R.id.Progress_bar_points);
+        btnSend = (Button) lay.findViewById(R.id.versturen_credits);
         progressWheelOptionFase3 = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
         setHasOptionsMenu(true);
         clickOnVakken();
@@ -152,9 +156,9 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
     }
 
     private void Vakken(){
-        VakkenOF3 = new ArrayList<>();
+
         VakkenOF3.add(new Vak("OBI07A","Intercommunautaire stagemobiliteit","24 sp","24"));
-        VakkenOF3.add(new Vak("HBI89B","Stagemobiliteit in Vlaanderen","24 sp", "2"));
+        VakkenOF3.add(new Vak("HBI89B","Stagemobiliteit in Vlaanderen","24 sp", "24"));
         VakkenOF3.add(new Vak("HBI90B","Stagemobiliteit in Europa","24 sp","24"));
         VakkenOF3.add(new Vak("HBI91B","Stagemobiliteit buiten Europa","24 sp","24"));
         VakkenOF3.add(new Vak("OS3000","Buiten Europa: voorbereid op stage","3 sp","3"));
@@ -182,6 +186,7 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
                             VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: out of Europe",creditPunten.toString()));
+                            cAOF3.notifyDataSetChanged();
                         }}
                     else if (TextUtils.equals(vakken_hm ,"Option 5 : Intership mobility in Europe : SHORT"))
                     {
@@ -193,6 +198,7 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
                             VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: in or out of Europe",creditPunten.toString()));
+                            cAOF3.notifyDataSetChanged();
                         }
                     }
                 }
@@ -202,6 +208,7 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                     Object credit = child.child("CREDITS").getValue(Object.class);
                     Object creditPunten = child.child("CREDITS").getValue(Object.class);
                     VakkenOF3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+                    cAOF3.notifyDataSetChanged();
                 }
 
             }
@@ -229,12 +236,14 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                         int percent = (360/60) * count;
                         progressWheelOptionFase3.setProgress(percent);
                         progressWheelOptionFase3.setText(Integer.toString(count)+" sp");
-                        Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                        Toasty.custom(getContext(), "+ "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
                     }else{
                         Toasty.error(getContext()," 60 sp is de limiet => Fase 3", Toast.LENGTH_SHORT).show();
                     }
                     if (count == 60) {
                         progressWheelOptionFase3.setBarColor(Color.	rgb(0,128,0));
+                        //btnSend.setEnabled(true);
+                        //btnSend.setBackgroundColor(Color.rgb(0,128,0));
                     }else if(count >= 45 && count < 60){
                         progressWheelOptionFase3.setBarColor(Color.rgb(255,69,0));
                     }else if (count >= 30 && count < 45) {
@@ -251,7 +260,7 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                         int percent = (360/60) * count;
                         progressWheelOptionFase3.setProgress(percent);
                         progressWheelOptionFase3.setText(Integer.toString(count)+" sp");
-                        Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
+                        Toasty.custom(getContext(), "- "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
                     }else{
                         Toasty.error(getContext()," MAG niet Onder de 0", Toast.LENGTH_SHORT).show();
                     }
@@ -260,6 +269,7 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                         progressWheelOptionFase3.setBarColor(Color.	rgb(0,128,0));
                     }else if(count >= 45 && count < 60){
                         progressWheelOptionFase3.setBarColor(Color.rgb(255,69,0));
+                        //btnSend.setEnabled(false);
                     }else if (count >= 30 && count < 45) {
                         progressWheelOptionFase3.setBarColor(Color.rgb(255,140,0));
                     }else if (count >= 15 && count < 30) {

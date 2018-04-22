@@ -15,16 +15,7 @@
     android:layout_height="match_parent"
     tools:context="app.stucre.about">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="77dp"
-        android:text="About us"
-        tools:layout_editor_absoluteX="176dp"
-        tools:layout_editor_absoluteY="17dp" />
+
 
     <android.support.v7.widget.Toolbar
         app:title="About us"
@@ -32,18 +23,36 @@
         app:titleTextColor="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#59595e"
+        android:background="@color/colorPrimaryDark"
         android:minHeight="?attr/actionBarSize"
         android:textAlignment="center"
         android:id="@+id/toolbarA"
         ></android.support.v7.widget.Toolbar>
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="136dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="14dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="169dp"
+        android:text="Info" />
 
 </RelativeLayout>
 <android.support.design.widget.NavigationView
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 app:menu="@menu/nav_a_bar"
-android:layout_gravity="start">
+android:layout_gravity="start"
+    android:id="@+id/nav_about">
 
 </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

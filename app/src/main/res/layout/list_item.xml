@@ -13,9 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardMaxElevation="15dp"
-        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_margin="4dp"
         app:cardCornerRadius="2dp"
         android:id="@+id/listCardview"
+        app
         >
 
         <LinearLayout
@@ -52,7 +53,7 @@
 
                 <TextView
                     android:id="@+id/text1"
-                    android:layout_width="160dp"
+                    android:layout_width="1dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="16dp"
@@ -64,7 +65,30 @@
                     android:text="berre"
                     android:textAlignment="textStart"
                     android:textColor="@drawable/select_item_listviewtext"
-                    android:textSize="16sp"
+                    android:textSize="16sp"/>
+
+                <RelativeLayout
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/vakkenbeschikbaar"
+                        android:id="@+id/optenemenVakken"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/vakkenopnieuwdoen"
+                        android:id="@+id/geslaagevakken"
+                        android:visibility="invisible"/>
+
+                </RelativeLayout>
+
+
 
 
                     />

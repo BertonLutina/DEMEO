@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
     private ProgressWheel progressWheelEMB;
     private View dutiesLayout;
     private int count = 0;
+    private Button btnSend;
 
     public ElectivesModulesOptionB(){
 
@@ -59,19 +61,23 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
         recyclerViewEmB.setHasFixedSize(true);
         recyclerViewEmB.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // object aanmaken
+        VakkenEmB = new ArrayList<>();
+
 
         // Test vakken
-        Vakken();
+        //Vakken();
 
         // Vakken Van Database
-        //VakkenDatabase();
+        VakkenDatabase();
 
         cAEMB = new courseAdapter(getContext(),VakkenEmB);
         recyclerViewEmB.setAdapter(cAEMB);
-        cAEMB.notifyDataSetChanged();
+        //cAEMB.notifyDataSetChanged();
 
         dutiesLayout = getActivity().findViewById(R.id.slideUpCreditsView);
         LinearLayout lay = dutiesLayout.findViewById(R.id.Progress_bar_points);
+        btnSend = (Button) lay.findViewById(R.id.versturen_credits);
         progressWheelEMB = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
         setHasOptionsMenu(true);
 
@@ -157,7 +163,7 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
     }
 
     private void Vakken(){
-        VakkenEmB = new ArrayList<>();
+
         VakkenEmB.add(new Vak("OH3104","Mobile and Internet 4", "6 sp","6"));
         VakkenEmB.add(new Vak("OH3105","System Management 4", "6 sp","6"));
         VakkenEmB.add(new Vak("OH4101","Network Management 4", "6 sp","6"));
@@ -186,7 +192,8 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            //VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2",creditPunten.toString()));
+                            VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2",creditPunten.toString()));
+                            cAEMB.notifyDataSetChanged();
 
 
                         }
@@ -200,7 +207,8 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            //VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3",creditPunten.toString()));
+                            VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3",creditPunten.toString()));
+                            cAEMB.notifyDataSetChanged();
 
 
                         }
@@ -232,7 +240,7 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
                     if(!(count> 60)) {
                         count += Integer.parseInt(point);
                         int percent = (360/60) * (count+1);
-                        Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                        Toasty.custom(getContext(), "+ "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
                         progressWheelEMB.setProgress(percent);
                         progressWheelEMB.setText(Integer.toString(count)+" sp");
                     } else{
@@ -240,6 +248,8 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
                     }
                     if (count == 60) {
                         progressWheelEMB.setBarColor(Color.	rgb(0,128,0));
+                        //btnSend.setEnabled(true);
+                        //btnSend.setBackgroundColor(Color.rgb(0,128,0));
                     }else if(count >= 45 && count < 60){
                         progressWheelEMB.setBarColor(Color.rgb(255,69,0));
                     }else if (count >= 30 && count < 45) {
@@ -255,7 +265,7 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
                     if(!(count < 0)) {
                         count -= Integer.parseInt(point);
                         int percent = (360/60) * (count+1);
-                        Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
+                        Toasty.custom(getContext(), "* "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
                         progressWheelEMB.setProgress(percent);
                         progressWheelEMB.setText(Integer.toString(count)+" sp");
 
@@ -267,6 +277,7 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
                         progressWheelEMB.setBarColor(Color.	rgb(0,128,0));
                     }else if(count >= 45 && count < 60){
                         progressWheelEMB.setBarColor(Color.rgb(255,69,0));
+                        //btnSend.setEnabled(false);
                     }else if (count >= 30 && count < 45) {
                         progressWheelEMB.setBarColor(Color.rgb(255,140,0));
                     }else if (count >= 15 && count < 30) {

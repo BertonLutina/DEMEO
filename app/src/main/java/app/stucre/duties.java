@@ -21,7 +21,9 @@ import android.widget.TextView;
 import com.ToxicBakery.viewpager.transforms.DepthPageTransformer;
 import com.mancj.slideup.SlideUp;
 
-public class duties extends AppCompatActivity {
+import es.dmoral.toasty.Toasty;
+
+public class duties extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout dLayout;
     private NavigationView nav_duties;
@@ -127,47 +129,13 @@ public class duties extends AppCompatActivity {
         dLayout.addDrawerListener(dToggle);
         dToggle.syncState();
 
-
         // These lines are needed to display the top-left hamburger button
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        nav_duties = findViewById(R.id.nav_duties);
+        nav_duties = (NavigationView) findViewById(R.id.nav_duties);
 
-        nav_duties.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                int id = item.getItemId();
-
-                switch (id) {
-                    case R.id.course:
-                        Intent course = new Intent(duties.this, Courses.class);
-                        startActivity(course);
-                        return false;
-                    case R.id.em:
-                        Intent em = new Intent(duties.this, electivesModules.class);
-                        startActivity(em);
-                        return false;
-                    case R.id.electives:
-                        Intent electives = new Intent(duties.this, electives.class);
-                        startActivity(electives);
-                        return false;
-                    case R.id.options:
-                        Intent options = new Intent(duties.this, options.class);
-                        startActivity(options);
-                        return false;
-
-                }
-
-
-                    return false;
-            }
-        });
-
-
-
-
+        nav_duties.setNavigationItemSelectedListener(this);
 
 
     }
@@ -176,7 +144,7 @@ public class duties extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         //menu.clear();
-        //getMenuInflater().inflate(R.menu.nav_a_bar,menu);
+        getMenuInflater().inflate(R.menu.nav_d_bar,menu);
         return true;
     }
 
@@ -186,6 +154,35 @@ public class duties extends AppCompatActivity {
         if(dToggle.onOptionsItemSelected(item)){
             return true;
         }
+
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.course:
+                Intent course = new Intent(duties.this,Courses.class );
+                startActivity(course);
+                return false;
+            case R.id.profile:
+                Intent em = new Intent(duties.this,profile.class );
+                startActivity(em);
+                return false;
+            case R.id.setting:
+                Intent electives = new Intent(duties.this,electives.class );
+                startActivity(electives);
+                return false;
+
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+
+    }
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
 
         int id = item.getItemId();
 
@@ -206,17 +203,11 @@ public class duties extends AppCompatActivity {
                 Intent options = new Intent(duties.this,options.class );
                 startActivity(options);
                 return false;
-
             default:
-                return super.onOptionsItemSelected(item);
+                return false;
+
         }
 
 
     }
-
-
-
-
-
-
 }

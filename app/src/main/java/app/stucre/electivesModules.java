@@ -1,6 +1,9 @@
 package app.stucre;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -16,13 +19,13 @@ import android.view.WindowManager;
 
 import com.mancj.slideup.SlideUp;
 
-public class electivesModules extends AppCompatActivity {
+public class electivesModules extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout dLayout;
     private ActionBarDrawerToggle dToggle;
     private SectionPageAdapter2 mSectionPageAdapter2;
     private ViewPager mViewPager;
-
+    private NavigationView nav_em;
     private SlideUp slideUp ;
     private View slideView;
     private View dimEM;
@@ -114,11 +117,15 @@ public class electivesModules extends AppCompatActivity {
         // These lines are needed to display the top-left hamburger button
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        nav_em = (NavigationView) findViewById(R.id.nav_em);
+
+        nav_em.setNavigationItemSelectedListener(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.nav_em_bar,menu);
+        getMenuInflater().inflate(R.menu.nav_a_bar,menu);
         return true;
     }
 
@@ -127,6 +134,53 @@ public class electivesModules extends AppCompatActivity {
         if(dToggle.onOptionsItemSelected(item)){
             return true;
         }
-        return super.onOptionsItemSelected(item);
+
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.course:
+                Intent course = new Intent(electivesModules.this,Courses.class );
+                startActivity(course);
+                return false;
+            case R.id.profile:
+                Intent em = new Intent(electivesModules.this,profile.class );
+                startActivity(em);
+                return false;
+            case R.id.setting:
+                Intent electives = new Intent(electivesModules.this,electives.class );
+                startActivity(electives);
+                return false;
+
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.course:
+                Intent course = new Intent(electivesModules.this,Courses.class );
+                startActivity(course);
+                return false;
+            case R.id.duties:
+                Intent duties = new Intent(electivesModules.this,duties.class );
+                startActivity(duties);
+                return false;
+            case R.id.electives:
+                Intent electives = new Intent(electivesModules.this,electives.class );
+                startActivity(electives);
+                return false;
+            case R.id.options:
+                Intent options = new Intent(electivesModules.this,options.class );
+                startActivity(options);
+                return false;
+            default:
+                return false;
+
+        }
     }
 }

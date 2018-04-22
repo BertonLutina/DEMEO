@@ -5,11 +5,11 @@
     <group android:checkableBehavior="single">
     <item android:id="@+id/profile"
         android:title="Profile"
-        android:icon="@drawable/studentscap"
+        android:icon="@drawable/loggo"
         ></item>
     <item android:id="@+id/about"
     android:title="About us"
-        android:icon="@drawable/eebook"></item>
+        android:icon="@drawable/ic_info_outline_white_48dp"></item>
     <item android:id="@+id/logOut"
         android:icon="@drawable/signoutoption"
         android:title="Log Out"></item>

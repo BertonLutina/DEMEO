@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ public class ElectivesModulesOptionA extends Fragment implements SearchView.OnQu
     private ProgressWheel progressWheelEMA;
     private View dutiesLayout;
     private int count = 0;
+    private Button btnSend;
 
     public ElectivesModulesOptionA(){
 
@@ -62,18 +64,22 @@ public class ElectivesModulesOptionA extends Fragment implements SearchView.OnQu
         recyclerViewEmA.setHasFixedSize(true);
         recyclerViewEmA.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        //Object aanmaken
+        VakkenEmA = new ArrayList<>();
+
         // Test vakken
-        Vakken();
+        //Vakken();
 
         // Vakken Van Database
-        //VakkenDatabase();
+        VakkenDatabase();
 
         cAEMA= new courseAdapter(getContext(),VakkenEmA);
         recyclerViewEmA.setAdapter(cAEMA);
-        cAEMA.notifyDataSetChanged();
+        //cAEMA.notifyDataSetChanged();
 
         dutiesLayout = getActivity().findViewById(R.id.slideUpCreditsView);
         LinearLayout lay = dutiesLayout.findViewById(R.id.Progress_bar_points);
+        btnSend = (Button) lay.findViewById(R.id.versturen_credits);
         progressWheelEMA = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
@@ -155,7 +161,7 @@ public class ElectivesModulesOptionA extends Fragment implements SearchView.OnQu
     }
 
     private void Vakken(){
-        VakkenEmA = new ArrayList<>();
+
         VakkenEmA.add(new Vak("OH3101","Software Engineering 4", "6 sp","6"));
         VakkenEmA.add(new Vak("OH3102","Application Development 4", "6 sp","6"));
         VakkenEmA.add(new Vak("OH3103","Database Development 4", "6 sp","6"));
@@ -186,6 +192,7 @@ public class ElectivesModulesOptionA extends Fragment implements SearchView.OnQu
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
                             VakkenEmA.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2",creditPunten.toString()));
+                            cAEMA.notifyDataSetChanged();
 
 
                         }
@@ -200,6 +207,7 @@ public class ElectivesModulesOptionA extends Fragment implements SearchView.OnQu
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
                             VakkenEmA.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3",creditPunten.toString()));
+                            cAEMA.notifyDataSetChanged();
 
                         }
 
@@ -232,7 +240,7 @@ public class ElectivesModulesOptionA extends Fragment implements SearchView.OnQu
                     if(!(count> 60)){
                         count += Integer.parseInt(point);
                         int percent = (360/60) * (count+1);
-                        Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                        Toasty.custom(getContext(), "+ "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
                         progressWheelEMA.setProgress(percent);
                         progressWheelEMA.setText(Integer.toString(count)+" sp");
                     }else{
@@ -241,6 +249,8 @@ public class ElectivesModulesOptionA extends Fragment implements SearchView.OnQu
 
                     if (count == 60) {
                         progressWheelEMA.setBarColor(Color.	rgb(0,128,0));
+                        //btnSend.setEnabled(true);
+                        //btnSend.setBackgroundColor(Color.rgb(0,128,0));
                     }else if(count >= 45 && count < 60){
                         progressWheelEMA.setBarColor(Color.rgb(255,69,0));
                     }else if (count >= 30 && count < 45) {
@@ -255,7 +265,7 @@ public class ElectivesModulesOptionA extends Fragment implements SearchView.OnQu
                     if(!(count < 0)){
                         count -= Integer.parseInt(point);
                         int percent = (360/60) * (count+1);
-                        Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
+                        Toasty.custom(getContext(), "- "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
                         progressWheelEMA.setProgress(percent);
                         progressWheelEMA.setText(Integer.toString(count)+" sp");
                     }else{
@@ -265,6 +275,7 @@ public class ElectivesModulesOptionA extends Fragment implements SearchView.OnQu
                         progressWheelEMA.setBarColor(Color.	rgb(0,128,0));
                     }else if(count >= 45 && count < 60){
                         progressWheelEMA.setBarColor(Color.rgb(255,69,0));
+                        //btnSend.setEnabled(false);
                     }else if (count >= 30 && count < 45) {
                         progressWheelEMA.setBarColor(Color.rgb(255,140,0));
                     }else if (count >= 15 && count < 30) {

@@ -4,6 +4,6 @@
     <color android:color="#d26428"/>
     </item>
     <item>
-    <color android:color="#fff"/>
+    <color android:color="@color/com_facebook_button_background_color_focused"/>
     </item><!-- default -->
 </selector>

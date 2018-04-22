@@ -16,6 +16,7 @@ import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
   private View LayoutCredits;
 
   int count = 0;
+  private Button btnSend;
 
 
   public DutiesFase1 (){
@@ -65,19 +67,23 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
     recyclerViewDF1.setLayoutManager(new LinearLayoutManager(getContext()));
 
     // Test data
-    Vakken();
-    //Real Data
-    //VakkenDatabase();
+    //Vakken();
+    Vakken1 = new ArrayList<>();
 
-      cA1 = new courseAdapter(getContext(),Vakken1);
+    //Real Data
+    VakkenDatabase();
+
+      cA1 = new courseAdapter(getActivity(),Vakken1);
       recyclerViewDF1.setAdapter(cA1);
-      cA1.notifyDataSetChanged();
+      //cA1.notifyDataSetChanged();
       setHasOptionsMenu(true);
 
 
     LayoutCredits = getActivity().findViewById(R.id.slideUpCreditsView);
     LinearLayout lay = LayoutCredits.findViewById(R.id.Progress_bar_points);
+    btnSend = (Button) lay.findViewById(R.id.versturen_credits);
     progressWheelFase1 = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
+
 
 
 
@@ -91,6 +97,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+
 
 
 
@@ -139,7 +146,6 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
    //Ldutiesfase1.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
   }
-
   @Override
   public boolean onQueryTextSubmit(String query) {
     return false;
@@ -219,7 +225,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
           Object creditPunten = child.child("CREDITS").getValue(Object.class);
           //Vakken.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
           Vakken1.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
-
+          cA1.notifyDataSetChanged();
         }
 
       }
@@ -245,15 +251,18 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
 
         if(!checked){
           Vakken1.get(position).setChecked(true);
+          int x = (int) cA1.getItemId(position);
           if(!(count> 60)){
-
             count += Integer.parseInt(point);
             int percent = (360/60) * count;
-            Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+            Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
             progressWheelFase1.setProgress(percent);
             progressWheelFase1.setText(Integer.toString(count)+" sp");
+
             if (count == 60) {
               progressWheelFase1.setBarColor(Color.	rgb(0,128,0));
+              //btnSend.setEnabled(true);
+              //btnSend.setBackgroundColor(Color.rgb(0,128,0));
             }else if(count >= 45 && count < 60){
               progressWheelFase1.setBarColor(Color.rgb(255,69,0));
             }else if (count >= 30 && count < 45) {
@@ -273,13 +282,14 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
           if(!(count < 0)){
             count -= Integer.parseInt(point);
             int percent = (360/60) * count;
-            Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
+            Toasty.custom(getContext(), "+ "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
             progressWheelFase1.setProgress(percent);
             progressWheelFase1.setText(Integer.toString(count)+" sp");
             if (count == 60) {
               progressWheelFase1.setBarColor(Color.	rgb(0,128,0));
             }else if(count >= 45 && count < 60){
               progressWheelFase1.setBarColor(Color.rgb(255,69,0));
+              //btnSend.setEnabled(false);
             }else if (count >= 30 && count < 45) {
               progressWheelFase1.setBarColor(Color.rgb(255,140,0));
             }else if (count >= 15 && count < 30) {

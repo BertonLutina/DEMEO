@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.support.v7.widget.SearchView;
 import android.widget.Toast;
@@ -39,9 +40,11 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
     private View dutiesLayout;
 
   private int count = 0;
+    private Button btnSend;
 
 
-  public DutiesFase2(){
+
+    public DutiesFase2(){
 
   }
 
@@ -58,16 +61,19 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
     recyclerViewDF2.setHasFixedSize(true);
     recyclerViewDF2.setLayoutManager(new LinearLayoutManager(getContext()));
 
+    // object aanmaken
+      Vakken2 = new ArrayList<>();
+
       // Test data
-        Vakken();
+        //Vakken();
 
       //Real Data
-      //VakkenDatabase();
+      VakkenDatabase();
 
 
         cA2 = new courseAdapter(getContext(),Vakken2);
         recyclerViewDF2.setAdapter(cA2);
-        cA2.notifyDataSetChanged();
+        //cA2.notifyDataSetChanged();
 
         clickOnVakken();
 
@@ -75,6 +81,7 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
 
       dutiesLayout = getActivity().findViewById(R.id.slideUpCreditsView);
       LinearLayout lay = dutiesLayout.findViewById(R.id.Progress_bar_points);
+      btnSend = (Button) lay.findViewById(R.id.versturen_credits);
       progressWheelFase2 = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
 
     return vFase2;
@@ -165,7 +172,7 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
   }
 
   private void Vakken(){
-      Vakken2 = new ArrayList<>();
+
       Vakken2.add(new Vak("HBI02C","ICT Organisation 4", "4 sp","4"));
       Vakken2.add(new Vak("HBI25B","ICT Organisation 3", "4 sp","4"));
       Vakken2.add(new Vak("HBI34B","Mobile en internet 3", "3 sp ","3"));
@@ -193,7 +200,8 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
                   Object course = child.child("COURSE").getValue(Object.class);
                   Object credit = child.child("CREDITS").getValue(Object.class);
                   Object creditPunten = child.child("CREDITS").getValue(Object.class);
-                  //Vakken2.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+                  Vakken2.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+                  cA2.notifyDataSetChanged();
 
 
               }
@@ -215,6 +223,8 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
               String point = Vakken2.get(position).getCreditPunten();
               boolean checked = Vakken2.get(position).isChecked();
 
+              //btnSend.setEnabled(false);
+
               if(!checked) {
                   Vakken2.get(position).setChecked(true);
                   if( !(count>= 60)){
@@ -222,13 +232,15 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
                       int percent = (360/60) * count;
                       progressWheelFase2.setProgress(percent);
                       progressWheelFase2.setText(Integer.toString(count)+" sp");
-                      Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                      Toasty.custom(getContext(), "+ "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
 
                   }else{
                       Toasty.error(getContext(),"60 sp is de limiet => Electives Modules", Toast.LENGTH_SHORT).show();
                   }
                   if (count == 60) {
                       progressWheelFase2.setBarColor(Color.	rgb(0,128,0));
+                      //btnSend.setEnabled(true);
+                      //btnSend.setBackgroundColor(Color.rgb(0,128,0));
                   }else if(count >= 45 && count < 60){
                       progressWheelFase2.setBarColor(Color.rgb(255,69,0));
                   }else if (count >= 30 && count < 45) {
@@ -245,7 +257,7 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
                       int percent = (360/60) * count;
                       progressWheelFase2.setProgress(percent);
                       progressWheelFase2.setText(Integer.toString(count)+" sp");
-                      Toasty.custom(getContext(), count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
+                      Toasty.custom(getContext(), "- "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
 
                   }else{
                       Toasty.error(getContext()," Mag niet onder de 0", Toast.LENGTH_SHORT).show();
@@ -254,6 +266,7 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
                       progressWheelFase2.setBarColor(Color.	rgb(0,128,0));
                   }else if(count >= 45 && count < 60){
                       progressWheelFase2.setBarColor(Color.rgb(255,69,0));
+                      //btnSend.setEnabled(false);
                   }else if (count >= 30 && count < 45) {
                       progressWheelFase2.setBarColor(Color.rgb(255,140,0));
                   }else if (count >= 15 && count < 30) {

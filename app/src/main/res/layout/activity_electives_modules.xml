@@ -66,14 +66,7 @@
 
 </RelativeLayout>
 
-<android.support.design.widget.NavigationView
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-app:menu="@menu/nav_em_bar"
-android:layout_gravity="start"
-    app:headerLayout="@layout/header_nav">
 
-</android.support.design.widget.NavigationView>
     <include layout="@layout/slideupview_credit_point"/>
 
     <FrameLayout
@@ -91,7 +84,17 @@ android:layout_gravity="start"
             android:layout_gravity="bottom|end"
             android:layout_margin="30dp"
             app:srcCompat="@android:drawable/ic_menu_sort_by_size"
-            app:backgroundTint="#ff385d"
+            app:backgroundTint="@color/Orange"
             android:id="@+id/floatBtnEM"/>
     </FrameLayout>
+
+    <android.support.design.widget.NavigationView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:menu="@menu/nav_em_bar"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/header_nav"
+        android:id="@+id/nav_em">
+
+    </android.support.design.widget.NavigationView>
     </android.support.v4.widget.DrawerLayout>

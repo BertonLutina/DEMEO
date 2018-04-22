@@ -1,12 +1,15 @@
 package app.stucre;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -15,11 +18,14 @@ import android.widget.Button;
 
 import com.google.firebase.database.FirebaseDatabase;
 
+import es.dmoral.toasty.Toasty;
 
-public class Courses extends AppCompatActivity {
+
+public class Courses extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
     private ActionBarDrawerToggle dToggle;
+    private NavigationView nav_course;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +105,10 @@ public class Courses extends AppCompatActivity {
             }
         });
 
+        nav_course = (NavigationView) findViewById(R.id.nav_courses);
+
+        nav_course.setNavigationItemSelectedListener(this);
+
 
     }
 
@@ -107,8 +117,50 @@ public class Courses extends AppCompatActivity {
         if(dToggle.onOptionsItemSelected(item)){
             return true;
         }
-        return super.onOptionsItemSelected(item);
+
+        int id = item.getItemId();
+
+        switch (id){
+
+            case R.id.setting:
+                Toasty.warning(getBaseContext(),"Logout").show();
+                return false;
+
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        //menu.clear();
+        getMenuInflater().inflate(R.menu.nav_a_bar,menu);
+        return true;
     }
 
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.profile:
+                Intent profile = new Intent(Courses.this,profile.class );
+                startActivity(profile);
+                return false;
+            case R.id.about:
+                Intent about = new Intent(Courses.this,about.class );
+                startActivity(about);
+                return false;
+            case R.id.duties:
+                Toasty.warning(getBaseContext(),"Logout").show();
+                return false;
+
+            default:
+                return false;
+
+        }
+    }
 }
