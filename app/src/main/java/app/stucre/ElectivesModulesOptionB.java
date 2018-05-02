@@ -1,11 +1,14 @@
 package app.stucre;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -17,8 +20,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -38,12 +44,13 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
 
     private RecyclerView recyclerViewEmB;
     private courseAdapter cAEMB;
-    private List<Vak> VakkenEmB;
+    private ArrayList<Vak> VakkenEmB;
 
     private ProgressWheel progressWheelEMB;
     private View dutiesLayout;
     private int count = 0;
     private Button btnSend;
+    private Switch selectall;
 
     public ElectivesModulesOptionB(){
 
@@ -62,14 +69,16 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
         recyclerViewEmB.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // object aanmaken
-        VakkenEmB = new ArrayList<>();
+        Intent intent = getActivity().getIntent();
+        VakkenEmB = (ArrayList<Vak>) intent.getSerializableExtra("EMB");
+
 
 
         // Test vakken
         //Vakken();
 
         // Vakken Van Database
-        VakkenDatabase();
+       // VakkenDatabase();
 
         cAEMB = new courseAdapter(getContext(),VakkenEmB);
         recyclerViewEmB.setAdapter(cAEMB);
@@ -83,7 +92,42 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
 
         // Click
         clickOnVakken();
+        selectall = (Switch) getActivity().findViewById(R.id.selectAllSwitchEMB);
 
+        selectall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if(b){
+                    for (Vak vak : VakkenEmB){
+                        vak.setChecked(true);
+                        boolean checked = vak.isChecked();
+                        String point = vak.getCreditPunten();
+                        count =+ Integer.parseInt(point);
+                        count++;
+                        int percent = (360/60) * (count+1);
+                        progressWheelEMB.setProgress(percent);
+                        progressWheelEMB.setText(Integer.toString(count)+" sp");
+                        cAEMB.notifyDataSetChanged();
+                    }
+                    Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                }else{
+                    for (Vak vak : VakkenEmB) {
+                        vak.setChecked(false);
+                        boolean checked = vak.isChecked();
+                        String point = vak.getCreditPunten();
+                        count = -Integer.parseInt(point);
+                        count--;
+                        int percent = (360 / 60) * (count + 1);
+                        progressWheelEMB.setProgress(percent);
+                        progressWheelEMB.setText(Integer.toString(count) + " sp");
+                        cAEMB.notifyDataSetChanged();
+                    }
+
+                }
+
+            }
+        });
 
         // Inflate the layout for this fragment
 
@@ -162,16 +206,7 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
 
     }
 
-    private void Vakken(){
 
-        VakkenEmB.add(new Vak("OH3104","Mobile and Internet 4", "6 sp","6"));
-        VakkenEmB.add(new Vak("OH3105","System Management 4", "6 sp","6"));
-        VakkenEmB.add(new Vak("OH4101","Network Management 4", "6 sp","6"));
-        VakkenEmB.add(new Vak("HBI87B","System Management 5 : Datacenter and cloud", "4 sp","4"));
-        VakkenEmB.add(new Vak("HBI97B","Security Management 5 and Information Security", "4 sp","4"));
-        VakkenEmB.add(new Vak("OH3108","Mobile & Internet 5: Smart App", "4 sp","4"));
-        VakkenEmB.add(new Vak("OH3109","Integration project Internet and Cloud", "9 sp","9"));
-    }
     private void VakkenDatabase(){
         EMdatabases.addValueEventListener(new ValueEventListener() {
             @Override
@@ -192,7 +227,7 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2",creditPunten.toString()));
+                            //VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 2",creditPunten.toString()));
                             cAEMB.notifyDataSetChanged();
 
 
@@ -207,7 +242,7 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3",creditPunten.toString()));
+                            //VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      fase 3",creditPunten.toString()));
                             cAEMB.notifyDataSetChanged();
 
 
@@ -290,6 +325,44 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
 
             }
         });
+
+        cAEMB.setOnItemLongClickListener(new courseAdapter.onItemLongClickListerner() {
+            @Override
+            public boolean onItemLongClick(int position) {
+                String course = VakkenEmB.get(position).getCourse();
+                Integer Score = VakkenEmB.get(position).setScore(0);
+                Integer getScore = VakkenEmB.get(position).getScore();
+
+                AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+
+                View dialogView = inflater.inflate(R.layout.dialogscore,null);
+                TextView vak = (TextView) dialogView.findViewById(R.id.vakDialoog);
+                TextView score = (TextView) dialogView.findViewById(R.id.score);
+                TextView geslaagd = (TextView) dialogView.findViewById(R.id.txtgeslaagd);
+
+                vak.setText(course);
+                score.setText(getScore.toString());
+                geslaagd.setText("In progress...");
+                geslaagd.setBackgroundColor(Color.rgb(0,128,0));
+                geslaagd.setTextColor(Color.rgb(246,246,246));
+
+
+                dialogvak.setView(dialogView).setPositiveButton("Back",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                AlertDialog alertVak =  dialogvak.create();
+
+                alertVak.show();
+
+                return true;
+            }
+        });
+
     }
 
 }

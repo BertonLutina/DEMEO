@@ -40,7 +40,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_rowWeight="1"
-                app:cardBackgroundColor="#d26428"
+                app:cardBackgroundColor="#778899"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="8dp"
                 android:id="@+id/dCardview">
@@ -77,7 +77,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_rowWeight="1"
-                app:cardBackgroundColor="@color/Orange"
+                app:cardBackgroundColor="#CD5C5C"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="8dp"
                 android:id="@+id/eMCardview">
@@ -114,7 +114,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_rowWeight="1"
-                app:cardBackgroundColor="@color/Orange"
+                app:cardBackgroundColor="#5F9EA0"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="8dp"
                 android:id="@+id/eCardview"
@@ -152,7 +152,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_rowWeight="1"
-                app:cardBackgroundColor="@color/Orange"
+                app:cardBackgroundColor="#cead00"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="8dp"
                 android:id="@+id/oCardview">
@@ -189,7 +189,7 @@
             android:id="@+id/toolbar2"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#ffffff"
+            android:background="#fff"
             android:minHeight="?attr/actionBarSize"
             app:title="Course"
             android:textAlignment="center"
@@ -235,5 +235,3 @@
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>
-
-

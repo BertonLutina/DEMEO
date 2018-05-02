@@ -1,5 +1,7 @@
 package app.stucre;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,8 +18,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import com.mancj.slideup.SlideUp;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class electives extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -29,6 +35,10 @@ public class electives extends AppCompatActivity implements NavigationView.OnNav
     private View slideView;
     private View dimElectives;
     private FloatingActionButton floatElectives;
+    private Button btnSend;
+    private List<String> opgenomenVakken = new ArrayList<>();
+    private String[] course_array;
+    private List<Vak> Ele;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +89,41 @@ public class electives extends AppCompatActivity implements NavigationView.OnNav
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabselectives);
         tabLayout.addTab(tabLayout.newTab().setText("Fase 3"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        Intent intent = getIntent();
+        Ele = (ArrayList<Vak>) intent.getSerializableExtra("EleFase3");
+
+        for (Vak course : Ele){
+            opgenomenVakken.add(course.getCourse());
+        }
+
+        course_array = new String[opgenomenVakken.size()];
+        opgenomenVakken.toArray(course_array);
+
+        btnSend = (Button) slideView.findViewById(R.id.versturen_credits);
+        btnSend.setEnabled(true);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(electives.this);
+                builder.setTitle("Included Courses")
+                        .setItems(course_array, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                            }
+                        }).setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+
+        });
 
         mViewPager = (ViewPager) findViewById(R.id.pagerElectives);
         final ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(),tabLayout.getTabCount());

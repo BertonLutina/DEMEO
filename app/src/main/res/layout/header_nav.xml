@@ -20,8 +20,10 @@
     android:textColor="#fff"
     android:layout_marginTop="15dp"
     android:text="Berton Lutina Mulamba"
-    android:layout_marginLeft="45dp"/>
+    android:layout_marginLeft="45dp"
+        android:id="@+id/headerUser"/>
     <TextView
+        android:id="@+id/headerEmail"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:textColor="#d26428"

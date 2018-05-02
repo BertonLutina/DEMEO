@@ -17,14 +17,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 public class Intro extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
-    Button signInButton;
-    Button signInButtonFacebook;
-
-
+    private Button signInButton;
+    private Button signInMicrosoft;
     //TextView statusTextView;
     GoogleApiClient mGoogleApiClient;
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
+    private Button signEmail;
+
 
 
     @Override
@@ -40,15 +40,29 @@ public class Intro extends AppCompatActivity implements GoogleApiClient.OnConnec
                 .build();
 
         signInButton = (Button) findViewById(R.id.Signinbtn);
-        signInButtonFacebook = (Button) findViewById(R.id.SigninFacebook);
+        signInMicrosoft = (Button) findViewById(R.id.SigninOutlook);
+        signEmail = (Button) findViewById(R.id.SigninEmail);
 
-        signInButtonFacebook.setOnClickListener(new View.OnClickListener() {
+        signInMicrosoft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intro.this,Courses.class);
+                Intent intent = new Intent(Intro.this,MicrosoftLogin.class);
                 startActivity(intent);
             }
         });
+
+
+
+        signEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Intro.this,Courses.class);
+                startActivity(intent);
+
+            }
+        });
+
 
 
         signInButton.setOnClickListener(this);
@@ -76,10 +90,12 @@ public class Intro extends AppCompatActivity implements GoogleApiClient.OnConnec
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RC_SIGN_IN){
+       if(requestCode == RC_SIGN_IN){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
+
+
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
@@ -100,4 +116,10 @@ public class Intro extends AppCompatActivity implements GoogleApiClient.OnConnec
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+    /*
+    ***********************Microsoft Methode*********************
+     */
+
+
 }

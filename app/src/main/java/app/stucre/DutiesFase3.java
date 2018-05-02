@@ -1,9 +1,12 @@
 package app.stucre;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,8 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.support.v7.widget.SearchView;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -33,12 +39,15 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
 
     private RecyclerView recyclerViewDF3;
     private courseAdapter cA3;
-    private List<Vak> Vakken3 = new ArrayList<>();
+    private ArrayList<Vak> Vakken3;
     private ProgressWheel progressWheelFase3;
     private View dutiesLayout;
 
     private int count = 0;
     private Button btnSend;
+    private Switch selectall;
+    private Switch selectall2;
+    private Switch selectall3;
 
     public DutiesFase3() {
     }
@@ -55,13 +64,17 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
         recyclerViewDF3.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //Object aanmaken
-        Vakken3 = new ArrayList<>();
+
+
+        Intent intent = getActivity().getIntent();
+        Vakken3 = (ArrayList<Vak>) intent.getSerializableExtra("FaseDrie");
+
 
         // Test data
         //Vakken();
 
         //Real Data
-        VakkenDatabase();
+        //VakkenDatabase();
 
         cA3 = new courseAdapter(getContext(),Vakken3);
         recyclerViewDF3.setAdapter(cA3);
@@ -74,6 +87,46 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
         progressWheelFase3 = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
 
         clickOnVakken();
+
+
+        selectall3 = (Switch) getActivity().findViewById(R.id.selectAllSwitchFase3);
+
+
+        selectall3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if(b){
+                    for (Vak vak : Vakken3){
+                        vak.setChecked(true);
+                        boolean checked = vak.isChecked();
+                        String point = vak.getCreditPunten();
+                        count = Integer.parseInt(point);
+                        count++;
+                        int percent = (360/60) * (count+1);
+                        progressWheelFase3.setProgress(percent);
+                        progressWheelFase3.setText(Integer.toString(count)+" sp");
+                        cA3.notifyDataSetChanged();
+
+                    }
+                    Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                }else{
+                    for (Vak vak : Vakken3) {
+                        vak.setChecked(false);
+                        boolean checked = vak.isChecked();
+                        String point = vak.getCreditPunten();
+                        count = Integer.parseInt(point);
+                        count--;
+                        int percent = (360 / 60) * (count + 1);
+                        progressWheelFase3.setProgress(percent);
+                        progressWheelFase3.setText(Integer.toString(count) + " sp");
+                        cA3.notifyDataSetChanged();
+
+                    }
+                }
+
+            }
+        });
         return vFase3;
     }
 
@@ -157,12 +210,7 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
 
     }
 
-    private void Vakken(){
 
-        Vakken3.add(new Vak("HBI04C","IM 5 - Big Data", "3 sp","3"));
-        Vakken3.add(new Vak("HBI07C","Business Ethics", "3 sp","3"));
-        Vakken3.add(new Vak("HBI12C","ICT 5: Creative Entrepreneurship", "3 sp","3"));
-    }
     private void VakkenDatabase(){
         dutiesFase3.addValueEventListener(new ValueEventListener() {
             @Override
@@ -175,7 +223,7 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
                     Object course = child.child("COURSE").getValue(Object.class);
                     Object credit = child.child("CREDITS").getValue(Object.class);
                     Object creditPunten = child.child("CREDITS").getValue(Object.class);
-                    Vakken3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+                    //Vakken3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
                     cA3.notifyDataSetChanged();
                 }
             }
@@ -229,7 +277,7 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
                         int percent = (360/60) * count;
                         progressWheelFase3.setProgress(percent);
                         progressWheelFase3.setText(Integer.toString(count)+" sp");
-                        Toasty.custom(getContext(), "* "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();}
+                        Toasty.custom(getContext(), "- "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();}
 
                         else{
                         Toasty.error(getContext()," Mag niet Onder de 0", Toast.LENGTH_SHORT).show();
@@ -248,6 +296,44 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
                     }
                 }
 
+            }
+        });
+
+        cA3.setOnItemLongClickListener(new courseAdapter.onItemLongClickListerner() {
+            @Override
+            public boolean onItemLongClick(int position) {
+
+                String course = Vakken3.get(position).getCourse();
+                Integer Score = Vakken3.get(position).setScore(0);
+                Integer getScore = Vakken3.get(position).getScore();
+
+                AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+
+                View dialogView = inflater.inflate(R.layout.dialogscore,null);
+                TextView vak = (TextView) dialogView.findViewById(R.id.vakDialoog);
+                TextView score = (TextView) dialogView.findViewById(R.id.score);
+                TextView geslaagd = (TextView) dialogView.findViewById(R.id.txtgeslaagd);
+
+                vak.setText(course);
+                score.setText(getScore.toString());
+                geslaagd.setText("In progress...");
+                geslaagd.setBackgroundColor(Color.rgb(0,128,0));
+                geslaagd.setTextColor(Color.rgb(246,246,246));
+
+
+                dialogvak.setView(dialogView).setPositiveButton("Back",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                AlertDialog alertVak =  dialogvak.create();
+
+                alertVak.show();
+
+                return true;
             }
         });
     }

@@ -43,6 +43,19 @@
         android:textAlignment="center"
         android:id="@+id/toolbarElectives"
         ></android.support.v7.widget.Toolbar>
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select All"
+            android:textAlignment="textEnd"
+            android:paddingRight="10dp"
+            android:switchPadding="14.5dp"
+            android:padding="10dp"
+            android:id="@+id/selectAllSwitch"
+            android:theme="@style/SCBSwitch"
+            android:textColor="#fff"
+            android:textColorHint="#fff"
+            />
     <android.support.design.widget.TabLayout
         android:id="@+id/tabselectives"
         android:layout_width="match_parent"

@@ -11,7 +11,12 @@
     <color name="colorA">#242b2d</color>
     <color name="colorP">#242b2d</color>
     <color name="colorGreen">#008000</color>
+    <color name="colorGreenForest">#228B22</color>
     <color name="colorYellow">#FFFF00</color>
     <color name="Orange">#d26428</color>
     <color name="BlauwDark">#263238</color>
+
+    <color name="disable_forground_grey">#42221f1f</color>
+    <color name="disable_thumb_grey">#1c000000</color>
+    <color name="enable_thumb_orange">#d26428</color>
 </resources>

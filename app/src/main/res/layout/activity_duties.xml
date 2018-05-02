@@ -44,6 +44,55 @@
 
         </android.support.v7.widget.Toolbar>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Switch
+                android:id="@+id/selectAllSwitchFase1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:paddingRight="10dp"
+                android:switchPadding="14.5dp"
+                android:text="Select All"
+                android:textAlignment="textEnd"
+                android:textColor="#fff"
+                android:textColorHint="#fff"
+                android:theme="@style/SCBSwitch" />
+
+            <Switch
+                android:id="@+id/selectAllSwitchFase2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:paddingRight="10dp"
+                android:switchPadding="14.5dp"
+                android:text="Select All"
+                android:textAlignment="textEnd"
+                android:textColor="#fff"
+                android:textColorHint="#fff"
+                android:theme="@style/SCBSwitch" />
+
+            <Switch
+                android:id="@+id/selectAllSwitchFase3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:paddingRight="10dp"
+                android:switchPadding="14.5dp"
+                android:text="Select All"
+                android:textAlignment="textEnd"
+                android:textColor="#fff"
+                android:textColorHint="#fff"
+                android:theme="@style/SCBSwitch" />
+
+
+        </LinearLayout>
+
+
         <android.support.design.widget.TabLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -64,8 +113,7 @@
 
 </RelativeLayout>
 
-
-    <include layout="@layout/slideupview_credit_point"/>
+<include layout="@layout/slideupview_credit_point"/>
 
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -82,7 +130,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="30dp"
             app:srcCompat="@android:drawable/ic_menu_sort_by_size"
-            app:backgroundTint="@color/Orange"
+            app:backgroundTint="@color/colorPrimaryDark"
             android:id="@+id/floatBtnDuties"/>
     </FrameLayout>
 

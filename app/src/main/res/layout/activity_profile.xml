@@ -8,7 +8,8 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_height="match_parent"
     tools:context="app.stucre.Courses"
-    android:background="@color/Orange">
+    android:descendantFocusability="blocksDescendants"
+    android:background="#ececec">
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -38,135 +39,248 @@
         ></android.support.v7.widget.Toolbar>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="240dp"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/toolbarPr"
-        android:layout_marginTop="0dp"
-        android:background="#f5f5f5"
-        android:gravity="center_horizontal"
-        android:id="@+id/relativeLayout">
+        android:background="#ffffff"
+        android:gravity="center">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/profile_image"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/fotoberre"
-            android:padding="5dp"
-            app:civ_border_width="4dp"
-            app:civ_border_color="@color/Orange"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/NaamUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_marginTop="120dp"
-            android:textSize="20dp"
-            android:padding="5dp"
-            android:text="Berton Lutina Mulamba" />
-        <TextView
-            android:id="@+id/EmailUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_marginTop="150dp"
-            android:textSize="14dp"
-            android:padding="5dp"
-            android:textColorLink="@color/colorPrimaryDark"
-            android:autoLink="email"
-            android:text="berton.lutinamulamba@student.odisee.be" />
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:clickable="true"
+                android:padding="5dp"
+                android:src="@drawable/fotoberre"
+                app:civ_border_color="@color/Orange"
+                app:civ_border_width="2dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="15dp">
+
+
+                <TextView
+                    android:id="@+id/NaamUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignTop="@+id/profile_image"
+                    android:padding="2dp"
+                    android:text="Berton Lutina Mulamba"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/EmailUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/NaamUser"
+                    android:autoLink="email"
+                    android:padding="2dp"
+                    android:text="berton.lutinamulamba@student.odisee.be"
+                    android:textColor="@color/Orange"
+                    android:textColorLink="@color/Orange"
+                    android:textSize="14dp" />
+            </LinearLayout>
+        </LinearLayout>
+
         <TextView
             android:id="@+id/Rnummer"
-            android:layout_width="wrap_content"
+            android:layout_width="128dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/Orange"
-            android:layout_marginTop="175dp"
-            android:textSize="11dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="3dp"
+            android:background="@color/Orange"
             android:padding="5dp"
             android:text="R0282865"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="12dp" />
 
-            />
-
-
-        <TextView
-            android:id="@+id/Update"
-            android:textAlignment="textEnd"
-            android:layout_width="190dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="100dp"
-            android:paddingTop="14dp"
-            android:paddingRight="24dp"
-            android:background="@drawable/textballoon"
-            android:textSize="14dp"
-            android:textColor="@color/colorGreen"
-            android:layout_marginTop="45dp"
-            android:text="Fase 1 : Geslaagd!" />
 
     </RelativeLayout>
 
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="243dp"
+        android:layout_below="@id/relativeLayout"
+        android:layout_marginBottom="-61dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/cardvieLayout">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:id="@+id/linCarFase1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="105dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:padding="5dp"
+                    android:text="Fase 1 "
+                    android:textAlignment="center" />
+
+                <ProgressBar
+                    android:id="@+id/progressf1"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="204dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:progressBackgroundTint="@color/colorPrimaryDark" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linCarFase2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="105dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:padding="5dp"
+                    android:text="Fase 2 "
+                    android:textAlignment="center" />
+
+                <ProgressBar
+                    android:id="@+id/progressf2"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="204dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:progressBackgroundTint="@color/colorPrimaryDark" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linCarFase3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="105dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:padding="5dp"
+                    android:text="Fase 3 "
+                    android:textAlignment="center" />
+
+                <ProgressBar
+                    android:id="@+id/progressf3"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="204dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:progressBackgroundTint="@color/colorPrimaryDark" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linCarfinal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:padding="5dp"
+                    android:text="/180"
+                    android:textAlignment="center"
+                    android:textSize="20sp"/>
+
+                <ProgressBar
+                    android:id="@+id/progressfinal"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:progressBackgroundTint="@color/colorPrimaryDark" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cardvieLayout"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/status_student"
+            android:layout_width="168dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="105dp"
+            android:background="@color/colorGreen"
+            android:padding="5dp"
+            android:text="In progres..."
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="12dp" />
+    </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="24dp"
-        android:orientation="vertical"
-        android:id="@+id/relativeLayout2">
+        android:layout_marginBottom="32dp"
+        android:orientation="vertical">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/floatingActionButton3"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="23dp"
-            android:clickable="true"
             android:backgroundTint="@color/colorP"
+            android:clickable="true"
             app:srcCompat="@android:drawable/ic_dialog_info" />
     </RelativeLayout>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/relativeLayout2"
-        android:layout_marginTop="4dp"
-        android:layout_below="@id/relativeLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="66dp">
-
-        <android.support.design.widget.TabLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/colorPrimaryDark"
-            app:tabBackground="@color/colorPrimaryDark"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="#fff"
-            app:tabSelectedTextColor="@color/Orange"
-            app:tabTextColor="#fff">
-
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/Orange"
-                android:text="Left" />
-
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Center" />
-
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Right" />
-        </android.support.design.widget.TabLayout>
-    </android.support.v7.widget.CardView>
 
 
 </RelativeLayout>

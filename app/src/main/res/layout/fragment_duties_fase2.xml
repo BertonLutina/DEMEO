@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="app.stucre.DutiesFase2">
+    tools:context="app.stucre.DutiesFase2"
+    android:id="@+id/fase2D">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.RecyclerView

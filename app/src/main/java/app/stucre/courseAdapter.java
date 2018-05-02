@@ -31,6 +31,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
     private onItemLongClickListerner mLongListener;
     private int focusedItem = -1;
 
+    public boolean isClickable = true;
 
 
     public courseAdapter(Context context, List<Vak> vakken) {
@@ -60,20 +61,32 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
 
         if(vak.isChecked()) {
             holder.check.setVisibility(View.VISIBLE);
-            holder.cardViewList.setCardBackgroundColor(Color.rgb(190, 192, 198));
+            holder.cardViewList.setCardBackgroundColor(Color.argb(200,40, 50, 50));
             holder.tvCourse.setTypeface(null,Typeface.BOLD_ITALIC);
+            holder.tvCourse.setTextColor(Color.WHITE);
             holder.tvCredit.setTypeface(null,Typeface.BOLD_ITALIC);
+            holder.tvCredit.setTextColor(Color.WHITE);
             holder.tvId.setTypeface(null,Typeface.BOLD_ITALIC);
+            holder.tvId.setTypeface(null,Typeface.BOLD_ITALIC);
+            holder.tvId.setTextColor(Color.WHITE);
             holder.optnemenVakken.setVisibility(View.GONE);
         }else{
             holder.check.setVisibility(View.GONE);
             holder.cardViewList.setCardBackgroundColor(Color.WHITE);
             holder.tvCourse.setTypeface(null,Typeface.NORMAL);
+            holder.tvCourse.setTextColor(Color.rgb(34,41,43));
             holder.tvCredit.setTypeface(null,Typeface.NORMAL);
+            holder.tvCredit.setTextColor(Color.argb(135,34,41,43));
             holder.tvId.setTypeface(null,Typeface.NORMAL);
+            holder.tvId.setTextColor(Color.rgb(210, 100, 40));
             holder.optnemenVakken.setVisibility(View.VISIBLE);
         }
-        //holder.bind(vak);
+
+        if(!isClickable){
+            holder.cardViewList.setCardBackgroundColor(Color.argb(13,40, 50, 50));
+        }
+
+
 
     }
 
@@ -106,6 +119,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
         Vakken = new ArrayList<>();
         Vakken.addAll(vakken);
         notifyDataSetChanged();
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -121,6 +135,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
 
 
 
+
         public ViewHolder(final View itemView) {
 
             super(itemView);
@@ -132,6 +147,8 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
             vakImage = (ImageView) itemView.findViewById(R.id.Beschikbaarvakken);
             optnemenVakken = (ImageView) itemView.findViewById(R.id.optenemenVakken);
             cardViewList = (CardView) itemView.findViewById(R.id.listCardview);
+            itemView.setEnabled(true);
+            itemView.setClickable(true);
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +157,9 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
                     if(mListener != null){
                         int position = getAdapterPosition();
                         if(position != RecyclerView.NO_POSITION){
+                            if(!isClickable)
+                                return;
+
                             mListener.onItemClick(position);
                             notifyDataSetChanged();
 
@@ -156,11 +176,13 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
                     if(mLongListener != null){
                         int position = getAdapterPosition();
                         if(position != RecyclerView.NO_POSITION){
+                            if(!isClickable)
+                                return false;
+
+
                             mLongListener.onItemLongClick(position);
-                            check.setVisibility(View.INVISIBLE);
-                            tvCourse.setTypeface(null, Typeface.NORMAL);
-                            tvCourse.setTextSize(16);
-                            cardViewList.setCardBackgroundColor(Color.WHITE);
+                            notifyDataSetChanged();
+
                         }
                     }
                     return true;
@@ -181,6 +203,8 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
             vakImage.setImageResource(R.drawable.booksstackofthreeeen);
 
         }
+
+
     }
 
 

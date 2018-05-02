@@ -1,10 +1,12 @@
 package app.stucre;
 
+import java.io.Serializable;
+
 /**
  * Created by TI_Laptop-008 on 15/03/2018.
  */
 
-public class Vak {
+public class Vak implements Serializable{
 
 
     private String id;
@@ -12,6 +14,12 @@ public class Vak {
     private String credit;
     private boolean checked;
     private String creditPunten;
+    private boolean geslaagd = false;
+    private int chance;
+    private final static int chanceMax = 4;
+    private int score;
+    private int fase;
+    private boolean isEnabled;
 
 
 
@@ -21,19 +29,31 @@ public class Vak {
     public Vak() {
     }
 
-    public Vak(String id, String course, String credit, String creditPunten) {
+    public Vak(String id, String course, String credit, String creditPunten, int fase, boolean geslaagd) {
         this.id = id;
         this.course = course;
         this.credit = credit;
         this.creditPunten = creditPunten;
+        this.fase = fase;
+        this.geslaagd = geslaagd;
     }
 
-    public Vak(String id, String course, String credit, boolean checked, String creditPunten) {
+    public Vak(String id, String course, String credit, boolean checked, String creditPunten,int fase, boolean geslaagd) {
         this.id = id;
         this.course = course;
         this.credit = credit;
         this.checked = checked;
         this.creditPunten = creditPunten;
+    }
+
+    public Vak(String id, String course, String credit, boolean checked, String creditPunten,int fase, boolean geslaagd, int score, int chance) {
+        this.id = id;
+        this.course = course;
+        this.credit = credit;
+        this.checked = checked;
+        this.creditPunten = creditPunten;
+        this.score = score;
+        this.chance = chance;
     }
 
 
@@ -79,6 +99,10 @@ public class Vak {
         this.creditPunten = creditPunten;
     }
 
+    public int getFase() {
+        return fase;
+    }
+
     public boolean isChecked() {
         return checked;
     }
@@ -91,5 +115,49 @@ public class Vak {
         checked = !checked ;
     }
 
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    public boolean isGeslaagd() {
+        return geslaagd;
+    }
+
+    public void setGeslaagd(boolean geslaagd) {
+        this.geslaagd = geslaagd;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public Integer setScore(int score) {
+        if((score >= 0) && (score <= 20)){
+        this.score = score;
+        return this.score;
+        }
+        return null;
+    }
+
+    public int getChance() {
+        return chance;
+    }
+
+    public Integer setChance(int chance) {
+
+        if(chance > chanceMax && chance <0)
+            return null;
+
+        this.chance = chance;
+        return this.chance;
+    }
+
+    public void setFase(int fase) {
+        this.fase = fase;
+    }
 
 }

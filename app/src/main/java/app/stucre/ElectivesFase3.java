@@ -1,11 +1,14 @@
 package app.stucre;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -16,7 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -37,12 +43,13 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
     private RecyclerView recyclerViewEF3;
     private courseAdapter cAEF3;
 
-    private List<Vak> VakkenEF3;
+    private ArrayList<Vak> VakkenEF3;
     Vak test;
     private ProgressWheel progressWheelElectivesFase3;
     private View dutiesLayout;
     private int count = 0;
     private Button btnSend;
+    private Switch selectall;
 
 
     public ElectivesFase3(){
@@ -63,13 +70,16 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
         recyclerViewEF3.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //Object aanmaken
-        VakkenEF3 = new ArrayList<>();
+        Intent intent = getActivity().getIntent();
+
+        VakkenEF3 = (ArrayList<Vak>) intent.getSerializableExtra("EleFase3");
+
 
         // Test vakken
         //Vakken();
 
         // Vakken Van Database
-        VakkenDatabase();
+        //VakkenDatabase();
 
         cAEF3= new courseAdapter(getContext(),VakkenEF3);
         recyclerViewEF3.setAdapter(cAEF3);
@@ -82,6 +92,51 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
 
         clickOnVakken();
 
+        selectall = (Switch) getActivity().findViewById(R.id.selectAllSwitch);
+
+        selectall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if(b){
+                    for (Vak vak : VakkenEF3){
+                        vak.setChecked(true);
+                    }
+                    Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                }else{
+                    for (Vak vak : VakkenEF3){
+                        vak.setChecked(false);
+                    }
+                    Toasty.custom(getContext(), "- "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
+                }
+                cAEF3.notifyDataSetChanged();
+
+                if(b){
+                    for (Vak vak : VakkenEF3){
+                        boolean checked = vak.isChecked();
+                        String point = vak.getCreditPunten();
+                        count = Integer.parseInt(point);
+                        count++;
+                        int percent = (360/60) * (count+1);
+                        progressWheelElectivesFase3.setProgress(percent);
+                        progressWheelElectivesFase3.setText(Integer.toString(count)+" sp");
+                    }
+                    Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                }else{
+                    for (Vak vak : VakkenEF3){
+                        boolean checked = vak.isChecked();
+                        String point = vak.getCreditPunten();
+                        count = Integer.parseInt(point);
+                        count--;
+                        int percent = (360/60) * (count+1);
+                        progressWheelElectivesFase3.setProgress(percent);
+                        progressWheelElectivesFase3.setText(Integer.toString(count)+" sp");
+                    }
+                    Toasty.custom(getContext(), "- "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
+                }
+
+            }
+        });
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
 
@@ -171,19 +226,6 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
         return filteredVakken;
 
     }
-
-
-    private void Vakken(){
-
-        VakkenEF3.add(new Vak("HBI33A","Sales and Customer interaction", "3 sp","3"));
-        VakkenEF3.add(new Vak("HBI47B","Content management", "3 sp","3"));
-        VakkenEF3.add(new Vak("HBI53B","Advanced Switching", "6 sp","6"));
-        VakkenEF3.add(new Vak("HBI54B","Advanced Routing", "6 sp","6"));
-        VakkenEF3.add(new Vak("OBI01A","ICT Partner Training", "3 sp","3"));
-        VakkenEF3.add(new Vak("OBI02A","ICT Partner Training B", "4 sp","4"));
-        VakkenEF3.add(new Vak("OBI03A","ICT Partner Training C", "5 sp","5"));
-        VakkenEF3.add(new Vak("OBI04A","ICT Partner Training D", "6 sp","6"));
-    }
     private void VakkenDatabase(){
         electivFase3.addValueEventListener(new ValueEventListener() {
             @Override
@@ -196,7 +238,7 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
                     Object course = child.child("COURSE").getValue(Object.class);
                     Object credit = child.child("CREDITS").getValue(Object.class);
                     Object creditPunten = child.child("CREDITS").getValue(Object.class);
-                    VakkenEF3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+                    //VakkenEF3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
                     cAEF3.notifyDataSetChanged();
 
 
@@ -269,6 +311,44 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
                 }
 
 
+            }
+        });
+
+        cAEF3.setOnItemLongClickListener(new courseAdapter.onItemLongClickListerner() {
+            @Override
+            public boolean onItemLongClick(int position) {
+
+                String course = VakkenEF3.get(position).getCourse();
+                Integer Score = VakkenEF3.get(position).setScore(0);
+                Integer getScore = VakkenEF3.get(position).getScore();
+
+                AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+
+                View dialogView = inflater.inflate(R.layout.dialogscore,null);
+                TextView vak = (TextView) dialogView.findViewById(R.id.vakDialoog);
+                TextView score = (TextView) dialogView.findViewById(R.id.score);
+                TextView geslaagd = (TextView) dialogView.findViewById(R.id.txtgeslaagd);
+
+                vak.setText(course);
+                score.setText(getScore.toString());
+                geslaagd.setText("In progress...");
+                geslaagd.setBackgroundColor(Color.rgb(0,128,0));
+                geslaagd.setTextColor(Color.rgb(246,246,246));
+
+
+                dialogvak.setView(dialogView).setPositiveButton("Back",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                AlertDialog alertVak =  dialogvak.create();
+
+                alertVak.show();
+
+                return true;
             }
         });
     }

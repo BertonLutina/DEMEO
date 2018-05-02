@@ -1,8 +1,11 @@
 package app.stucre;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -14,7 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -35,19 +41,21 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
     private RecyclerView recyclerViewOF3;
     private courseAdapter cAOF3;
 
-    private List<Vak> VakkenOF3;
+    private ArrayList<Vak> VakkenOF3;
 
     private ProgressWheel progressWheelOptionFase3;
     private View LayoutCredits;
     private int count = 0;
     private Button btnSend;
 
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference optionsFase3 = database.getReference("Bedrijfskunde/TI/Options/fase 3");
+    private Switch selectall;
+
     public OptionsIntership(){
 
     }
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference optionsFase3 = database.getReference("Bedrijfskunde/TI/Options/fase 3");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,13 +67,14 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
         recyclerViewOF3.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Object aanmaken
-        VakkenOF3 = new ArrayList<>();
+        Intent intent = getActivity().getIntent();
+        VakkenOF3 = (ArrayList<Vak>) intent.getSerializableExtra("Intership");
 
         // TestVakken
         //Vakken();
 
         //Vakken van de DATABASE
-        VakkenDatabase();
+        //VakkenDatabase();
 
         cAOF3= new courseAdapter(getContext(),VakkenOF3);
         recyclerViewOF3.setAdapter(cAOF3);
@@ -77,6 +86,40 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
         progressWheelOptionFase3 = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
         setHasOptionsMenu(true);
         clickOnVakken();
+        selectall = (Switch) getActivity().findViewById(R.id.selectAllSwitch);
+
+        selectall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if(b){
+                    for (Vak vak : VakkenOF3){
+                        vak.setChecked(true);
+                        boolean checked = vak.isChecked();
+                        String point = vak.getCreditPunten();
+                        count = Integer.parseInt(point);
+                        count++;
+                        int percent = (360/60) * (count+1);
+                        progressWheelOptionFase3.setProgress(percent);
+                        progressWheelOptionFase3.setText(Integer.toString(count)+" sp");
+                    }
+                    Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                }else{
+                    for (Vak vak : VakkenOF3) {
+                        vak.setChecked(false);
+                        boolean checked = vak.isChecked();
+                        String point = vak.getCreditPunten();
+                        count = Integer.parseInt(point);
+                        count--;
+                        int percent = (360 / 60) * (count + 1);
+                        progressWheelOptionFase3.setProgress(percent);
+                        progressWheelOptionFase3.setText(Integer.toString(count) + " sp");
+                    }
+                    cAOF3.notifyDataSetChanged();
+                }
+
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;
@@ -155,17 +198,6 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
 
     }
 
-    private void Vakken(){
-
-        VakkenOF3.add(new Vak("OBI07A","Intercommunautaire stagemobiliteit","24 sp","24"));
-        VakkenOF3.add(new Vak("HBI89B","Stagemobiliteit in Vlaanderen","24 sp", "24"));
-        VakkenOF3.add(new Vak("HBI90B","Stagemobiliteit in Europa","24 sp","24"));
-        VakkenOF3.add(new Vak("HBI91B","Stagemobiliteit buiten Europa","24 sp","24"));
-        VakkenOF3.add(new Vak("OS3000","Buiten Europa: voorbereid op stage","3 sp","3"));
-        VakkenOF3.add(new Vak("HBI92B","Studiemobiliteit in of buiten Europa", "3 sp", "3"));
-        VakkenOF3.add(new Vak("OBI05A","Option 5 : Werkplekleren: ICT Partner Training","12","12"));
-        VakkenOF3.add(new Vak("OBI06A", "Option 5 : Stageproject","12","12"));
-    }
     private void VakkenDatabase(){  optionsFase3.addValueEventListener(new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -185,7 +217,7 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: out of Europe",creditPunten.toString()));
+                            //VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: out of Europe",creditPunten.toString()));
                             cAOF3.notifyDataSetChanged();
                         }}
                     else if (TextUtils.equals(vakken_hm ,"Option 5 : Intership mobility in Europe : SHORT"))
@@ -197,7 +229,7 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                             Object course = kid.child("COURSE").getValue(Object.class);
                             Object credit = kid.child("CREDITS").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: in or out of Europe",creditPunten.toString()));
+                            //VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: in or out of Europe",creditPunten.toString()));
                             cAOF3.notifyDataSetChanged();
                         }
                     }
@@ -207,7 +239,7 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                     Object course = child.child("COURSE").getValue(Object.class);
                     Object credit = child.child("CREDITS").getValue(Object.class);
                     Object creditPunten = child.child("CREDITS").getValue(Object.class);
-                    VakkenOF3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+                    //VakkenOF3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
                     cAOF3.notifyDataSetChanged();
                 }
 
@@ -284,6 +316,46 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
 
             }
         });
+
+        cAOF3.setOnItemLongClickListener(new courseAdapter.onItemLongClickListerner() {
+            @Override
+            public boolean onItemLongClick(int position) {
+
+                String course = VakkenOF3.get(position).getCourse();
+                Integer Score = VakkenOF3.get(position).setScore(0);
+                Integer getScore = VakkenOF3.get(position).getScore();
+
+                AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+
+                View dialogView = inflater.inflate(R.layout.dialogscore,null);
+                TextView vak = (TextView) dialogView.findViewById(R.id.vakDialoog);
+                TextView score = (TextView) dialogView.findViewById(R.id.score);
+                TextView geslaagd = (TextView) dialogView.findViewById(R.id.txtgeslaagd);
+
+                vak.setText(course);
+                score.setText(getScore.toString());
+                geslaagd.setText("In progress...");
+                geslaagd.setBackgroundColor(Color.rgb(0,128,0));
+                geslaagd.setTextColor(Color.rgb(246,246,246));
+
+
+                dialogvak.setView(dialogView).setPositiveButton("Back",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                AlertDialog alertVak =  dialogvak.create();
+
+                alertVak.show();
+
+
+                return true;
+            }
+        });
     }
+
 
 }

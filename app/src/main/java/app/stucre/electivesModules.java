@@ -1,5 +1,7 @@
 package app.stucre;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,8 +18,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.Switch;
 
 import com.mancj.slideup.SlideUp;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 public class electivesModules extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -30,8 +39,15 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
     private View slideView;
     private View dimEM;
     private FloatingActionButton floatEM;
+    private List<String> opgenomenVakken = new ArrayList<>();
+    private List<Vak> EMA;
+    private List<Vak> EMB;
+    private String[] course_array;
 
     private static final String TAG ="duties";
+    private Button btnSend;
+    private Switch selectallB;
+    private Switch selectallA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +91,46 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
             }
         });
 
+        Intent intent = getIntent();
+        EMA = (ArrayList<Vak>) intent.getSerializableExtra("EMA");
+        EMB = (ArrayList<Vak>) intent.getSerializableExtra("EMB");
+
+        for (Vak course : EMA){
+            opgenomenVakken.add(course.getCourse());
+        }
+
+        for (Vak course : EMB){
+            opgenomenVakken.add(course.getCourse());
+        }
+
+        course_array = new String[opgenomenVakken.size()];
+        opgenomenVakken.toArray(course_array);
+
+        btnSend = (Button) slideView.findViewById(R.id.versturen_credits);
+        btnSend.setEnabled(true);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(electivesModules.this);
+                builder.setTitle("Included Courses")
+                        .setItems(course_array, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                            }
+                        }).setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+
+        });
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarEM);
         setSupportActionBar(toolbar);
 
@@ -88,10 +144,26 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
         mViewPager.setAdapter(adapter2);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
+        selectallA = (Switch) findViewById(R.id.selectAllSwitchEMA);
+        selectallB = (Switch) findViewById(R.id.selectAllSwitchEMB);
+
+        selectallB.setVisibility(View.GONE);
+        selectallA.setVisibility(View.VISIBLE);
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition(),true);
+                if(tab.getPosition() == 0){
+
+                    selectallB.setVisibility(View.GONE);
+                    selectallA.setVisibility(View.VISIBLE);
+                }else if(tab.getPosition() == 1){
+
+                    selectallB.setVisibility(View.VISIBLE);
+                    selectallA.setVisibility(View.GONE);
+
+                }
             }
 
             @Override

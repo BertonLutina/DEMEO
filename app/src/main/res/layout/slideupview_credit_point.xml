@@ -43,7 +43,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="170dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:id="@+id/creditstxt">
 
         <TextView
             android:id="@+id/text_Credit_fase3"
@@ -56,31 +57,26 @@
 
 
     </LinearLayout>
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/Progress_bar_points"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_marginTop="30dp"
+    android:descendantFocusability="blocksDescendants">
     <Button
         android:id="@+id/versturen_credits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/verwijderen_credits"
-        android:layout_marginEnd="80dp"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:background="@color/Orange"
         android:text="Send"
-        android:enabled="false"
         android:textColor="#fff"
-        android:background="#cecece"/>
+        android:clickable="true"/>
+</LinearLayout>
 
-    <Button
-        android:id="@+id/verwijderen_credits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="103dp"
-        android:layout_marginStart="81dp"
-        android:clickable="false"
-        android:textColor="#fff"
-        android:text="Erase"
-        android:background="@color/colorPrimaryDark"/>
+
+
 
     <TextView
         android:id="@+id/swipeDown"

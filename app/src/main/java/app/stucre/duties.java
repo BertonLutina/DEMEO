@@ -1,6 +1,10 @@
 package app.stucre;
 
+import android.app.AlertDialog;
+import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -16,21 +20,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.ToxicBakery.viewpager.transforms.DepthPageTransformer;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mancj.slideup.SlideUp;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
-public class duties extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class duties extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout dLayout;
     private NavigationView nav_duties;
     private ActionBarDrawerToggle dToggle;
     private ViewPager mViewPager;
 
-    private SlideUp slideUp ;
+
+    private SlideUp slideUp;
     private View slideView;
     private View dimDuties;
     private FloatingActionButton floatDuties;
@@ -38,14 +54,30 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
     private TextView tvCourse;
 
 
+    private List<Vak> Vakken1;
+    private List<Vak> Vakken2;
+    private List<Vak> Vakken3;
+
+    private List<Vak> Vakken1_Dialog;
+    private List<Vak> Vakken2_Dialog;
+    private List<Vak> Vakken3_Dialog;
+
+    private List <String> opgenomenVakken = new ArrayList<>();
+    private String [] course_array;
 
     private static final String TAG = "duties";
+    private Button btnSend;
+
+    private static final int DUTIES_FASE1FRAGEMENY_REQUEST_CODE = 0;
+    private Switch selectall;
+    private Switch selectall2;
+    private Switch selectall3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_duties);
-
 
 
         if (android.os.Build.VERSION.SDK_INT >= 21) {
@@ -54,6 +86,8 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(this.getResources().getColor(R.color.colorD));
         }
+
+
 
         slideView = findViewById(R.id.slideUpCreditsView);
         dimDuties = findViewById(R.id.dim_duties);
@@ -74,12 +108,12 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
         slideUp.setSlideListener(new SlideUp.SlideListener() {
             @Override
             public void onSlideDown(float v) {
-                dimDuties.setAlpha(1-(v/100));
+                dimDuties.setAlpha(1 - (v / 100));
             }
 
             @Override
             public void onVisibilityChanged(int i) {
-                if(i == View.GONE){
+                if (i == View.GONE) {
                     floatDuties.show();
                 }
             }
@@ -87,22 +121,91 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDuties);
         setSupportActionBar(toolbar);
 
+        // Versturen van de gegeven naar een dialoog ---------------------------------
+
+        Intent duties_from_DutiesFase1 = getIntent();
+        Vakken1_Dialog = (ArrayList<Vak>) duties_from_DutiesFase1.getSerializableExtra("FaseEen");
+        //Vakken2_Dialog = (ArrayList<Vak>) duties_from_DutiesFase1.getSerializableExtra("FaseTwee");
+        //Vakken3_Dialog = (ArrayList<Vak>) duties_from_DutiesFase1.getSerializableExtra("FaseDrie");
+
+
+
+            for (Vak course : Vakken1_Dialog){
+                opgenomenVakken.add(course.getCourse());
+            }
+
+            course_array = new String[opgenomenVakken.size()];
+            opgenomenVakken.toArray(course_array);
+
+
+        btnSend = (Button) slideView.findViewById(R.id.versturen_credits);
+        btnSend.setEnabled(true);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(duties.this);
+                builder.setTitle("Included Courses")
+                        .setItems(course_array, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                            }
+                        }).setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+
+        });
+        // ----------------------------------------------------------------------------
+
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabsDuties);
         tabLayout.addTab(tabLayout.newTab().setText("Fase 1"));
         tabLayout.addTab(tabLayout.newTab().setText("Fase 2"));
         tabLayout.addTab(tabLayout.newTab().setText("Fase 3"));
+
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+
+        selectall = (Switch) findViewById(R.id.selectAllSwitchFase1);
+        selectall2 = (Switch) findViewById(R.id.selectAllSwitchFase2);
+        selectall3 = (Switch) findViewById(R.id.selectAllSwitchFase3);
+
+        selectall2.setVisibility(View.GONE);
+        selectall3.setVisibility(View.GONE);
+        selectall.setVisibility(View.VISIBLE);
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         final SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         mViewPager.setAdapter(adapter);
-
-        mViewPager.setPageTransformer(true,new DepthPageTransformer());
+        mViewPager.setPageTransformer(true, new DepthPageTransformer());
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition(),true);
+                mViewPager.setCurrentItem(tab.getPosition(), true);
+                if(tab.getPosition() == 0){
+                    Toasty.info(getApplicationContext(),"Fase1").show();
+                    selectall2.setVisibility(View.GONE);
+                    selectall3.setVisibility(View.GONE);
+                    selectall.setVisibility(View.VISIBLE);
+                }else if(tab.getPosition() == 1){
+                    Toasty.info(getApplicationContext(),"Fase2").show();
+                    selectall2.setVisibility(View.VISIBLE);
+                    selectall.setVisibility(View.GONE);
+                    selectall3.setVisibility(View.GONE);
+                }else if(tab.getPosition() == 2){
+                    Toasty.info(getApplicationContext(),"Fase3").show();
+                    selectall2.setVisibility(View.GONE);
+                    selectall3.setVisibility(View.VISIBLE);
+                    selectall.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -117,14 +220,8 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
         });
 
         mViewPager.setOffscreenPageLimit(3);
-
-
-
-        dLayout = (DrawerLayout)findViewById(R.id.drawer);
-
-
-
-        dToggle = new ActionBarDrawerToggle(this,dLayout,R.string.open_drawer,R.string.close_drawer);
+        dLayout = (DrawerLayout) findViewById(R.id.drawer);
+        dToggle = new ActionBarDrawerToggle(this, dLayout, R.string.open_drawer, R.string.close_drawer);
 
         dLayout.addDrawerListener(dToggle);
         dToggle.syncState();
@@ -134,40 +231,68 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         nav_duties = (NavigationView) findViewById(R.id.nav_duties);
-
         nav_duties.setNavigationItemSelectedListener(this);
 
 
+        // Get Intent of another activity
+
+
+
+
+
+        //Vakken1 = (ArrayList<Vak>) duties.getSerializableExtra("FaseEen");
+        //Vakken2 = (ArrayList<Vak>) duties.getSerializableExtra("FaseTwee");
+        //Vakken3 = (ArrayList <Vak>)duties.getSerializableExtra("FaseDrie");
+
+
+        //android.support.v4.app.FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+    public List<Vak> sendData(){
+        return Vakken1;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         //menu.clear();
-        getMenuInflater().inflate(R.menu.nav_d_bar,menu);
+        getMenuInflater().inflate(R.menu.nav_d_bar, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(dToggle.onOptionsItemSelected(item)){
+         if (dToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.course:
-                Intent course = new Intent(duties.this,Courses.class );
+                Intent course = new Intent(duties.this, Courses.class);
                 startActivity(course);
                 return false;
             case R.id.profile:
-                Intent em = new Intent(duties.this,profile.class );
+                Intent em = new Intent(duties.this, profile.class);
                 startActivity(em);
                 return false;
             case R.id.setting:
-                Intent electives = new Intent(duties.this,electives.class );
+
+                Intent electives = new Intent(duties.this, electives.class);
                 startActivity(electives);
                 return false;
 
@@ -186,21 +311,21 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
 
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.course:
-                Intent course = new Intent(duties.this,Courses.class );
+                Intent course = new Intent(duties.this, Courses.class);
                 startActivity(course);
                 return false;
             case R.id.em:
-                Intent em = new Intent(duties.this,electivesModules.class );
+                Intent em = new Intent(duties.this, electivesModules.class);
                 startActivity(em);
                 return false;
             case R.id.electives:
-                Intent electives = new Intent(duties.this,electives.class );
+                Intent electives = new Intent(duties.this, electives.class);
                 startActivity(electives);
                 return false;
             case R.id.options:
-                Intent options = new Intent(duties.this,options.class );
+                Intent options = new Intent(duties.this, options.class);
                 startActivity(options);
                 return false;
             default:
@@ -210,4 +335,7 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
 
 
     }
+
+
+
 }

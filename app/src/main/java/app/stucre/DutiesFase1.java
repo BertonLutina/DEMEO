@@ -1,23 +1,34 @@
 package app.stucre;
 
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.support.design.widget.TabLayout;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.todddavies.components.progressbar.ProgressWheel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,16 +54,32 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
   private ProgressWheel progressWheelFase1;
   private View LayoutCredits;
 
-  int count = 0;
+  private int credit= 0;
+  private int count = 0;
   private Button btnSend;
+  private Bundle bundle;
+  private TabLayout Tab;
+  private ViewPager vp;
+  private RecyclerView recyclerViewDF2;
+  private RecyclerView recyclerViewDF3;
+
+  private List <Vak> vakken_te_Versturen = new ArrayList<>();
+  private Intent intent;
+  private Switch selectall;
+  private Switch selectall2;
+  private Switch selectall3;
 
 
   public DutiesFase1 (){
 
     }
 
+
+
   FirebaseDatabase database = FirebaseDatabase.getInstance();
   DatabaseReference dutiesFase1 = database.getReference("Bedrijfskunde/TI/Duties/fase 1");
+
+
 
   @Override
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -60,36 +88,100 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
 
     LinearLayout linearLayout = (LinearLayout) vFase1.findViewById(R.id.linearLayout1);
 
-
+    vp = (ViewPager) getActivity().findViewById(R.id.pager);
+    Tab = (TabLayout) getActivity().findViewById(R.id.tabsDuties);
+    vp.getAdapter();
 
     recyclerViewDF1 = (RecyclerView) vFase1.findViewById(R.id.dutiesfase1);
     recyclerViewDF1.setHasFixedSize(true);
     recyclerViewDF1.setLayoutManager(new LinearLayoutManager(getContext()));
 
+    //Vakken1 = new ArrayList<>();
+    /*Bundle extras = getArguments();
+    if(extras == null){
+      return vFase1;
+
+    }*/
+
+    Intent intent = getActivity().getIntent();
+
+    Vakken1 = (ArrayList<Vak>) intent.getSerializableExtra("FaseEen");
+    count = intent.getIntExtra("Credit",credit);
+    //duties D = (duties) getActivity();
+    //D.sendData();
+
     // Test data
     //Vakken();
-    Vakken1 = new ArrayList<>();
 
+    //Vakken1 = new ArrayList<>();
     //Real Data
-    VakkenDatabase();
+    //VakkenDatabase();
 
       cA1 = new courseAdapter(getActivity(),Vakken1);
       recyclerViewDF1.setAdapter(cA1);
-      //cA1.notifyDataSetChanged();
+      cA1.notifyDataSetChanged();
+
       setHasOptionsMenu(true);
+
 
 
     LayoutCredits = getActivity().findViewById(R.id.slideUpCreditsView);
     LinearLayout lay = LayoutCredits.findViewById(R.id.Progress_bar_points);
-    btnSend = (Button) lay.findViewById(R.id.versturen_credits);
+    LayoutInflater inflater1 = getActivity().getLayoutInflater();
+    View vSlide = inflater.inflate(R.layout.slideupview_credit_point,null);
     progressWheelFase1 = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
 
 
 
 
     clickOnVakken();
+    
+    selectall = (Switch) getActivity().findViewById(R.id.selectAllSwitchFase1);
+
+    selectall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+        if(b){
+          for (Vak vak : Vakken1){
+            vak.setChecked(true);
+            boolean checked = vak.isChecked();
+            String point = vak.getCreditPunten();
+            count = Integer.parseInt(point);
+            count++;
+            int percent = (360/60) * (count+1);
+            progressWheelFase1.setProgress(percent);
+            progressWheelFase1.setText(Integer.toString(count)+" sp");
+            cA1.notifyDataSetChanged();
+          }
+          Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+        }else{
+          for (Vak vak : Vakken1) {
+            vak.setChecked(false);
+            boolean checked = vak.isChecked();
+            String point = vak.getCreditPunten();
+            count =Integer.parseInt(point);
+            count--;
+            int percent = (360 / 60) * (count + 1);
+            progressWheelFase1.setProgress(percent);
+            progressWheelFase1.setText(Integer.toString(count) + " sp");
+            cA1.notifyDataSetChanged();
+          }
+
+        }
+
+      }
+    });
+
+
+
     return vFase1;
 
+
+
+  }
+
+  private void selectAll() {
 
 
   }
@@ -183,34 +275,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
 
   }
 
-  private void Vakken(){
 
-    Vakken1 = new ArrayList<>();
-    Vakken1.add(new Vak("HBI09B","ICT Organisation 1", "4 sp","4"));
-    Vakken1.add(new Vak("HBI10B","ICT Organisation 2", "4 sp","4"));
-    Vakken1.add(new Vak("HBI18B","Mobile en internet 1", "3 sp","3"));
-    Vakken1.add(new Vak("HBI19B","Mobile en internet 2", "3 sp","3"));
-    Vakken1.add(new Vak("HBI20B","System Management 1", "3 sp","3"));
-    Vakken1.add(new Vak("HBI21B","System Management 2", "3 sp","3"));
-    Vakken1.add(new Vak("HBI22B","Network Management 1", "3 sp","3"));
-    Vakken1.add(new Vak("HBI23B","Network Management 2", "3 sp","3"));
-    Vakken1.add(new Vak("HBI59B","Communicatietraining 1", "4 sp","4"));
-    Vakken1.add(new Vak("HBI60B","Communicatietraining 2", "4 sp","4"));
-    Vakken1.add(new Vak("HBI61B","Information management 1", "3 sp","3"));
-    Vakken1.add(new Vak("HBI62B","Information management 2", "3 sp","3"));
-    Vakken1.add(new Vak("HBI63B","Database development 1", "3 sp","3"));
-    Vakken1.add(new Vak("HBI64B","Database development 2", "3 sp","3"));
-    Vakken1.add(new Vak("HBI65B","Application development 1", "4 sp","4"));
-    Vakken1.add(new Vak("HBI66B","Application development 2", "4 sp","4"));
-    Vakken1.add(new Vak("HBI77B","Software engineering 1", "3 sp","3"));
-    Vakken1.add(new Vak("HBI78B","Software engineering 2", "3 sp","3"));
-
-
-
-
-
-
-  }
   private void VakkenDatabase (){
     dutiesFase1.addValueEventListener(new ValueEventListener() {
       @Override
@@ -224,7 +289,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
           Object credit = child.child("CREDITS").getValue(Object.class);
           Object creditPunten = child.child("CREDITS").getValue(Object.class);
           //Vakken.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
-          Vakken1.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+          //Vakken1.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
           cA1.notifyDataSetChanged();
         }
 
@@ -241,26 +306,34 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
 
   private void clickOnVakken(){
 
+     //intent = new Intent(getContext(),duties.class);
 
     cA1.setOnItemClickListener(new courseAdapter.OnItemClickListener() {
       @Override
       public void onItemClick(int position) {
         //String plaats = Vakken1.get(position).getCourse();
         String point = Vakken1.get(position).getCreditPunten();
+        Vak course_to_send = Vakken1.get(position);
         boolean checked = Vakken1.get(position).isChecked();
 
         if(!checked){
+
           Vakken1.get(position).setChecked(true);
           int x = (int) cA1.getItemId(position);
+
           if(!(count> 60)){
             count += Integer.parseInt(point);
             int percent = (360/60) * count;
             Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
             progressWheelFase1.setProgress(percent);
             progressWheelFase1.setText(Integer.toString(count)+" sp");
+            vakken_te_Versturen.add(course_to_send);
 
             if (count == 60) {
               progressWheelFase1.setBarColor(Color.	rgb(0,128,0));
+              //intent.putExtra("OGV", (ArrayList<Vak>)vakken_te_Versturen);
+
+
               //btnSend.setEnabled(true);
               //btnSend.setBackgroundColor(Color.rgb(0,128,0));
             }else if(count >= 45 && count < 60){
@@ -269,7 +342,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
               progressWheelFase1.setBarColor(Color.rgb(255,140,0));
             }else if (count >= 15 && count < 30) {
               progressWheelFase1.setBarColor(Color.rgb(255,165,0));
-            }else if (count >= 0 && count < 15) {
+            }else if (count >= 1 && count < 15) {
               progressWheelFase1.setBarColor(Color.	rgb(255,215,0));
             }
           }else{
@@ -278,13 +351,18 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
           }
 
         }else{
+
           Vakken1.get(position).setChecked(false);
+
           if(!(count < 0)){
             count -= Integer.parseInt(point);
             int percent = (360/60) * count;
-            Toasty.custom(getContext(), "+ "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
+            Toasty.custom(getContext(), "- "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
             progressWheelFase1.setProgress(percent);
             progressWheelFase1.setText(Integer.toString(count)+" sp");
+            //vakken_te_Versturen.remove(course_to_send);
+            //intent.putExtra("OGV", (ArrayList<Vak>)vakken_te_Versturen);
+            //startActivity(intent);
             if (count == 60) {
               progressWheelFase1.setBarColor(Color.	rgb(0,128,0));
             }else if(count >= 45 && count < 60){
@@ -311,14 +389,40 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
     cA1.setOnItemLongClickListener(new courseAdapter.onItemLongClickListerner() {
       @Override
       public boolean onItemLongClick(int position) {
-        String plaats = Vakken1.get(position).getCourse();
-        String point = Vakken1.get(position).getCreditPunten();
+        String course = Vakken1.get(position).getCourse();
+        Integer Score = Vakken1.get(position).setScore(0);
+        Integer getScore = Vakken1.get(position).getScore();
 
-        count -= Integer.parseInt(point);
-        Toast.makeText(getContext(),count+" sp . press short to select", Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.dialogscore,null);
+        TextView vak = (TextView) dialogView.findViewById(R.id.vakDialoog);
+        TextView score = (TextView) dialogView.findViewById(R.id.score);
+        TextView geslaagd = (TextView) dialogView.findViewById(R.id.txtgeslaagd);
+
+        vak.setText(course);
+        score.setText(getScore.toString());
+        geslaagd.setText("In progress...");
+        geslaagd.setBackgroundColor(Color.rgb(0,128,0));
+        geslaagd.setTextColor(Color.rgb(246,246,246));
+
+
+        dialogvak.setView(dialogView).setPositiveButton("Back",new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+
+          }
+        });
+
+        AlertDialog alertVak =  dialogvak.create();
+
+        alertVak.show();
+
         return true;
       }
     });
+
 
 
   }
