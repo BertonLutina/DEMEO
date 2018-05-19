@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.support.v7.widget.SearchView;
 import android.widget.Switch;
@@ -31,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.todddavies.components.progressbar.ProgressWheel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -48,6 +51,12 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
     private Switch selectall;
     private Switch selectall2;
     private Switch selectall3;
+    private int clickbutton = 0;
+    private int clicks = 0;
+    private int input = 0;
+    private boolean checked;
+    private HashMap <String, Integer>scoreVak = new HashMap<String, Integer>();
+
 
     public DutiesFase3() {
     }
@@ -59,7 +68,14 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vFase3 = inflater.inflate(R.layout.fragment_duties_fase3, container, false);
 
-        recyclerViewDF3 = (RecyclerView) vFase3.findViewById(R.id.dutiesfase3);
+
+        return vFase3;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        recyclerViewDF3 = (RecyclerView) view.findViewById(R.id.dutiesfase3);
         recyclerViewDF3.setHasFixedSize(true);
         recyclerViewDF3.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -101,23 +117,47 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
                         vak.setChecked(true);
                         boolean checked = vak.isChecked();
                         String point = vak.getCreditPunten();
-                        count = Integer.parseInt(point);
-                        count++;
-                        int percent = (360/60) * (count+1);
+                        //count = Integer.parseInt(point);
+                        //count++;
+                        count =+ 9;
+                        int percent = 360;
                         progressWheelFase3.setProgress(percent);
                         progressWheelFase3.setText(Integer.toString(count)+" sp");
                         cA3.notifyDataSetChanged();
 
                     }
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                    builder.setMessage("Would like to continue?")
+                            .setTitle("Go to Electives Modules")
+                            .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    Intent change = new Intent(getActivity(),profile.class);
+                                    startActivity(change);
+
+                                }
+                            }).setNegativeButton("Stop", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            return;
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
                     Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
                 }else{
                     for (Vak vak : Vakken3) {
                         vak.setChecked(false);
                         boolean checked = vak.isChecked();
                         String point = vak.getCreditPunten();
-                        count = Integer.parseInt(point);
-                        count--;
-                        int percent = (360 / 60) * (count + 1);
+                        //count = Integer.parseInt(point);
+                        //count--;
+                        count = 0;
+                        int percent = 0;
                         progressWheelFase3.setProgress(percent);
                         progressWheelFase3.setText(Integer.toString(count) + " sp");
                         cA3.notifyDataSetChanged();
@@ -127,7 +167,6 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
 
             }
         });
-        return vFase3;
     }
 
     @Override
@@ -250,49 +289,62 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
                     Vakken3.get(position).setChecked(true);
                     if(!(count> 60)){
                         count += Integer.parseInt(point);
-                        int percent = (360/60) * count;
+                        int percent = (360/9) * count;
                         progressWheelFase3.setProgress(percent);
                         progressWheelFase3.setText(Integer.toString(count)+" sp");
-                        Toasty.custom(getContext(), "+ "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                        Toasty.custom(getContext(), "+ "+ point+" sp. ->  "+"Total: "+count, getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
                     }else{
                         Toasty.error(getContext(), "9 sp is de limiet => Intership & Electives Modules and Electives", Toast.LENGTH_SHORT).show();
                     }
-                    if (count == 60) {
+                    if (count == 9) {
                         progressWheelFase3.setBarColor(Color.	rgb(0,128,0));
                         //btnSend.setEnabled(true);
                         //btnSend.setBackgroundColor(Color.rgb(0,128,0));
-                    }else if(count >= 45 && count < 60){
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                        builder.setMessage("Would like to continue?")
+                                .setTitle("Go to Electives Modules")
+                                .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        Intent change = new Intent(getActivity(),profile.class);
+                                        startActivity(change);
+
+                                    }
+                                }).setNegativeButton("Stop", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                return;
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }else if(count == 6){
                         progressWheelFase3.setBarColor(Color.rgb(255,69,0));
-                    }else if (count >= 30 && count < 45) {
-                        progressWheelFase3.setBarColor(Color.rgb(255,140,0));
-                    }else if (count >= 15 && count < 30) {
-                        progressWheelFase3.setBarColor(Color.rgb(255,165,0));
-                    }else if (count >= 0 && count < 15) {
+                    }else if (count >= 0 && count <= 3) {
                         progressWheelFase3.setBarColor(Color.	rgb(255,215,0));
                     }
                 }else{
                     Vakken3.get(position).setChecked(false);
                     if(!(count <= 0)){
                         count -= Integer.parseInt(point);
-                        int percent = (360/60) * count;
+                        int percent = (360/9) * count;
                         progressWheelFase3.setProgress(percent);
                         progressWheelFase3.setText(Integer.toString(count)+" sp");
-                        Toasty.custom(getContext(), "- "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();}
+                        Toasty.custom(getContext(), "- "+ point+" sp. ->  "+"Total: "+count, getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();}
 
                         else{
                         Toasty.error(getContext()," Mag niet Onder de 0", Toast.LENGTH_SHORT).show();
                     }
-                    if (count == 60) {
-                        progressWheelFase3.setBarColor(Color.	rgb(0,128,0));
-                    }else if(count >= 45 && count < 60){
+                    if (count == 9) {
+                        progressWheelFase3.setBarColor(Color.rgb(0,128,0));
+                    }else if(count == 6){
                         progressWheelFase3.setBarColor(Color.rgb(255,69,0));
                         //btnSend.setEnabled(false);
-                    }else if (count >= 30 && count < 45) {
-                        progressWheelFase3.setBarColor(Color.rgb(255,140,0));
-                    }else if (count >= 15 && count < 30) {
-                        progressWheelFase3.setBarColor(Color.rgb(255,165,0));
-                    }else if (count >= 0 && count < 15) {
-                        progressWheelFase3.setBarColor(Color.	rgb(255,215,0));
+                    }else if (count >= 0 && count <= 3) {
+                        progressWheelFase3.setBarColor(Color.rgb(255,215,0));
                     }
                 }
 
@@ -300,41 +352,165 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
         });
 
         cA3.setOnItemLongClickListener(new courseAdapter.onItemLongClickListerner() {
+
+
             @Override
-            public boolean onItemLongClick(int position) {
+            public boolean onItemLongClick(final int position) {
+                clickbutton++;
+                final int pos = position;
+                boolean geslaagd = Vakken3.get(pos).isGeslaagd();
 
-                String course = Vakken3.get(position).getCourse();
-                Integer Score = Vakken3.get(position).setScore(0);
-                Integer getScore = Vakken3.get(position).getScore();
+                String course = Vakken3.get(pos).getCourse();
+                boolean  checked = Vakken3.get(pos).isChecked();
 
-                AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
-                LayoutInflater inflater = getActivity().getLayoutInflater();
+                Integer getScore = Vakken3.get(pos).getScore();
+                clicks = 0;
 
-                View dialogView = inflater.inflate(R.layout.dialogscore,null);
-                TextView vak = (TextView) dialogView.findViewById(R.id.vakDialoog);
-                TextView score = (TextView) dialogView.findViewById(R.id.score);
-                TextView geslaagd = (TextView) dialogView.findViewById(R.id.txtgeslaagd);
-
-                vak.setText(course);
-                score.setText(getScore.toString());
-                geslaagd.setText("In progress...");
-                geslaagd.setBackgroundColor(Color.rgb(0,128,0));
-                geslaagd.setTextColor(Color.rgb(246,246,246));
+                scoreVak.put(course,getScore);
+                Integer value = scoreVak.get(course);
 
 
-                dialogvak.setView(dialogView).setPositiveButton("Back",new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                });
 
-                AlertDialog alertVak =  dialogvak.create();
 
-                alertVak.show();
+                      if(value == 0)
+                      {
+                          Vakken3.get(pos).setGeslaagd(false);
+                          NietGeslaagdeVakken(pos,course,geslaagd);
+                      }
+                      else if (value < 10 )
+                      {
+                          Vakken3.get(pos).setGeslaagd(false);
+                          NietGeslaagdeVakken(pos,course,geslaagd);
+                      }
+                      else if (value>= 10 || value <= 20)
+                       {
+                           Vakken3.get(pos).setGeslaagd(true);
+                           Vakken(pos, geslaagd);
+                       }
 
-                return true;
+
+              return true;
             }
         });
+        cA3.notifyDataSetChanged();
+    }
+
+    public void Vakken(final int pos, boolean geslaagdvak){
+
+
+            geslaagdvak = true;
+            String textScore = Integer.toString(Vakken3.get(pos).getScore());
+            Integer Score = Vakken3.get(pos).setScore(Integer.parseInt(textScore));
+            String course = Vakken3.get(pos).getCourse();
+            Integer getScore = Vakken3.get(pos).getScore();
+
+            final AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+
+
+            View dialogBack = inflater.inflate(R.layout.dialogscore, null);
+
+            TextView vak = (TextView) dialogBack.findViewById(R.id.vakDialoog);
+            TextView score = (TextView) dialogBack.findViewById(R.id.score);
+            TextView geslaagd = (TextView) dialogBack.findViewById(R.id.txtgeslaagd);
+
+            Integer value = scoreVak.get(course);
+
+            vak.setText(course);
+
+            if (value > 10 || value < 20) {
+                geslaagd.setText("Geslaagd");
+                geslaagd.setBackgroundColor(Color.rgb(20, 120, 0));
+                geslaagd.setTextColor(Color.rgb(246, 246, 246));
+                score.setText(getScore.toString());
+            } else if (value == 0) {
+                geslaagd.setText("Onbekend");
+                geslaagd.setBackgroundColor(Color.rgb(120, 120, 120));
+                geslaagd.setTextColor(Color.rgb(246, 246, 246));
+                score.setText(getScore.toString());
+            }
+            if (value < 10) {
+                geslaagd.setText("Onvoldoende");
+                geslaagd.setBackgroundColor(Color.rgb(128, 20, 0));
+                geslaagd.setTextColor(Color.rgb(246, 246, 246));
+                score.setText(getScore.toString());
+            }
+
+            dialogvak.setView(dialogBack).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+
+            dialogvak.setView(dialogBack).setNegativeButton("Rewrite", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    if(Vakken3.get(pos).isGeslaagd() == false)
+                    Vakken(pos,false);
+                }
+            });
+
+
+            AlertDialog alertVak = dialogvak.create();
+
+            alertVak.show();
+
+
+
+
+
+    }
+
+    public void NietGeslaagdeVakken(final int pos, String course, boolean geslaagd){
+
+        geslaagd = false;
+        AlertDialog.Builder inputVak = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        final View inputView = inflater.inflate(R.layout.inputscore, null);
+
+        final EditText inputText = (EditText) inputView.findViewById(R.id.cijferinputvak);
+        TextView vakText = (TextView) inputView.findViewById(R.id.vakinput);
+        vakText.setText(course);
+
+
+        inputVak.setView(inputView).setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                clicks++;
+                    checked = true;
+                    if(scoreVak == null)
+                        Toasty.error(getContext(), "Er werd geen vak geselecteerd", Toast.LENGTH_SHORT).show();
+
+                    if (clicks > 4)
+                    {
+                    Toasty.error(getContext(), "Je mag maar 3 keren uw score veranderen!!", Toast.LENGTH_SHORT).show();
+                    return;
+                    }
+
+
+
+                    Vakken3.get(pos).setScore(Integer.parseInt(inputText.getText().toString()));
+
+                scoreVak.put(Vakken3.get(pos).getCourse(), Vakken3.get(pos).getScore());
+
+                Integer value = scoreVak.get(Vakken3.get(pos).getCourse());
+
+                    if ((value < 0 || value > 20))
+                        Toasty.error(getContext(), "Score moet tussen 0 en 20 zijn!", Toast.LENGTH_SHORT).show();
+
+
+                    Vakken(pos,Vakken3.get(pos).isGeslaagd());
+
+            }
+        });
+
+
+        AlertDialog dialog = inputVak.create();
+
+        dialog.show();
     }
 }

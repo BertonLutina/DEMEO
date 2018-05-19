@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,8 +63,8 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
     private List<Vak> Vakken2_Dialog;
     private List<Vak> Vakken3_Dialog;
 
-    private List <String> opgenomenVakken = new ArrayList<>();
-    private String [] course_array;
+    private List<String> opgenomenVakken = new ArrayList<>();
+    private String[] course_array;
 
     private static final String TAG = "duties";
     private Button btnSend;
@@ -72,6 +73,7 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
     private Switch selectall;
     private Switch selectall2;
     private Switch selectall3;
+    private List<Vak> OpgenomenCourse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +88,6 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(this.getResources().getColor(R.color.colorD));
         }
-
 
 
         slideView = findViewById(R.id.slideUpCreditsView);
@@ -123,20 +124,21 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
 
         // Versturen van de gegeven naar een dialoog ---------------------------------
 
-        Intent duties_from_DutiesFase1 = getIntent();
+        final Intent duties_from_DutiesFase1 = getIntent();
         Vakken1_Dialog = (ArrayList<Vak>) duties_from_DutiesFase1.getSerializableExtra("FaseEen");
         //Vakken2_Dialog = (ArrayList<Vak>) duties_from_DutiesFase1.getSerializableExtra("FaseTwee");
         //Vakken3_Dialog = (ArrayList<Vak>) duties_from_DutiesFase1.getSerializableExtra("FaseDrie");
 
 
+        for (Vak course : Vakken1_Dialog) {
+            opgenomenVakken.add(course.getCourse());
+            Log.d("duties", opgenomenVakken.toString());
+        }
 
-            for (Vak course : Vakken1_Dialog){
-                opgenomenVakken.add(course.getCourse());
-            }
+        course_array = new String[opgenomenVakken.size()];
+        opgenomenVakken.toArray(course_array);
 
-            course_array = new String[opgenomenVakken.size()];
-            opgenomenVakken.toArray(course_array);
-
+// Cursus zien die je gebruikt.
 
         btnSend = (Button) slideView.findViewById(R.id.versturen_credits);
         btnSend.setEnabled(true);
@@ -190,21 +192,31 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition(), true);
-                if(tab.getPosition() == 0){
-                    Toasty.info(getApplicationContext(),"Fase1").show();
+                if (tab.getPosition() == 0) {
+                    Toasty.info(getApplicationContext(), "Fase1").show();
                     selectall2.setVisibility(View.GONE);
                     selectall3.setVisibility(View.GONE);
                     selectall.setVisibility(View.VISIBLE);
-                }else if(tab.getPosition() == 1){
-                    Toasty.info(getApplicationContext(),"Fase2").show();
+                    floatDuties.setEnabled(true);
+                    floatDuties.setVisibility(View.VISIBLE);
+                    btnSend.setVisibility(View.VISIBLE);
+                } else if (tab.getPosition() == 1) {
+                    Toasty.info(getApplicationContext(), "Fase2").show();
                     selectall2.setVisibility(View.VISIBLE);
                     selectall.setVisibility(View.GONE);
                     selectall3.setVisibility(View.GONE);
-                }else if(tab.getPosition() == 2){
-                    Toasty.info(getApplicationContext(),"Fase3").show();
+                    //floatDuties.setEnabled(false);
+                    //floatDuties.setVisibility(View.GONE);
+                    btnSend.setVisibility(View.GONE);
+
+                } else if (tab.getPosition() == 2) {
+                    Toasty.info(getApplicationContext(), "Fase3").show();
                     selectall2.setVisibility(View.GONE);
                     selectall3.setVisibility(View.VISIBLE);
                     selectall.setVisibility(View.GONE);
+                    //floatDuties.setEnabled(false);
+                    //floatDuties.setVisibility(View.GONE);
+                    btnSend.setVisibility(View.GONE);
                 }
             }
 
@@ -234,33 +246,10 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
         nav_duties.setNavigationItemSelectedListener(this);
 
 
-        // Get Intent of another activity
-
-
-
-
-
-        //Vakken1 = (ArrayList<Vak>) duties.getSerializableExtra("FaseEen");
-        //Vakken2 = (ArrayList<Vak>) duties.getSerializableExtra("FaseTwee");
-        //Vakken3 = (ArrayList <Vak>)duties.getSerializableExtra("FaseDrie");
-
-
-        //android.support.v4.app.FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
-
-
-
-
-
-
-
-
-
-
     }
 
 
-
-    public List<Vak> sendData(){
+    public List<Vak> sendData() {
         return Vakken1;
     }
 
@@ -275,7 +264,7 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-         if (dToggle.onOptionsItemSelected(item)) {
+        if (dToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
@@ -336,6 +325,13 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
 
     }
 
+    public static class Voltwaardigheden {
+        Vak vakpositie;
 
+        public Voltwaardigheden(Vak vakpositie) {
+            this.vakpositie = vakpositie;
+        }
+    }
 
 }
+

@@ -4,11 +4,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +33,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.todddavies.components.progressbar.ProgressWheel;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +48,7 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
   private courseAdapter cA2;
 
   private List<Vak> Vakken2;
+  private List<Vak> Vakken2_send = new ArrayList<>();
 
     private ProgressWheel progressWheelFase2;
     private View dutiesLayout;
@@ -51,6 +59,8 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
     private Switch selectall2;
     private Switch selectall3;
 
+    EventBus bus = EventBus.getDefault();
+
 
     public DutiesFase2(){
 
@@ -59,87 +69,128 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
   FirebaseDatabase database = FirebaseDatabase.getInstance();
   DatabaseReference dutiesFase2 = database.getReference("Bedrijfskunde/TI/Duties/fase 2");
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        bus.register(this);
+    }
 
-  @Override
+    @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
     View vFase2 = inflater.inflate(R.layout.fragment_duties_fase2, container, false);
 
-    recyclerViewDF2 = (RecyclerView) vFase2.findViewById(R.id.dutiesfase2);
-    recyclerViewDF2.setHasFixedSize(true);
-    recyclerViewDF2.setLayoutManager(new LinearLayoutManager(getContext()));
-
-    // object aanmaken
-
-      Intent intent = getActivity().getIntent();
-
-      Vakken2 = (ArrayList<Vak>) intent.getSerializableExtra("FaseTwee");
-
-
-      // Test data
-        //Vakken();
-
-      //Real Data
-      //VakkenDatabase();
-
-
-        cA2 = new courseAdapter(getContext(),Vakken2);
-        recyclerViewDF2.setAdapter(cA2);
-        cA2.notifyDataSetChanged();
-
-        clickOnVakken();
-
-      selectall2 = (Switch) getActivity().findViewById(R.id.selectAllSwitchFase2);
-
-
-      selectall2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-              if(b){
-                  for (Vak vak : Vakken2){
-                      vak.setChecked(true);
-                      boolean checked = vak.isChecked();
-                      String point = vak.getCreditPunten();
-                      count = Integer.parseInt(point);
-                      count++;
-                      int percent = (360/60) * (count+1);
-                      progressWheelFase2.setProgress(percent);
-                      progressWheelFase2.setText(Integer.toString(count)+" sp");
-                      cA2.notifyDataSetChanged();
-
-                  }
-                  Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
-              }else{
-                  for (Vak vak : Vakken2) {
-                      vak.setChecked(false);
-                      boolean checked = vak.isChecked();
-                      String point = vak.getCreditPunten();
-                      count =Integer.parseInt(point);
-                      count--;
-                      int percent = (360 / 60) * (count + 1);
-                      progressWheelFase2.setProgress(percent);
-                      progressWheelFase2.setText(Integer.toString(count) + " sp");
-                      cA2.notifyDataSetChanged();
-
-                  }
-              }
-          }
-      });
-
-    setHasOptionsMenu(true);
-
-      dutiesLayout = getActivity().findViewById(R.id.slideUpCreditsView);
-      LinearLayout lay = dutiesLayout.findViewById(R.id.Progress_bar_points);
-      btnSend = (Button) lay.findViewById(R.id.versturen_credits);
-      progressWheelFase2 = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
 
     return vFase2;
 
 
   }
 
-  @Override
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        recyclerViewDF2 = (RecyclerView) view.findViewById(R.id.dutiesfase2);
+        recyclerViewDF2.setHasFixedSize(true);
+        recyclerViewDF2.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // object aanmaken
+
+
+        Intent intent = getActivity().getIntent();
+
+        Vakken2 = (ArrayList<Vak>) intent.getSerializableExtra("FaseTwee");
+
+
+        // Test data
+        //Vakken();
+
+        //Real Data
+        //VakkenDatabase();
+
+
+        cA2 = new courseAdapter(getContext(),Vakken2);
+        recyclerViewDF2.setAdapter(cA2);
+        //cA2.isEnable = false;
+        cA2.notifyDataSetChanged();
+
+        clickOnVakken();
+
+        selectall2 = (Switch) getActivity().findViewById(R.id.selectAllSwitchFase2);
+
+
+        selectall2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if(b){
+                    for (Vak vak : Vakken2){
+                        vak.setChecked(true);
+                        Vakken2_send.add(vak);
+                        boolean checked = vak.isChecked();
+                        String point = vak.getCreditPunten();
+                        // count = Integer.parseInt(point);
+                        //count++;
+                        count =+ 42;
+                        int percent = 360;
+                        progressWheelFase2.setProgress(percent);
+                        progressWheelFase2.setText(Integer.toString(count)+" sp");
+                        cA2.notifyDataSetChanged();
+
+
+                    }
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                    builder.setMessage("Would like to continue?")
+                            .setTitle("Go to Electives Modules")
+                            .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    Intent change = new Intent(getActivity(),electivesModules.class);
+                                    change.putExtra("VK2",(ArrayList<Vak>) Vakken2_send);
+                                    startActivity(change);
+
+                                }
+                            }).setNegativeButton("Stop", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            return;
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                }else{
+                    for (Vak vak : Vakken2) {
+                        vak.setChecked(false);
+                        Vakken2_send.remove(vak);
+                        boolean checked = vak.isChecked();
+                        String point = vak.getCreditPunten();
+                        //count = Integer.parseInt(point);
+                        //count--;
+                        count = 0;
+                        int percent = 0;
+                        progressWheelFase2.setProgress(percent);
+                        progressWheelFase2.setText(Integer.toString(count) + " sp");
+                        cA2.notifyDataSetChanged();
+
+                    }
+                }
+            }
+        });
+
+        setHasOptionsMenu(true);
+
+        dutiesLayout = getActivity().findViewById(R.id.slideUpCreditsView);
+        LinearLayout lay = dutiesLayout.findViewById(R.id.Progress_bar_points);
+        btnSend = (Button) lay.findViewById(R.id.versturen_credits);
+        progressWheelFase2 = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
+    }
+
+    @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
@@ -260,24 +311,41 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
 
               if(!checked) {
                   Vakken2.get(position).setChecked(true);
-                  if( !(count>= 60)){
+                  if( !(count>= 42)){
                       count += Integer.parseInt(point);
-                      int percent = (360/60) * count;
+                      int percent = (360/42) * count;
                       progressWheelFase2.setProgress(percent);
                       progressWheelFase2.setText(Integer.toString(count)+" sp");
-                      Toasty.custom(getContext(), "+ "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                      Toasty.custom(getContext(), "+ "+ point+" sp. ->  "+"Total: "+count, getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
 
                   }else{
                       Toasty.error(getContext(),"60 sp is de limiet => Electives Modules", Toast.LENGTH_SHORT).show();
                   }
-                  if (count == 60) {
+                  if (count == 42) {
                       progressWheelFase2.setBarColor(Color.	rgb(0,128,0));
-                      //btnSend.setEnabled(true);
-                      //btnSend.setBackgroundColor(Color.rgb(0,128,0));
-                  }else if(count >= 45 && count < 60){
+                      AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                      builder.setMessage("Would like to continue?")
+                      .setTitle("Go to Electives Modules")
+                      .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                          @Override
+                          public void onClick(DialogInterface dialogInterface, int i) {
+
+                              Intent change = new Intent(getActivity(),profile.class);
+                              startActivity(change);
+
+                          }
+                      }).setNegativeButton("Stop", new DialogInterface.OnClickListener() {
+                          @Override
+                          public void onClick(DialogInterface dialogInterface, int i) {
+                              return;
+                          }
+                      });
+
+                      AlertDialog dialog = builder.create();
+                      dialog.show();
+                  }else if(count >= 28 && count < 42){
                       progressWheelFase2.setBarColor(Color.rgb(255,69,0));
-                  }else if (count >= 30 && count < 45) {
-                      progressWheelFase2.setBarColor(Color.rgb(255,140,0));
                   }else if (count >= 15 && count < 30) {
                       progressWheelFase2.setBarColor(Color.rgb(255,165,0));
                   }else if (count >= 0 && count < 15) {
@@ -290,22 +358,18 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
                       int percent = (360/60) * count;
                       progressWheelFase2.setProgress(percent);
                       progressWheelFase2.setText(Integer.toString(count)+" sp");
-                      Toasty.custom(getContext(), "- "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
+                      Toasty.custom(getContext(), "+ "+ point+" sp. ->  "+"Total: "+count, getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
 
                   }else{
                       Toasty.error(getContext()," Mag niet onder de 0", Toast.LENGTH_SHORT).show();
                   }
-                  if (count == 60) {
-                      progressWheelFase2.setBarColor(Color.	rgb(0,128,0));
-                  }else if(count >= 45 && count < 60){
-                      progressWheelFase2.setBarColor(Color.rgb(255,69,0));
+                  if (count == 42) {
+                  }else if(count >= 28 && count < 42){
                       //btnSend.setEnabled(false);
-                  }else if (count >= 30 && count < 45) {
-                      progressWheelFase2.setBarColor(Color.rgb(255,140,0));
                   }else if (count >= 15 && count < 30) {
-                      progressWheelFase2.setBarColor(Color.rgb(255,165,0));
+
                   }else if (count >= 0 && count < 15) {
-                      progressWheelFase2.setBarColor(Color.	rgb(255,215,0));
+
                   }
               }
 
@@ -350,4 +414,22 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
           }
       });
   }
+
+  @Subscribe
+  public void onEvent (duties.Voltwaardigheden event){
+
+          for(int i = 0; i < cA2.getItemCount(); i++){
+              if(cA2.getItemVak(i).getVoltijdigheden() != null ){
+                  for(int v = 0 ; v < cA2.getItemVak(i).getVoltijdigheden().length; v++){
+                      if(TextUtils.equals(event.vakpositie.getCourse(),cA2.getItemVak(i).getVoltijdigheden()[v])) {
+                          cA2.getItemVak(i).setCourse("Yellow");
+                          cA2.notifyDataSetChanged();
+                          Log.d("DutiesFase2", cA2.getItemVak(i).getVoltijdigheden().toString());
+                      }
+                  }
+              }
+          }
+      }
+
+
 }

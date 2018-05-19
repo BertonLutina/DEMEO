@@ -1,6 +1,8 @@
 package app.stucre;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by TI_Laptop-008 on 15/03/2018.
@@ -20,6 +22,9 @@ public class Vak implements Serializable{
     private int score;
     private int fase;
     private boolean isEnabled;
+    private String [] voltijdigheden;
+    private String voltijdigheid;
+    private boolean clickable;
 
 
 
@@ -29,24 +34,79 @@ public class Vak implements Serializable{
     public Vak() {
     }
 
-    public Vak(String id, String course, String credit, String creditPunten, int fase, boolean geslaagd) {
+
+
+    public Vak(String id, String course, String credit, String creditPunten, int fase, boolean geslaagd, boolean clickable) {
         this.id = id;
         this.course = course;
         this.credit = credit;
         this.creditPunten = creditPunten;
         this.fase = fase;
         this.geslaagd = geslaagd;
+        this.clickable = clickable;
+        this.voltijdigheden = new  String[]{};
+    }
+    public Vak(String id, String course, String credit, String creditPunten, int fase, int score ,boolean geslaagd, boolean clickable) {
+        this.id = id;
+        this.course = course;
+        this.credit = credit;
+        this.creditPunten = creditPunten;
+        this.fase = fase;
+        this.geslaagd = geslaagd;
+        this.clickable = clickable;
+        this.score = score;
+        this.voltijdigheden = new  String[]{};
     }
 
-    public Vak(String id, String course, String credit, boolean checked, String creditPunten,int fase, boolean geslaagd) {
+    public Vak(String id, String course, String credit, String creditPunten, int fase, boolean geslaagd,String [] voltijdigheden, boolean clickable) {
+        this.id = id;
+        this.course = course;
+        this.credit = credit;
+        this.creditPunten = creditPunten;
+        this.fase = fase;
+        this.geslaagd = geslaagd;
+        this.voltijdigheden = voltijdigheden;
+        this.clickable = clickable;
+    }
+
+    public Vak(String id, String course, String credit, String creditPunten, int fase, int score,boolean geslaagd,String [] voltijdigheden, boolean clickable) {
+        this.id = id;
+        this.course = course;
+        this.credit = credit;
+        this.creditPunten = creditPunten;
+        this.fase = fase;
+        this.geslaagd = geslaagd;
+        this.voltijdigheden = voltijdigheden;
+        this.clickable = clickable;
+        this.score = score;
+    }
+
+    public Vak(String id, String course, String credit, boolean checked, String creditPunten,int fase, boolean geslaagd,String [] voltijdigheden, boolean clickable) {
         this.id = id;
         this.course = course;
         this.credit = credit;
         this.checked = checked;
         this.creditPunten = creditPunten;
+        this.voltijdigheden = voltijdigheden;
+        this.clickable = clickable;
     }
 
-    public Vak(String id, String course, String credit, boolean checked, String creditPunten,int fase, boolean geslaagd, int score, int chance) {
+    public Vak(String id, String course, String credit, boolean checked, String creditPunten, boolean geslaagd, int chance, int score, int fase, boolean isEnabled, String [] voltijdigheden,boolean clickable) {
+        this.id = id;
+        this.course = course;
+        this.credit = credit;
+        this.checked = checked;
+        this.creditPunten = creditPunten;
+        this.geslaagd = geslaagd;
+        this.chance = chance;
+        this.score = score;
+        this.fase = fase;
+        this.isEnabled = isEnabled;
+        this.voltijdigheden = voltijdigheden;
+        this.clickable = clickable;
+    }
+
+    public Vak(String id, String course, String credit, boolean checked, String creditPunten, int fase, boolean geslaagd, int score, int chance, String [] voltijdigheden, boolean clickable) {
         this.id = id;
         this.course = course;
         this.credit = credit;
@@ -54,7 +114,11 @@ public class Vak implements Serializable{
         this.creditPunten = creditPunten;
         this.score = score;
         this.chance = chance;
+        this.voltijdigheden = voltijdigheden;
+        this.clickable = clickable;
     }
+
+
 
 
 
@@ -160,4 +224,23 @@ public class Vak implements Serializable{
         this.fase = fase;
     }
 
+    public static int getChanceMax() {
+        return chanceMax;
+    }
+
+    public String[] getVoltijdigheden() {
+        return voltijdigheden;
+    }
+
+    public void setVoltijdigheden(String[] voltijdigheden) {
+        this.voltijdigheden = voltijdigheden;
+    }
+
+    public boolean isClickable() {
+        return clickable;
+    }
+
+    public void setClickable(boolean clickable) {
+        this.clickable = clickable;
+    }
 }

@@ -12,10 +12,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import app.stucre.R;
+import es.dmoral.toasty.Toasty;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -26,12 +29,17 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
 
 
     private Context context;
-    private List <Vak> Vakken;
+    private List <Vak> Vakken = new ArrayList<>();
     private OnItemClickListener mListener;
     private onItemLongClickListerner mLongListener;
-    private int focusedItem = -1;
+    private int input = 0;
+    private int click = 0;
+    private HashMap<String, Integer> scoreVak = new HashMap<String, Integer>();
+
 
     public boolean isClickable = true;
+    public boolean isEnable = true;
+    private boolean geslaagd = false;
 
 
     public courseAdapter(Context context, List<Vak> vakken) {
@@ -58,6 +66,8 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
         holder.check.setImageResource(R.drawable.donetick);
         holder.vakImage.setImageResource(R.drawable.booksstackofthreeeen);
         holder.optnemenVakken.setImageResource(R.drawable.vakkenbeschikbaar);
+        holder.nietGeslaagdVal.setImageResource(R.drawable.vakkenopnieuwdoen);
+        holder.tvNietgeslaagd.setText("ONBEKEND");
 
         if(vak.isChecked()) {
             holder.check.setVisibility(View.VISIBLE);
@@ -66,25 +76,53 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
             holder.tvCourse.setTextColor(Color.WHITE);
             holder.tvCredit.setTypeface(null,Typeface.BOLD_ITALIC);
             holder.tvCredit.setTextColor(Color.WHITE);
-            holder.tvId.setTypeface(null,Typeface.BOLD_ITALIC);
+            holder.tvNietgeslaagd.setVisibility(View.INVISIBLE);
             holder.tvId.setTypeface(null,Typeface.BOLD_ITALIC);
             holder.tvId.setTextColor(Color.WHITE);
+            holder.nietGeslaagdVal.setVisibility(View.INVISIBLE);
             holder.optnemenVakken.setVisibility(View.GONE);
+            /**/
+
         }else{
             holder.check.setVisibility(View.GONE);
             holder.cardViewList.setCardBackgroundColor(Color.WHITE);
+            holder.vakImage.setVisibility(View.VISIBLE);
             holder.tvCourse.setTypeface(null,Typeface.NORMAL);
             holder.tvCourse.setTextColor(Color.rgb(34,41,43));
             holder.tvCredit.setTypeface(null,Typeface.NORMAL);
             holder.tvCredit.setTextColor(Color.argb(135,34,41,43));
             holder.tvId.setTypeface(null,Typeface.NORMAL);
+            holder.nietGeslaagdVal.setVisibility(View.INVISIBLE);
+            holder.tvNietgeslaagd.setVisibility(View.VISIBLE);
+
             holder.tvId.setTextColor(Color.rgb(210, 100, 40));
             holder.optnemenVakken.setVisibility(View.VISIBLE);
+
+            scoreVak.put(vak.getCourse(),vak.getScore());
+
+            Integer value = scoreVak.get(vak.getCourse());
+
+            if(value == 0 )
+            {
+                holder.optnemenVakken.setVisibility(View.VISIBLE);
+            } else if (value < 10)
+            {
+                holder.nietGeslaagdVal.setVisibility(View.VISIBLE);
+                holder.tvNietgeslaagd.setText("NIET GESLAAGD");
+                holder.tvNietgeslaagd.setTextColor(Color.rgb(204,0,0));
+                holder.optnemenVakken.setVisibility(View.INVISIBLE);
+            }
+            else if(value >= 10 || value <= 20){
+                holder.vakImage.setVisibility(View.INVISIBLE);
+                holder.tvNietgeslaagd.setText("GESLAAGD");
+                holder.tvNietgeslaagd.setTextColor(Color.rgb(34,139,34));
+                holder.optnemenVakken.setVisibility(View.INVISIBLE);
+            }
         }
 
-        if(!isClickable){
-            holder.cardViewList.setCardBackgroundColor(Color.argb(13,40, 50, 50));
-        }
+
+
+
 
 
 
@@ -106,13 +144,16 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
         mLongListener = listener;
     }
 
+
     @Override
     public int getItemCount() {
         return Vakken.size();
     }
 
     public Vak getItemVak(int position){
+
         return Vakken.get(position);
+
     }
 
     public void setFilter(List<Vak> vakken) {
@@ -127,7 +168,10 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
         public TextView tvCourse;
         public TextView tvCredit;
         public TextView tvId ;
+        public TextView tvNietgeslaagd ;
+
         public ImageView vakImage;
+        public ImageView nietGeslaagdVal;
         public ImageView check;
         public ImageView optnemenVakken;
         public CardView cardViewList;
@@ -136,15 +180,18 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
 
 
 
-        public ViewHolder(final View itemView) {
+
+        public ViewHolder(View itemView) {
 
             super(itemView);
 
             tvCourse = (TextView) itemView.findViewById(R.id.text1);
             tvCredit = (TextView) itemView.findViewById(R.id.text2);
             tvId = (TextView) itemView.findViewById(R.id.text3);
+            tvNietgeslaagd = (TextView) itemView.findViewById(R.id.text4);
             check = (ImageView) itemView.findViewById(R.id.checkImage);
             vakImage = (ImageView) itemView.findViewById(R.id.Beschikbaarvakken);
+            nietGeslaagdVal = (ImageView) itemView.findViewById(R.id.nietgeslaagevakken);
             optnemenVakken = (ImageView) itemView.findViewById(R.id.optenemenVakken);
             cardViewList = (CardView) itemView.findViewById(R.id.listCardview);
             itemView.setEnabled(true);
@@ -157,10 +204,13 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
                     if(mListener != null){
                         int position = getAdapterPosition();
                         if(position != RecyclerView.NO_POSITION){
-                            if(!isClickable)
+                            if(!isClickable || !isEnable)
                                 return;
 
+
                             mListener.onItemClick(position);
+
+
                             notifyDataSetChanged();
 
                         }
@@ -176,8 +226,10 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
                     if(mLongListener != null){
                         int position = getAdapterPosition();
                         if(position != RecyclerView.NO_POSITION){
-                            if(!isClickable)
+                            if(!isClickable || !isEnable)
                                 return false;
+
+
 
 
                             mLongListener.onItemLongClick(position);
@@ -207,8 +259,21 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
 
     }
 
+    public boolean isClickable() {
+        return isClickable;
+    }
 
+    public void setClickable(boolean clickable) {
+        isClickable = clickable;
+    }
 
+    public boolean isEnable() {
+        return isEnable;
+    }
+
+    public void setEnable(boolean enable) {
+        isEnable = enable;
+    }
 
 
 

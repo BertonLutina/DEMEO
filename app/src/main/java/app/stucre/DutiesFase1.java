@@ -38,6 +38,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.todddavies.components.progressbar.ProgressWheel;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +71,8 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
   private Switch selectall2;
   private Switch selectall3;
 
+  EventBus bus = EventBus.getDefault();
+
 
   public DutiesFase1 (){
 
@@ -86,36 +90,46 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
 
     View vFase1 = inflater.inflate(R.layout.fragment_duties_fase1, container, false);
 
-    LinearLayout linearLayout = (LinearLayout) vFase1.findViewById(R.id.linearLayout1);
+    return vFase1;
 
-    vp = (ViewPager) getActivity().findViewById(R.id.pager);
-    Tab = (TabLayout) getActivity().findViewById(R.id.tabsDuties);
-    vp.getAdapter();
+  }
 
-    recyclerViewDF1 = (RecyclerView) vFase1.findViewById(R.id.dutiesfase1);
-    recyclerViewDF1.setHasFixedSize(true);
-    recyclerViewDF1.setLayoutManager(new LinearLayoutManager(getContext()));
 
-    //Vakken1 = new ArrayList<>();
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+      LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.linearLayout1);
+
+      vp = (ViewPager) getActivity().findViewById(R.id.pager);
+      Tab = (TabLayout) getActivity().findViewById(R.id.tabsDuties);
+      vp.getAdapter();
+
+      recyclerViewDF1 = (RecyclerView) view.findViewById(R.id.dutiesfase1);
+      recyclerViewDF1.setHasFixedSize(true);
+      recyclerViewDF1.setLayoutManager(new LinearLayoutManager(getContext()));
+
+      //Vakken1 = new ArrayList<>();
     /*Bundle extras = getArguments();
     if(extras == null){
       return vFase1;
 
     }*/
 
-    Intent intent = getActivity().getIntent();
+      Intent intent = getActivity().getIntent();
 
-    Vakken1 = (ArrayList<Vak>) intent.getSerializableExtra("FaseEen");
-    count = intent.getIntExtra("Credit",credit);
-    //duties D = (duties) getActivity();
-    //D.sendData();
+      Vakken1 = (ArrayList<Vak>) intent.getSerializableExtra("FaseEen");
+      count = intent.getIntExtra("Credit",credit);
+      //duties D = (duties) getActivity();
+      //D.sendData();
 
-    // Test data
-    //Vakken();
+      // Test data
+      //Vakken();
 
-    //Vakken1 = new ArrayList<>();
-    //Real Data
-    //VakkenDatabase();
+      //Vakken1 = new ArrayList<>();
+      //Real Data
+      //VakkenDatabase();
 
       cA1 = new courseAdapter(getActivity(),Vakken1);
       recyclerViewDF1.setAdapter(cA1);
@@ -125,70 +139,56 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
 
 
 
-    LayoutCredits = getActivity().findViewById(R.id.slideUpCreditsView);
-    LinearLayout lay = LayoutCredits.findViewById(R.id.Progress_bar_points);
-    LayoutInflater inflater1 = getActivity().getLayoutInflater();
-    View vSlide = inflater.inflate(R.layout.slideupview_credit_point,null);
-    progressWheelFase1 = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
+      LayoutCredits = getActivity().findViewById(R.id.slideUpCreditsView);
+      LinearLayout lay = LayoutCredits.findViewById(R.id.Progress_bar_points);
+      LayoutInflater inflater = getActivity().getLayoutInflater();
+      View vSlide = inflater.inflate(R.layout.slideupview_credit_point,null);
+      progressWheelFase1 = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
 
 
 
 
-    clickOnVakken();
-    
-    selectall = (Switch) getActivity().findViewById(R.id.selectAllSwitchFase1);
+      clickOnVakken();
 
-    selectall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-      @Override
-      public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+      selectall = (Switch) getActivity().findViewById(R.id.selectAllSwitchFase1);
 
-        if(b){
-          for (Vak vak : Vakken1){
-            vak.setChecked(true);
-            boolean checked = vak.isChecked();
-            String point = vak.getCreditPunten();
-            count = Integer.parseInt(point);
-            count++;
-            int percent = (360/60) * (count+1);
-            progressWheelFase1.setProgress(percent);
-            progressWheelFase1.setText(Integer.toString(count)+" sp");
-            cA1.notifyDataSetChanged();
+      selectall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+          @Override
+          public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+              if(b){
+                  for (Vak vak : Vakken1){
+                      vak.setChecked(true);
+                      boolean checked = vak.isChecked();
+                      String point = vak.getCreditPunten();
+                      //count = Integer.parseInt(point);
+                      //count++;
+                      count =+ 60;
+                      int percent = 360;
+                      progressWheelFase1.setProgress(percent);
+                      progressWheelFase1.setText(Integer.toString(count)+" sp");
+                      cA1.notifyDataSetChanged();
+                  }
+                  Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+              }else{
+                  for (Vak vak : Vakken1) {
+                      vak.setChecked(false);
+                      boolean checked = vak.isChecked();
+                      String point = vak.getCreditPunten();
+                      //count =Integer.parseInt(point);
+                      //count--;
+                      count = 0;
+                      int percent = count;
+                      progressWheelFase1.setProgress(percent);
+                      progressWheelFase1.setText(Integer.toString(count) + " sp");
+                      cA1.notifyDataSetChanged();
+                  }
+
+              }
+
           }
-          Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
-        }else{
-          for (Vak vak : Vakken1) {
-            vak.setChecked(false);
-            boolean checked = vak.isChecked();
-            String point = vak.getCreditPunten();
-            count =Integer.parseInt(point);
-            count--;
-            int percent = (360 / 60) * (count + 1);
-            progressWheelFase1.setProgress(percent);
-            progressWheelFase1.setText(Integer.toString(count) + " sp");
-            cA1.notifyDataSetChanged();
-          }
+      });
 
-        }
-
-      }
-    });
-
-
-
-    return vFase1;
-
-
-
-  }
-
-  private void selectAll() {
-
-
-  }
-
-  @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
 
 
 
@@ -306,7 +306,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
 
   private void clickOnVakken(){
 
-     //intent = new Intent(getContext(),duties.class);
+     intent = new Intent(getContext(),duties.class);
 
     cA1.setOnItemClickListener(new courseAdapter.OnItemClickListener() {
       @Override
@@ -324,16 +324,17 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
           if(!(count> 60)){
             count += Integer.parseInt(point);
             int percent = (360/60) * count;
-            Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+            Toasty.custom(getContext(), "+ "+ point+" sp. ->  "+"Total: "+count , getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
             progressWheelFase1.setProgress(percent);
             progressWheelFase1.setText(Integer.toString(count)+" sp");
             vakken_te_Versturen.add(course_to_send);
+            Log.d("DutiesFase1", vakken_te_Versturen.toString());
+            bus.post(new duties.Voltwaardigheden(course_to_send));
+            Log.d("DutiesFase1", course_to_send.getCourse());
 
             if (count == 60) {
               progressWheelFase1.setBarColor(Color.	rgb(0,128,0));
               //intent.putExtra("OGV", (ArrayList<Vak>)vakken_te_Versturen);
-
-
               //btnSend.setEnabled(true);
               //btnSend.setBackgroundColor(Color.rgb(0,128,0));
             }else if(count >= 45 && count < 60){
@@ -357,7 +358,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
           if(!(count < 0)){
             count -= Integer.parseInt(point);
             int percent = (360/60) * count;
-            Toasty.custom(getContext(), "- "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
+            Toasty.custom(getContext(), "- "+ point+" sp. ->  "+"Total: "+count, getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
             progressWheelFase1.setProgress(percent);
             progressWheelFase1.setText(Integer.toString(count)+" sp");
             //vakken_te_Versturen.remove(course_to_send);
@@ -396,19 +397,10 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
         AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.dialogscore,null);
-        TextView vak = (TextView) dialogView.findViewById(R.id.vakDialoog);
-        TextView score = (TextView) dialogView.findViewById(R.id.score);
-        TextView geslaagd = (TextView) dialogView.findViewById(R.id.txtgeslaagd);
-
-        vak.setText(course);
-        score.setText(getScore.toString());
-        geslaagd.setText("In progress...");
-        geslaagd.setBackgroundColor(Color.rgb(0,128,0));
-        geslaagd.setTextColor(Color.rgb(246,246,246));
+        View dialogView = inflater.inflate(R.layout.inputscore,null);
 
 
-        dialogvak.setView(dialogView).setPositiveButton("Back",new DialogInterface.OnClickListener() {
+        dialogvak.setView(dialogView).setPositiveButton("OK",new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
 

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AlertDialog;
@@ -64,6 +66,16 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_electives_modules_option_b, container, false);
 
+
+
+        // Inflate the layout for this fragment
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         recyclerViewEmB = (RecyclerView) view.findViewById(R.id.emoptionB);
         recyclerViewEmB.setHasFixedSize(true);
         recyclerViewEmB.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -78,7 +90,7 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
         //Vakken();
 
         // Vakken Van Database
-       // VakkenDatabase();
+        // VakkenDatabase();
 
         cAEMB = new courseAdapter(getContext(),VakkenEmB);
         recyclerViewEmB.setAdapter(cAEMB);
@@ -128,10 +140,6 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
 
             }
         });
-
-        // Inflate the layout for this fragment
-
-        return view;
     }
 
     @Override

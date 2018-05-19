@@ -82,7 +82,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:src="@drawable/vakkenopnieuwdoen"
-                        android:id="@+id/geslaagevakken"
+                        android:id="@+id/nietgeslaagevakken"
                         android:visibility="invisible"/>
 
                 </RelativeLayout>
@@ -102,7 +102,7 @@
 
                 <TextView
                     android:id="@+id/text2"
-                    android:layout_width="match_parent"
+                    android:layout_width="217dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-condensed"
@@ -112,6 +112,19 @@
                     android:textColor="@drawable/select_item_listviewtext2"
                     android:textSize="13sp"
                     android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/text4"
+                    android:layout_width="223dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-condensed"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="20dp"
+                    android:text="niet geslaagd"
+                    android:textColor="@drawable/select_item_listviewtext2"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/text3"

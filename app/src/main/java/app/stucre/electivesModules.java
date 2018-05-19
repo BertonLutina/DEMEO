@@ -42,6 +42,8 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
     private List<String> opgenomenVakken = new ArrayList<>();
     private List<Vak> EMA;
     private List<Vak> EMB;
+    private List<Vak> EMA_Duties;
+    private List<Vak> EMB_Duties;
     private String[] course_array;
 
     private static final String TAG ="duties";
@@ -93,43 +95,80 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
 
         Intent intent = getIntent();
         EMA = (ArrayList<Vak>) intent.getSerializableExtra("EMA");
-        EMB = (ArrayList<Vak>) intent.getSerializableExtra("EMB");
 
-        for (Vak course : EMA){
-            opgenomenVakken.add(course.getCourse());
-        }
-
-        for (Vak course : EMB){
-            opgenomenVakken.add(course.getCourse());
-        }
-
-        course_array = new String[opgenomenVakken.size()];
-        opgenomenVakken.toArray(course_array);
-
-        btnSend = (Button) slideView.findViewById(R.id.versturen_credits);
-        btnSend.setEnabled(true);
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(electivesModules.this);
-                builder.setTitle("Included Courses")
-                        .setItems(course_array, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // The 'which' argument contains the index position
-                                // of the selected item
-                            }
-                        }).setPositiveButton("Accept", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+        if(EMA != null){
+            for (Vak course : EMA){
+                opgenomenVakken.add(course.getCourse());
             }
 
-        });
+
+            course_array = new String[opgenomenVakken.size()];
+            opgenomenVakken.toArray(course_array);
+
+            btnSend = (Button) slideView.findViewById(R.id.versturen_credits);
+            btnSend.setEnabled(true);
+            btnSend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(electivesModules.this);
+                    builder.setTitle("Included Courses")
+                            .setItems(course_array, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // The 'which' argument contains the index position
+                                    // of the selected item
+                                }
+                            }).setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+
+            });
+        }else{
+
+            EMA_Duties = (ArrayList<Vak>) intent.getSerializableExtra("VK2");
+
+            for (Vak course : EMA_Duties){
+                opgenomenVakken.add(course.getCourse());
+            }
+
+
+            course_array = new String[opgenomenVakken.size()];
+            opgenomenVakken.toArray(course_array);
+
+            btnSend = (Button) slideView.findViewById(R.id.versturen_credits);
+            btnSend.setEnabled(true);
+            btnSend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(electivesModules.this);
+                    builder.setTitle("Included Courses")
+                            .setItems(course_array, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // The 'which' argument contains the index position
+                                    // of the selected item
+                                }
+                            }).setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+
+            });
+        }
+
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarEM);
         setSupportActionBar(toolbar);

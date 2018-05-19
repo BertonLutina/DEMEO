@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -64,6 +65,15 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_electives_fase3, container, false);
+
+
+        return view;
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         recyclerViewEF3 = (RecyclerView) view.findViewById(R.id.electivesFase3);
         recyclerViewEF3.setHasFixedSize(true);
@@ -140,11 +150,7 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
 
-        return view;
-
     }
-
-
 
     @Override
     public void onStart() {
