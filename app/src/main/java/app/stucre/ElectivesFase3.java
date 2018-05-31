@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.todddavies.components.progressbar.ProgressWheel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -43,23 +45,24 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
 
     private RecyclerView recyclerViewEF3;
     private courseAdapter cAEF3;
-
-    private ArrayList<Vak> VakkenEF3;
-    Vak test;
+    private List<Vak> VakkenEF3 = new ArrayList<>();
+    private Vak test;
     private ProgressWheel progressWheelElectivesFase3;
     private View dutiesLayout;
     private int count = 0;
     private Button btnSend;
     private Switch selectall;
+    private HashMap<String, Integer> scoreVak = new HashMap<String, Integer>();
+    private int clicks = 0;
+    private boolean checked ;
+    private int clickbutton = 0;
 
 
     public ElectivesFase3(){
 
     }
-
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference electivFase3 = database.getReference("Bedrijfskunde/TI/Electives/fase 3");
-
+    DatabaseReference electivFase3 = database.getReference("Bedrijfskunde/TI/Electives");
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,7 +73,6 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
         return view;
 
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -79,17 +81,14 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
         recyclerViewEF3.setHasFixedSize(true);
         recyclerViewEF3.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        //Object aanmaken
-        Intent intent = getActivity().getIntent();
-
-        VakkenEF3 = (ArrayList<Vak>) intent.getSerializableExtra("EleFase3");
-
 
         // Test vakken
         //Vakken();
 
-        // Vakken Van Database
-        //VakkenDatabase();
+        VakkenEF3 = new ArrayList<>();
+        //Vakken Van Database
+        VakkenDatabase();
+
 
         cAEF3= new courseAdapter(getContext(),VakkenEF3);
         recyclerViewEF3.setAdapter(cAEF3);
@@ -151,15 +150,12 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
         // Inflate the layout for this fragment
 
     }
-
     @Override
     public void onStart() {
         super.onStart();
         //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
-
     // Implements methode from Search.OnQueryListener
-
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
@@ -175,9 +171,6 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
         cAEF3.notifyDataSetChanged();
         return false;
     }
-
-
-
     // Menu option to create the Search bar in the actinBar and add the Loop Icon
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -207,7 +200,6 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
         });
         super.onCreateOptionsMenu(menu, inflater);
     }
-
     // Create a methode filter and give the paramter a Arraylist and a String
     // Here we will take the list and filter
     private List<Vak> filter(List<Vak> vakken1, String query) {
@@ -237,17 +229,16 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-
                 for (DataSnapshot child:children) {
-
                     Object course_id = child.child("COURSE_ID").getValue(Object.class);
                     Object course = child.child("COURSE").getValue(Object.class);
-                    Object credit = child.child("CREDITS").getValue(Object.class);
-                    Object creditPunten = child.child("CREDITS").getValue(Object.class);
-                    //VakkenEF3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+                    Object credit = child.child("CREDIT").getValue(Object.class);
+                    Object creditPunten = child.child("CREDITPOINT").getValue(Object.class);
+                    Object fase = child.child("FASE").getValue(Object.class);
+                    Object score = child.child("SCORE").getValue(Object.class);
+                    Object succeeded = child.child("SUCCEEDED").getValue(Object.class);
+                    VakkenEF3.add(new Vak(course_id.toString(), course.toString(), credit.toString(),creditPunten.toString(),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
                     cAEF3.notifyDataSetChanged();
-
-
                 }
             }
 
@@ -324,38 +315,176 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
             @Override
             public boolean onItemLongClick(int position) {
 
-                String course = VakkenEF3.get(position).getCourse();
-                Integer Score = VakkenEF3.get(position).setScore(0);
-                Integer getScore = VakkenEF3.get(position).getScore();
+                clickbutton++;
+                final int pos = position;
+                boolean geslaagd = VakkenEF3.get(pos).isGeslaagd();
 
-                AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
-                LayoutInflater inflater = getActivity().getLayoutInflater();
+                String course = VakkenEF3.get(pos).getCourse();
+                boolean  checked = VakkenEF3.get(pos).isChecked();
 
-                View dialogView = inflater.inflate(R.layout.dialogscore,null);
-                TextView vak = (TextView) dialogView.findViewById(R.id.vakDialoog);
-                TextView score = (TextView) dialogView.findViewById(R.id.score);
-                TextView geslaagd = (TextView) dialogView.findViewById(R.id.txtgeslaagd);
+                Integer getScore = VakkenEF3.get(pos).getScore();
+                clicks = 0;
 
-                vak.setText(course);
-                score.setText(getScore.toString());
-                geslaagd.setText("In progress...");
-                geslaagd.setBackgroundColor(Color.rgb(0,128,0));
-                geslaagd.setTextColor(Color.rgb(246,246,246));
+                scoreVak.put(course,getScore);
+                Integer value = scoreVak.get(course);
 
 
-                dialogvak.setView(dialogView).setPositiveButton("Back",new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                });
 
-                AlertDialog alertVak =  dialogvak.create();
 
-                alertVak.show();
+                if(value == 0)
+                {
+
+                    NietGeslaagdeVakken(pos,course,geslaagd);
+                }
+                else if (value < 10 )
+                {
+
+                    NietGeslaagdeVakken(pos,course,geslaagd);
+                }
+                else if (value>= 10 || value <= 20)
+                {
+
+                    Vakken(pos, geslaagd);
+                }
+
+
+
+
 
                 return true;
             }
         });
+    }
+    public void Vakken(final int pos, boolean geslaagdvak){
+
+
+        geslaagdvak = true;
+        String textScore = Integer.toString(VakkenEF3.get(pos).getScore());
+        Integer Score = VakkenEF3.get(pos).setScore(Integer.parseInt(textScore));
+        final String course = VakkenEF3.get(pos).getCourse();
+        Integer getScore = VakkenEF3.get(pos).getScore();
+
+        final AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+
+        View dialogBack = inflater.inflate(R.layout.dialogscore, null);
+
+        TextView vak = (TextView) dialogBack.findViewById(R.id.vakDialoog);
+        TextView score = (TextView) dialogBack.findViewById(R.id.score);
+        TextView geslaagd = (TextView) dialogBack.findViewById(R.id.txtgeslaagd);
+
+        final Integer value = scoreVak.get(course);
+
+        vak.setText(course);
+
+        if (value > 10 || value < 20) {
+            geslaagd.setText("Geslaagd");
+            geslaagd.setBackgroundColor(Color.rgb(20, 120, 0));
+            geslaagd.setTextColor(Color.rgb(246, 246, 246));
+            score.setText(getScore.toString()+ "/20");
+        } else if (value == 0) {
+            geslaagd.setText("Onbekend");
+            geslaagd.setBackgroundColor(Color.rgb(120, 120, 120));
+            geslaagd.setTextColor(Color.rgb(246, 246, 246));
+            score.setText(getScore.toString()+ "/20");
+        }
+        if (value < 10) {
+            geslaagd.setText("Onvoldoende");
+            geslaagd.setBackgroundColor(Color.rgb(128, 20, 0));
+            geslaagd.setTextColor(Color.rgb(246, 246, 246));
+            score.setText(getScore.toString()+ "/20");
+        }
+
+        dialogvak.setView(dialogBack).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(getContext(),"Score: " + value+" /20",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        dialogvak.setView(dialogBack).setNegativeButton("Rewrite", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(VakkenEF3.get(pos).isGeslaagd() == false)
+                    NietGeslaagdeVakken(pos,course,VakkenEF3.get(pos).isGeslaagd());
+
+
+            }
+        });
+
+
+        AlertDialog alertVak = dialogvak.create();
+
+        alertVak.show();
+
+
+
+
+
+    }
+    public void NietGeslaagdeVakken(final int pos, String course, boolean geslaagd){
+
+        geslaagd = false;
+        AlertDialog.Builder inputVak = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        final View inputView = inflater.inflate(R.layout.inputscore, null);
+
+        final EditText inputText = (EditText) inputView.findViewById(R.id.cijferinputvak);
+        TextView vakText = (TextView) inputView.findViewById(R.id.vakinput);
+        vakText.setText(course);
+
+
+        inputVak.setView(inputView).setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                clicks++;
+                checked = true;
+                if(scoreVak == null)
+                    Toasty.error(getContext(), "Er werd geen vak geselecteerd", Toast.LENGTH_SHORT).show();
+
+                if (clicks > 4)
+                {
+                    Toasty.error(getContext(), "Je mag maar 3 keren uw score veranderen!!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+
+                VakkenEF3.get(pos).setScore(Integer.parseInt(inputText.getText().toString()));
+
+                scoreVak.put(VakkenEF3.get(pos).getCourse(), VakkenEF3.get(pos).getScore());
+
+                Integer value = scoreVak.get(VakkenEF3.get(pos).getCourse());
+
+                if ((value < 0 || value > 20))
+                    Toasty.error(getContext(), "Score moet tussen 0 en 20 zijn!", Toast.LENGTH_SHORT).show();
+
+
+                if ( value == 0 || value < 10 )
+                {
+                    VakkenEF3.get(pos).setGeslaagd(false);
+
+                }
+                else if (value>= 10 || value <= 20)
+                {
+                    VakkenEF3.get(pos).setGeslaagd(true);
+                }
+
+                Vakken(pos,VakkenEF3.get(pos).isGeslaagd());
+
+
+
+            }
+        });
+
+
+        AlertDialog dialog = inputVak.create();
+
+        dialog.show();
     }
 }

@@ -3,6 +3,7 @@ package app.stucre;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -93,6 +94,7 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
             }
         });
 
+        /*
         Intent intent = getIntent();
         EMA = (ArrayList<Vak>) intent.getSerializableExtra("EMA");
 
@@ -131,7 +133,7 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
             });
         }else{
 
-            EMA_Duties = (ArrayList<Vak>) intent.getSerializableExtra("VK2");
+           /* EMA_Duties = (ArrayList<Vak>) intent.getSerializableExtra("VK2");
 
             for (Vak course : EMA_Duties){
                 opgenomenVakken.add(course.getCourse());
@@ -143,6 +145,7 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
 
             btnSend = (Button) slideView.findViewById(R.id.versturen_credits);
             btnSend.setEnabled(true);
+
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -165,7 +168,7 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
                 }
 
             });
-        }
+        }*/
 
 
 
@@ -221,6 +224,7 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
         dLayout = (DrawerLayout)findViewById(R.id.drawer);
 
         dToggle = new ActionBarDrawerToggle(this,dLayout,R.string.open_drawer,R.string.close_drawer);
+        dToggle.getDrawerArrowDrawable().setColor(Color.WHITE);
 
         dLayout.addDrawerListener(dToggle);
         dToggle.syncState();

@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -85,10 +86,8 @@ public class options extends AppCompatActivity implements NavigationView.OnNavig
                     }
             }
         });
+/*
 
-        Intent intent = getIntent();
-
-        Options_Dialog = (ArrayList<Vak>) intent.getSerializableExtra("Intership");
 
         for (Vak course : Options_Dialog){
             opgenomenVakken.add(course.getCourse());
@@ -120,7 +119,7 @@ public class options extends AppCompatActivity implements NavigationView.OnNavig
                 alertDialog.show();
             }
 
-        });
+        });*/
 
 
 
@@ -139,6 +138,7 @@ public class options extends AppCompatActivity implements NavigationView.OnNavig
         dLayout = (DrawerLayout)findViewById(R.id.drawerO);
 
         dToggle = new ActionBarDrawerToggle(this,dLayout,R.string.open_drawer,R.string.close_drawer);
+        dToggle.getDrawerArrowDrawable().setColor(Color.WHITE);
 
         dLayout.addDrawerListener(dToggle);
         dToggle.syncState();

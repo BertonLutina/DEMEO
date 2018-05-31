@@ -8,8 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -79,18 +81,10 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
         recyclerViewDF3.setHasFixedSize(true);
         recyclerViewDF3.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        //Object aanmaken
-
-
-        Intent intent = getActivity().getIntent();
-        Vakken3 = (ArrayList<Vak>) intent.getSerializableExtra("FaseDrie");
-
-
-        // Test data
-        //Vakken();
 
         //Real Data
-        //VakkenDatabase();
+        Vakken3 = new ArrayList<>();
+        VakkenDatabase();
 
         cA3 = new courseAdapter(getContext(),Vakken3);
         recyclerViewDF3.setAdapter(cA3);
@@ -375,19 +369,22 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
 
                       if(value == 0)
                       {
-                          Vakken3.get(pos).setGeslaagd(false);
+
                           NietGeslaagdeVakken(pos,course,geslaagd);
                       }
                       else if (value < 10 )
                       {
-                          Vakken3.get(pos).setGeslaagd(false);
+
                           NietGeslaagdeVakken(pos,course,geslaagd);
                       }
                       else if (value>= 10 || value <= 20)
                        {
-                           Vakken3.get(pos).setGeslaagd(true);
+
                            Vakken(pos, geslaagd);
                        }
+
+
+
 
 
               return true;
@@ -402,7 +399,7 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
             geslaagdvak = true;
             String textScore = Integer.toString(Vakken3.get(pos).getScore());
             Integer Score = Vakken3.get(pos).setScore(Integer.parseInt(textScore));
-            String course = Vakken3.get(pos).getCourse();
+            final String course = Vakken3.get(pos).getCourse();
             Integer getScore = Vakken3.get(pos).getScore();
 
             final AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
@@ -415,7 +412,7 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
             TextView score = (TextView) dialogBack.findViewById(R.id.score);
             TextView geslaagd = (TextView) dialogBack.findViewById(R.id.txtgeslaagd);
 
-            Integer value = scoreVak.get(course);
+            final Integer value = scoreVak.get(course);
 
             vak.setText(course);
 
@@ -423,23 +420,24 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
                 geslaagd.setText("Geslaagd");
                 geslaagd.setBackgroundColor(Color.rgb(20, 120, 0));
                 geslaagd.setTextColor(Color.rgb(246, 246, 246));
-                score.setText(getScore.toString());
+                score.setText(getScore.toString()+ "/20");
             } else if (value == 0) {
                 geslaagd.setText("Onbekend");
                 geslaagd.setBackgroundColor(Color.rgb(120, 120, 120));
                 geslaagd.setTextColor(Color.rgb(246, 246, 246));
-                score.setText(getScore.toString());
+                score.setText(getScore.toString()+ "/20");
             }
             if (value < 10) {
                 geslaagd.setText("Onvoldoende");
                 geslaagd.setBackgroundColor(Color.rgb(128, 20, 0));
                 geslaagd.setTextColor(Color.rgb(246, 246, 246));
-                score.setText(getScore.toString());
+                score.setText(getScore.toString()+ "/20");
             }
 
             dialogvak.setView(dialogBack).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getContext(),"Score: " + value+" /20",Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -448,7 +446,9 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if(Vakken3.get(pos).isGeslaagd() == false)
-                    Vakken(pos,false);
+                    NietGeslaagdeVakken(pos,course,Vakken3.get(pos).isGeslaagd());
+
+
                 }
             });
 
@@ -503,7 +503,19 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
                         Toasty.error(getContext(), "Score moet tussen 0 en 20 zijn!", Toast.LENGTH_SHORT).show();
 
 
+                if ( value == 0 || value < 10 )
+                {
+                    Vakken3.get(pos).setGeslaagd(false);
+
+                }
+                else if (value>= 10 || value <= 20)
+                {
+                    Vakken3.get(pos).setGeslaagd(true);
+                }
+
                     Vakken(pos,Vakken3.get(pos).isGeslaagd());
+
+
 
             }
         });

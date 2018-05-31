@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.support.v7.widget.SearchView;
 import android.widget.Switch;
@@ -38,6 +39,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -60,6 +62,10 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
     private Switch selectall3;
 
     EventBus bus = EventBus.getDefault();
+    private HashMap<String,Integer> scoreVak = new HashMap<String, Integer>();
+    private int clicks = 0;
+    private int clickbutton = 0;
+    private boolean checked;
 
 
     public DutiesFase2(){
@@ -97,16 +103,12 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
         // object aanmaken
 
 
-        Intent intent = getActivity().getIntent();
-
-        Vakken2 = (ArrayList<Vak>) intent.getSerializableExtra("FaseTwee");
 
 
-        // Test data
-        //Vakken();
+        Vakken2 = new ArrayList<>();
 
-        //Real Data
-        //VakkenDatabase();
+
+        VakkenDatabase();
 
 
         cA2 = new courseAdapter(getContext(),Vakken2);
@@ -380,35 +382,42 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
       cA2.setOnItemLongClickListener(new courseAdapter.onItemLongClickListerner() {
           @Override
           public boolean onItemLongClick(int position) {
-              String course = Vakken2.get(position).getCourse();
-              Integer Score = Vakken2.get(position).setScore(0);
-              Integer getScore = Vakken2.get(position).getScore();
+              clickbutton++;
+              final int pos = position;
+              boolean geslaagd = Vakken2.get(pos).isGeslaagd();
 
-              AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
-              LayoutInflater inflater = getActivity().getLayoutInflater();
+              String course = Vakken2.get(pos).getCourse();
+              boolean  checked = Vakken2.get(pos).isChecked();
 
-              View dialogView = inflater.inflate(R.layout.dialogscore,null);
-              TextView vak = (TextView) dialogView.findViewById(R.id.vakDialoog);
-              TextView score = (TextView) dialogView.findViewById(R.id.score);
-              TextView geslaagd = (TextView) dialogView.findViewById(R.id.txtgeslaagd);
+              Integer getScore = Vakken2.get(pos).getScore();
+              clicks = 0;
 
-              vak.setText(course);
-              score.setText(getScore.toString());
-              geslaagd.setText("In progress...");
-              geslaagd.setBackgroundColor(Color.rgb(0,128,0));
-              geslaagd.setTextColor(Color.rgb(246,246,246));
+              scoreVak.put(course,getScore);
+              Integer value = scoreVak.get(course);
 
 
-              dialogvak.setView(dialogView).setPositiveButton("Back",new DialogInterface.OnClickListener() {
-                  @Override
-                  public void onClick(DialogInterface dialogInterface, int i) {
 
-                  }
-              });
 
-              AlertDialog alertVak =  dialogvak.create();
 
-              alertVak.show();
+              if(value == 0)
+              {
+
+                  NietGeslaagdeVakken(pos,course,geslaagd);
+              }
+              else if (value < 10 )
+              {
+
+                  NietGeslaagdeVakken(pos,course,geslaagd);
+              }
+              else if (value>= 10 || value <= 20)
+              {
+
+                  Vakken(pos, geslaagd);
+              }
+
+
+
+
 
               return true;
           }
@@ -432,4 +441,136 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
       }
 
 
+    public void Vakken(final int pos, boolean geslaagdvak){
+
+
+        geslaagdvak = true;
+        String textScore = Integer.toString(Vakken2.get(pos).getScore());
+        Integer Score = Vakken2.get(pos).setScore(Integer.parseInt(textScore));
+        final String course = Vakken2.get(pos).getCourse();
+        Integer getScore = Vakken2.get(pos).getScore();
+
+        final AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+
+        View dialogBack = inflater.inflate(R.layout.dialogscore, null);
+
+        TextView vak = (TextView) dialogBack.findViewById(R.id.vakDialoog);
+        TextView score = (TextView) dialogBack.findViewById(R.id.score);
+        TextView geslaagd = (TextView) dialogBack.findViewById(R.id.txtgeslaagd);
+
+        final Integer value = scoreVak.get(course);
+
+        vak.setText(course);
+
+        if (value > 10 || value < 20) {
+            geslaagd.setText("Geslaagd");
+            geslaagd.setBackgroundColor(Color.rgb(20, 120, 0));
+            geslaagd.setTextColor(Color.rgb(246, 246, 246));
+            score.setText(getScore.toString()+ "/20");
+        } else if (value == 0) {
+            geslaagd.setText("Onbekend");
+            geslaagd.setBackgroundColor(Color.rgb(120, 120, 120));
+            geslaagd.setTextColor(Color.rgb(246, 246, 246));
+            score.setText(getScore.toString()+ "/20");
+        }
+        if (value < 10) {
+            geslaagd.setText("Onvoldoende");
+            geslaagd.setBackgroundColor(Color.rgb(128, 20, 0));
+            geslaagd.setTextColor(Color.rgb(246, 246, 246));
+            score.setText(getScore.toString()+ "/20");
+        }
+
+        dialogvak.setView(dialogBack).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(getContext(),"Score: " + value+" /20",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        dialogvak.setView(dialogBack).setNegativeButton("Rewrite", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(Vakken2.get(pos).isGeslaagd() == false)
+                    NietGeslaagdeVakken(pos,course,Vakken2.get(pos).isGeslaagd());
+
+
+            }
+        });
+
+
+        AlertDialog alertVak = dialogvak.create();
+
+        alertVak.show();
+
+
+
+
+
+    }
+
+    public void NietGeslaagdeVakken(final int pos, String course, boolean geslaagd){
+
+        geslaagd = false;
+        AlertDialog.Builder inputVak = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        final View inputView = inflater.inflate(R.layout.inputscore, null);
+
+        final EditText inputText = (EditText) inputView.findViewById(R.id.cijferinputvak);
+        TextView vakText = (TextView) inputView.findViewById(R.id.vakinput);
+        vakText.setText(course);
+
+
+        inputVak.setView(inputView).setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                clicks++;
+                checked = true;
+                if(scoreVak == null)
+                    Toasty.error(getContext(), "Er werd geen vak geselecteerd", Toast.LENGTH_SHORT).show();
+
+                if (clicks > 4)
+                {
+                    Toasty.error(getContext(), "Je mag maar 3 keren uw score veranderen!!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+
+                Vakken2.get(pos).setScore(Integer.parseInt(inputText.getText().toString()));
+
+                scoreVak.put(Vakken2.get(pos).getCourse(), Vakken2.get(pos).getScore());
+
+                Integer value = scoreVak.get(Vakken2.get(pos).getCourse());
+
+                if ((value < 0 || value > 20))
+                    Toasty.error(getContext(), "Score moet tussen 0 en 20 zijn!", Toast.LENGTH_SHORT).show();
+
+
+                if ( value > 0 || value < 10 )
+                {
+                    Vakken2.get(pos).setGeslaagd(false);
+
+                }
+                else if (value>= 10 || value <= 20)
+                {
+                    Vakken2.get(pos).setGeslaagd(true);
+                }
+
+                Vakken(pos,Vakken2.get(pos).isGeslaagd());
+
+
+
+            }
+        });
+
+
+        AlertDialog dialog = inputVak.create();
+
+        dialog.show();
+    }
 }

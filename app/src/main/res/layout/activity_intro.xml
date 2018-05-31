@@ -13,9 +13,9 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="6dp"
+
         android:scaleType="fitXY"
-        android:src="@drawable/graduatedsmartphone"/>
+        android:background="#00407A"/>
 
     <ImageView
         android:id="@+id/loginOverlay"
@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/linearLayout"
         android:layout_alignParentStart="true"
-        android:background="#f022292b"
+        android:background="#9722292b"
         android:scaleType="fitXY" />
 
     <ImageView

@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.todddavies.components.progressbar.ProgressWheel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -43,7 +45,7 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
     private RecyclerView recyclerViewOF3;
     private courseAdapter cAOF3;
 
-    private ArrayList<Vak> VakkenOF3;
+    private ArrayList<Vak> VakkenOF3 = new ArrayList<>();
 
     private ProgressWheel progressWheelOptionFase3;
     private View LayoutCredits;
@@ -51,8 +53,12 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
     private Button btnSend;
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference optionsFase3 = database.getReference("Bedrijfskunde/TI/Options/fase 3");
+    private DatabaseReference optionsFase3 = database.getReference("Bedrijfskunde/TI/Options");
     private Switch selectall;
+    private int clickbutton = 0;
+    private int clicks = 0;
+    private HashMap<String,Integer> scoreVak = new HashMap<String,Integer>();
+    private boolean checked;
 
     public OptionsIntership(){
 
@@ -63,6 +69,8 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_options_intership, container, false);
+
+        VakkenDatabase();
 
 
         // Inflate the layout for this fragment
@@ -77,15 +85,10 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
         recyclerViewOF3.setHasFixedSize(true);
         recyclerViewOF3.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Object aanmaken
-        Intent intent = getActivity().getIntent();
-        VakkenOF3 = (ArrayList<Vak>) intent.getSerializableExtra("Intership");
 
-        // TestVakken
-        //Vakken();
 
         //Vakken van de DATABASE
-        //VakkenDatabase();
+
 
         cAOF3= new courseAdapter(getContext(),VakkenOF3);
         recyclerViewOF3.setAdapter(cAOF3);
@@ -216,40 +219,51 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
 
                 String vakken_hm = child.getKey();
 
-                if(TextUtils.equals(vakken_hm ,"Option 2 : Intership mobility out of Europe") || TextUtils.equals(vakken_hm ,"Option 5 : Intership mobility in Europe : SHORT" )){
-                    if(TextUtils.equals(vakken_hm ,"Option 2 : Intership mobility out of Europe"))
+                if(TextUtils.equals(vakken_hm ,"Optie 2: Stagemobiliteit buiten Europa") || TextUtils.equals(vakken_hm ,"Optie 5: Studiemobiliteit in Europa KORT" )){
+                    if(TextUtils.equals(vakken_hm ,"Optie 2: Stagemobiliteit buiten Europa"))
                     {
                         Iterable<DataSnapshot> kids = child.getChildren();
 
                         for (DataSnapshot kid : kids) {
                             Object course_id = kid.child("COURSE_ID").getValue(Object.class);
                             Object course = kid.child("COURSE").getValue(Object.class);
-                            Object credit = kid.child("CREDITS").getValue(Object.class);
-                            Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            //VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: out of Europe",creditPunten.toString()));
+                            Object credit = kid.child("CREDIT").getValue(Object.class);
+                            Object creditPunten = kid.child("CREDITPOINT").getValue(Object.class);
+                            Object fase = kid.child("FASE").getValue(Object.class);
+                            Object score = kid.child("FASE").getValue(Object.class);
+                            Object succeeded = kid.child("SUCCEEDED").getValue(Object.class);
+                            VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString(),creditPunten.toString(),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
                             cAOF3.notifyDataSetChanged();
                         }}
-                    else if (TextUtils.equals(vakken_hm ,"Option 5 : Intership mobility in Europe : SHORT"))
+                    else if (TextUtils.equals(vakken_hm ,"Optie 5: Studiemobiliteit in Europa KORT"))
                     {
                         Iterable<DataSnapshot> kids = child.getChildren();
 
                         for (DataSnapshot kid : kids) {
                             Object course_id = kid.child("COURSE_ID").getValue(Object.class);
                             Object course = kid.child("COURSE").getValue(Object.class);
-                            Object credit = kid.child("CREDITS").getValue(Object.class);
-                            Object creditPunten = kid.child("CREDITS").getValue(Object.class);
-                            //VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString()+" sp.      Combination: in or out of Europe",creditPunten.toString()));
+                            Object credit = kid.child("CREDIT").getValue(Object.class);
+                            Object creditPunten = kid.child("CREDITPOINT").getValue(Object.class);
+                            Object fase = kid.child("FASE").getValue(Object.class);
+                            Object score = kid.child("FASE").getValue(Object.class);
+                            Object succeeded = kid.child("SUCCEEDED").getValue(Object.class);
+                            VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString(),creditPunten.toString(),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
                             cAOF3.notifyDataSetChanged();
                         }
                     }
                 }
                 else{
-                    Object course_id = child.child("COURSE_ID").getValue(Object.class);
-                    Object course = child.child("COURSE").getValue(Object.class);
-                    Object credit = child.child("CREDITS").getValue(Object.class);
-                    Object creditPunten = child.child("CREDITS").getValue(Object.class);
-                    //VakkenOF3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
-                    cAOF3.notifyDataSetChanged();
+                    for(DataSnapshot kid: child.getChildren()){
+                    Object course_id = kid.child("COURSE_ID").getValue(Object.class);
+                    Object course = kid.child("COURSE").getValue(Object.class);
+                    Object credit = kid.child("CREDIT").getValue(Object.class);
+                    Object creditPunten = kid.child("CREDITPOINT").getValue(Object.class);
+                    Object fase = kid.child("FASE").getValue(Object.class);
+                    Object score = kid.child("SCORE").getValue(Object.class);
+                    Object succeeded = kid.child("SUCCEEDED").getValue(Object.class);
+                    VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString(),creditPunten.toString(),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
+
+                    cAOF3.notifyDataSetChanged();}
                 }
 
             }
@@ -330,40 +344,179 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
             @Override
             public boolean onItemLongClick(int position) {
 
-                String course = VakkenOF3.get(position).getCourse();
-                Integer Score = VakkenOF3.get(position).setScore(0);
-                Integer getScore = VakkenOF3.get(position).getScore();
+                clickbutton++;
+                final int pos = position;
+                boolean geslaagd = VakkenOF3.get(pos).isGeslaagd();
 
-                AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
-                LayoutInflater inflater = getActivity().getLayoutInflater();
+                String course = VakkenOF3.get(pos).getCourse();
+                boolean  checked = VakkenOF3.get(pos).isChecked();
 
-                View dialogView = inflater.inflate(R.layout.dialogscore,null);
-                TextView vak = (TextView) dialogView.findViewById(R.id.vakDialoog);
-                TextView score = (TextView) dialogView.findViewById(R.id.score);
-                TextView geslaagd = (TextView) dialogView.findViewById(R.id.txtgeslaagd);
+                Integer getScore = VakkenOF3.get(pos).getScore();
+                clicks = 0;
 
-                vak.setText(course);
-                score.setText(getScore.toString());
-                geslaagd.setText("In progress...");
-                geslaagd.setBackgroundColor(Color.rgb(0,128,0));
-                geslaagd.setTextColor(Color.rgb(246,246,246));
+                scoreVak.put(course,getScore);
+                Integer value = scoreVak.get(course);
 
 
-                dialogvak.setView(dialogView).setPositiveButton("Back",new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                });
 
-                AlertDialog alertVak =  dialogvak.create();
 
-                alertVak.show();
+                if(value == 0 || value < 10)
+                {
 
+                    NietGeslaagdeVakken(pos,course,geslaagd);
+                }
+                else if (value>= 10 || value <= 20)
+                {
+                    Vakken(pos, geslaagd);
+                }
+
+
+                /*
+
+                if ( value > 0 || value < 10 )
+                {
+                    VakkenOF3.get(pos).setGeslaagd(false);
+
+                }
+                else if (value>= 10 || value <= 20)
+                {
+                    VakkenOF3.get(pos).setGeslaagd(true);
+                }
+
+*/
 
                 return true;
             }
         });
+    }
+
+    public void Vakken(final int pos, boolean geslaagdvak){
+
+
+        geslaagdvak = true;
+        String textScore = Integer.toString(VakkenOF3.get(pos).getScore());
+        Integer Score = VakkenOF3.get(pos).setScore(Integer.parseInt(textScore));
+        final String course = VakkenOF3.get(pos).getCourse();
+        Integer getScore = VakkenOF3.get(pos).getScore();
+
+        final AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+
+        View dialogBack = inflater.inflate(R.layout.dialogscore, null);
+
+        TextView vak = (TextView) dialogBack.findViewById(R.id.vakDialoog);
+        TextView score = (TextView) dialogBack.findViewById(R.id.score);
+        TextView geslaagd = (TextView) dialogBack.findViewById(R.id.txtgeslaagd);
+
+        final Integer value = scoreVak.get(course);
+
+        vak.setText(course);
+
+        if (value > 10 || value < 20) {
+            geslaagd.setText("Geslaagd");
+            geslaagd.setBackgroundColor(Color.rgb(20, 120, 0));
+            geslaagd.setTextColor(Color.rgb(246, 246, 246));
+            score.setText(getScore.toString()+ "/20");
+        } else if (value == 0) {
+            geslaagd.setText("Onbekend");
+            geslaagd.setBackgroundColor(Color.rgb(120, 120, 120));
+            geslaagd.setTextColor(Color.rgb(246, 246, 246));
+            score.setText(getScore.toString()+ "/20");
+        }
+        if (value < 10) {
+            geslaagd.setText("Onvoldoende");
+            geslaagd.setBackgroundColor(Color.rgb(128, 20, 0));
+            geslaagd.setTextColor(Color.rgb(246, 246, 246));
+            score.setText(getScore.toString()+ "/20");
+        }
+
+        dialogvak.setView(dialogBack).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(getContext(),"Score: " + value+" /20",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        dialogvak.setView(dialogBack).setNegativeButton("Rewrite", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(VakkenOF3.get(pos).isGeslaagd() == false)
+                    NietGeslaagdeVakken(pos,course,VakkenOF3.get(pos).isGeslaagd());
+
+
+            }
+        });
+
+
+        AlertDialog alertVak = dialogvak.create();
+
+        alertVak.show();
+
+
+
+
+
+    }
+
+    public void NietGeslaagdeVakken(final int pos, String course, boolean geslaagd){
+
+        geslaagd = false;
+        AlertDialog.Builder inputVak = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        final View inputView = inflater.inflate(R.layout.inputscore, null);
+
+        final EditText inputText = (EditText) inputView.findViewById(R.id.cijferinputvak);
+        TextView vakText = (TextView) inputView.findViewById(R.id.vakinput);
+        vakText.setText(course);
+
+
+        inputVak.setView(inputView).setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                clicks++;
+                checked = true;
+                if(scoreVak == null)
+                    Toasty.error(getContext(), "Er werd geen vak geselecteerd", Toast.LENGTH_SHORT).show();
+
+
+                VakkenOF3.get(pos).setScore(Integer.parseInt(inputText.getText().toString()));
+
+                scoreVak.put(VakkenOF3.get(pos).getCourse(), VakkenOF3.get(pos).getScore());
+
+                Integer value = scoreVak.get(VakkenOF3.get(pos).getCourse());
+
+                if ((value < 0 || value > 20))
+                    Toasty.error(getContext(), "Score moet tussen 0 en 20 zijn!", Toast.LENGTH_SHORT).show();
+
+
+                if(value == 0 || value < 10) {
+
+                    VakkenOF3.get(pos).setGeslaagd(false);
+
+
+                }else if (value>= 10 || value <= 20)
+                {
+                    VakkenOF3.get(pos).setGeslaagd(true);
+
+
+                }
+
+                Vakken(pos,VakkenOF3.get(pos).isGeslaagd());
+
+
+
+            }
+        });
+
+
+        AlertDialog dialog = inputVak.create();
+
+        dialog.show();
     }
 
 

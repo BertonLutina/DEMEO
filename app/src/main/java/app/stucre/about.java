@@ -1,5 +1,6 @@
 package app.stucre;
 
+import android.graphics.Color;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class about extends AppCompatActivity {
 
 
         dToggle = new ActionBarDrawerToggle(this,dLayout,R.string.open_drawer,R.string.close_drawer);
+        dToggle.getDrawerArrowDrawable().setColor(Color.WHITE);
 
         dLayout.addDrawerListener(dToggle);
         dToggle.syncState();

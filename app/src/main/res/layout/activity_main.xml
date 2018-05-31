@@ -5,19 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="app.stucre.MainActivity"
-    android:background="@drawable/graduatedsmartphone">
+    android:background="#00407A"
+    xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+    android:gravity="center">
 
 
 
 
     <ImageView
         android:id="@+id/loginOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="400dp"
+        android:layout_height="270dp"
+        android:layout_marginLeft="40dp"
         android:layout_alignBottom="@+id/linearLayout"
         android:layout_alignParentStart="true"
-        android:background="#5d22292b"
+        android:background="@drawable/stucrenew"
         android:scaleType="fitXY" />
+
+    <com.todddavies.components.progressbar.ProgressWheel
+        android:id="@+id/proModules"
+        android:layout_width="450dp"
+        android:layout_height="230dp"
+        ProgressWheel:pwBarColor="#002d56"
+        ProgressWheel:pwRimColor="#036ac7"
+        android:visibility="gone"
+
+        />
 
 
 

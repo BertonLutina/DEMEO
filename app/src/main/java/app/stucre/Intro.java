@@ -15,7 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-public class Intro extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+public class Intro extends AppCompatActivity {
 
     private Button signInButton;
     private Button signInMicrosoft;
@@ -31,14 +31,14 @@ public class Intro extends AppCompatActivity implements GoogleApiClient.OnConnec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+      /*  GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this,this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
+*/
         signInButton = (Button) findViewById(R.id.Signinbtn);
         signInMicrosoft = (Button) findViewById(R.id.SigninOutlook);
         signEmail = (Button) findViewById(R.id.SigninEmail);
@@ -57,7 +57,7 @@ public class Intro extends AppCompatActivity implements GoogleApiClient.OnConnec
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(Intro.this,Courses.class);
+                Intent intent = new Intent(Intro.this,Opleiding.class);
                 startActivity(intent);
 
             }
@@ -65,41 +65,25 @@ public class Intro extends AppCompatActivity implements GoogleApiClient.OnConnec
 
 
 
-        signInButton.setOnClickListener(this);
+        //signInButton.setOnClickListener(this);
     }
 
-    @Override
-    public void onClick(View v) {
 
-        switch (v.getId()){
-
-            case R.id.Signinbtn :
-                signIn();
-                break;
-        }
-
-    }
-
-    private void signIn() {
-        Intent signItent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signItent, RC_SIGN_IN);
-
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-       if(requestCode == RC_SIGN_IN){
+       /*if(requestCode == RC_SIGN_IN){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
-
+*/
 
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG,"handleSignInREsult:" + result.isSuccess());
+       /* Log.d(TAG,"handleSignInREsult:" + result.isSuccess());
 
         if(result.isSuccess()){
             GoogleSignInAccount acct = result.getSignInAccount();
@@ -108,14 +92,10 @@ public class Intro extends AppCompatActivity implements GoogleApiClient.OnConnec
             startActivity(main_to_course);
         }else {
 
-        }
+        }*/
     }
 
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 
     /*
     ***********************Microsoft Methode*********************

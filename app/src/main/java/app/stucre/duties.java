@@ -234,6 +234,7 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
         mViewPager.setOffscreenPageLimit(3);
         dLayout = (DrawerLayout) findViewById(R.id.drawer);
         dToggle = new ActionBarDrawerToggle(this, dLayout, R.string.open_drawer, R.string.close_drawer);
+        dToggle.getDrawerArrowDrawable().setColor(Color.WHITE);
 
         dLayout.addDrawerListener(dToggle);
         dToggle.syncState();

@@ -1,6 +1,6 @@
 package app.stucre;
 
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * Created by TI_Laptop-008 on 15/03/2018.
  */
 
-public class Vak implements Serializable{
+public class Vak {
 
 
     private String id;
@@ -117,17 +117,6 @@ public class Vak implements Serializable{
         this.voltijdigheden = voltijdigheden;
         this.clickable = clickable;
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     public String getId() {
@@ -240,7 +229,13 @@ public class Vak implements Serializable{
         return clickable;
     }
 
+
+
     public void setClickable(boolean clickable) {
         this.clickable = clickable;
+    }
+
+    public void PassValueToDataBase(){
+
     }
 }

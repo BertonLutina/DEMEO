@@ -25,6 +25,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.support.design.widget.TabLayout;
 import android.widget.Switch;
@@ -42,6 +44,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -55,6 +58,8 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
   public SearchView searchViewFase1;
   private ProgressWheel progressWheelFase1;
   private View LayoutCredits;
+
+
 
   private int credit= 0;
   private int count = 0;
@@ -72,6 +77,9 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
   private Switch selectall3;
 
   EventBus bus = EventBus.getDefault();
+  private int clickbutton = 0;
+  private HashMap<String,Integer> scoreVak = new HashMap<String, Integer>();
+  private int clicks = 0;
 
 
   public DutiesFase1 (){
@@ -90,7 +98,9 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
 
     View vFase1 = inflater.inflate(R.layout.fragment_duties_fase1, container, false);
 
+
     return vFase1;
+
 
   }
 
@@ -110,26 +120,9 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
       recyclerViewDF1.setHasFixedSize(true);
       recyclerViewDF1.setLayoutManager(new LinearLayoutManager(getContext()));
 
-      //Vakken1 = new ArrayList<>();
-    /*Bundle extras = getArguments();
-    if(extras == null){
-      return vFase1;
+      Vakken1 = new ArrayList<>();
 
-    }*/
-
-      Intent intent = getActivity().getIntent();
-
-      Vakken1 = (ArrayList<Vak>) intent.getSerializableExtra("FaseEen");
-      count = intent.getIntExtra("Credit",credit);
-      //duties D = (duties) getActivity();
-      //D.sendData();
-
-      // Test data
-      //Vakken();
-
-      //Vakken1 = new ArrayList<>();
-      //Real Data
-      //VakkenDatabase();
+      VakkenDatabase();
 
       cA1 = new courseAdapter(getActivity(),Vakken1);
       recyclerViewDF1.setAdapter(cA1);
@@ -390,26 +383,41 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
     cA1.setOnItemLongClickListener(new courseAdapter.onItemLongClickListerner() {
       @Override
       public boolean onItemLongClick(int position) {
-        String course = Vakken1.get(position).getCourse();
-        Integer Score = Vakken1.get(position).setScore(0);
-        Integer getScore = Vakken1.get(position).getScore();
+        clickbutton++;
+        final int pos = position;
+        boolean geslaagd = Vakken1.get(pos).isGeslaagd();
 
-        AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        String course = Vakken1.get(pos).getCourse();
+        boolean  checked = Vakken1.get(pos).isChecked();
 
-        View dialogView = inflater.inflate(R.layout.inputscore,null);
+        Integer getScore = Vakken1.get(pos).getScore();
 
 
-        dialogvak.setView(dialogView).setPositiveButton("OK",new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialogInterface, int i) {
+        scoreVak.put(course,getScore);
+        Integer value = scoreVak.get(course);
 
-          }
-        });
 
-        AlertDialog alertVak =  dialogvak.create();
 
-        alertVak.show();
+
+
+        if(value == 0)
+        {
+
+          NietGeslaagdeVakken(pos,course,geslaagd);
+        }
+        else if (value < 10 )
+        {
+
+          NietGeslaagdeVakken(pos,course,geslaagd);
+        }
+        else if (value>= 10 || value <= 20)
+        {
+
+          Vakken(pos, geslaagd);
+        }
+
+
+
 
         return true;
       }
@@ -419,4 +427,130 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
 
   }
 
+  public void Vakken(final int pos, boolean geslaagdvak){
+
+
+    geslaagdvak = true;
+    String textScore = Integer.toString(Vakken1.get(pos).getScore());
+    Integer Score = Vakken1.get(pos).setScore(Integer.parseInt(textScore));
+    final String course = Vakken1.get(pos).getCourse();
+    Integer getScore = Vakken1.get(pos).getScore();
+
+    final AlertDialog.Builder dialogvak = new AlertDialog.Builder(getContext());
+    LayoutInflater inflater = getActivity().getLayoutInflater();
+
+
+    View dialogBack = inflater.inflate(R.layout.dialogscore, null);
+
+    TextView vak = (TextView) dialogBack.findViewById(R.id.vakDialoog);
+    TextView score = (TextView) dialogBack.findViewById(R.id.score);
+    TextView geslaagd = (TextView) dialogBack.findViewById(R.id.txtgeslaagd);
+
+    final Integer value = scoreVak.get(course);
+
+    vak.setText(course);
+
+    if (value > 10 || value < 20) {
+      Vakken1.get(pos).setGeslaagd(true);
+      geslaagd.setText("Geslaagd");
+      geslaagd.setBackgroundColor(Color.rgb(20, 120, 0));
+      geslaagd.setTextColor(Color.rgb(246, 246, 246));
+      score.setText(getScore.toString()+ "/20");
+    } else if (value == 0) {
+      Vakken1.get(pos).setGeslaagd(false);
+      geslaagd.setText("Onbekend");
+      geslaagd.setBackgroundColor(Color.rgb(120, 120, 120));
+      geslaagd.setTextColor(Color.rgb(246, 246, 246));
+      score.setText(getScore.toString()+ "/20");
+    }
+    if (value < 10) {
+      Vakken1.get(pos).setGeslaagd(false);
+      geslaagd.setText("Onvoldoende");
+      geslaagd.setBackgroundColor(Color.rgb(128, 20, 0));
+      geslaagd.setTextColor(Color.rgb(246, 246, 246));
+      score.setText(getScore.toString()+ "/20");
+    }
+
+    dialogvak.setView(dialogBack).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        Toast.makeText(getContext(),"Score: " + value+" /20",Toast.LENGTH_SHORT).show();
+
+      }
+    });
+
+    dialogvak.setView(dialogBack).setNegativeButton("Rewrite", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        if(Vakken1.get(pos).isGeslaagd() == false)
+          NietGeslaagdeVakken(pos,course,Vakken1.get(pos).isGeslaagd());
+
+
+      }
+    });
+
+
+    AlertDialog alertVak = dialogvak.create();
+
+    alertVak.show();
+
+
+
+
+
+  }
+
+  public void NietGeslaagdeVakken(final int pos, String course, boolean geslaagd){
+
+    geslaagd = false;
+    AlertDialog.Builder inputVak = new AlertDialog.Builder(getContext());
+    LayoutInflater inflater = getActivity().getLayoutInflater();
+
+    final View inputView = inflater.inflate(R.layout.inputscore, null);
+
+    final EditText inputText = (EditText) inputView.findViewById(R.id.cijferinputvak);
+    TextView vakText = (TextView) inputView.findViewById(R.id.vakinput);
+    vakText.setText(course);
+
+
+    inputVak.setView(inputView).setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+
+        clicks++;
+        //checked = true;
+        if(scoreVak == null)
+          Toasty.error(getContext(), "Er werd geen vak geselecteerd", Toast.LENGTH_SHORT).show();
+
+        if (clicks > 4)
+        {
+          Toasty.error(getContext(), "Je mag maar 3 keren uw score veranderen!!", Toast.LENGTH_SHORT).show();
+          return;
+        }
+
+
+
+        Vakken1.get(pos).setScore(Integer.parseInt(inputText.getText().toString()));
+
+        scoreVak.put(Vakken1.get(pos).getCourse(), Vakken1.get(pos).getScore());
+
+        Integer value = scoreVak.get(Vakken1.get(pos).getCourse());
+
+        if (value < 0 || value > 20)
+          Toasty.error(getContext(), "Score moet tussen 0 en 20 zijn!", Toast.LENGTH_SHORT).show();
+
+
+
+        Vakken(pos,Vakken1.get(pos).isGeslaagd());
+
+
+
+      }
+    });
+
+
+    AlertDialog dialog = inputVak.create();
+
+    dialog.show();
+  }
 }

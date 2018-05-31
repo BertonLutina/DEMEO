@@ -3,6 +3,7 @@ package app.stucre;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -38,7 +39,7 @@ public class electives extends AppCompatActivity implements NavigationView.OnNav
     private Button btnSend;
     private List<String> opgenomenVakken = new ArrayList<>();
     private String[] course_array;
-    private List<Vak> Ele;
+    private List<Vak> Ele = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +91,7 @@ public class electives extends AppCompatActivity implements NavigationView.OnNav
         tabLayout.addTab(tabLayout.newTab().setText("Fase 3"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        Intent intent = getIntent();
+        /*Intent intent = getIntent();
         Ele = (ArrayList<Vak>) intent.getSerializableExtra("EleFase3");
 
         for (Vak course : Ele){
@@ -123,7 +124,7 @@ public class electives extends AppCompatActivity implements NavigationView.OnNav
                 alertDialog.show();
             }
 
-        });
+        });*/
 
         mViewPager = (ViewPager) findViewById(R.id.pagerElectives);
         final ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
@@ -133,6 +134,7 @@ public class electives extends AppCompatActivity implements NavigationView.OnNav
 
 
         dToggle = new ActionBarDrawerToggle(this,dLayout,R.string.open_drawer,R.string.close_drawer);
+        dToggle.getDrawerArrowDrawable().setColor(Color.WHITE);
 
         dLayout.addDrawerListener(dToggle);
         dToggle.syncState();

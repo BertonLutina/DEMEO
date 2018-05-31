@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="app.stucre.Courses"
+    android:background="#fff"
     >
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,24 +17,29 @@
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="app.stucre.Course"
-        android:background="#fff"
+
         >
 
 
         <GridLayout
+            android:id="@+id/gridcardviewlist"
             android:layout_width="300dp"
-            android:layout_height="340dp"
+            android:layout_height="324dp"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_marginTop="160dp"
             android:alignmentMode="alignMargins"
             android:columnCount="2"
             android:layoutMode="clipBounds"
-            android:rowCount="3"
             android:orientation="horizontal"
-            android:id="@+id/gridcardviewlist">
+
+            android:rowCount="3"
+            android:layout_centerVertical="true"
+            >
 
 
             <android.support.v7.widget.CardView
+                android:id="@+id/dCardview"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_columnWeight="1"
@@ -43,8 +49,7 @@
                 android:layout_rowWeight="1"
                 app:cardBackgroundColor="#778899"
                 app:cardCornerRadius="8dp"
-                app:cardElevation="8dp"
-                android:id="@+id/dCardview">
+                app:cardElevation="8dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -71,6 +76,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/eMCardview"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_columnWeight="1"
@@ -78,10 +84,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_rowWeight="1"
-                app:cardBackgroundColor="#CD5C5C"
+                app:cardBackgroundColor="#cd5c5c"
                 app:cardCornerRadius="8dp"
-                app:cardElevation="8dp"
-                android:id="@+id/eMCardview">
+                app:cardElevation="8dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -99,7 +104,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Electives Modules"
+                        android:text="EM"
+                        android:padding="2dp"
                         android:textAlignment="center"
                         android:textColor="#fff"
                         android:textSize="16dp"
@@ -108,6 +114,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/eCardview"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_columnWeight="1"
@@ -115,11 +122,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_rowWeight="1"
-                app:cardBackgroundColor="#5F9EA0"
+                app:cardBackgroundColor="#5f9ea0"
                 app:cardCornerRadius="8dp"
-                app:cardElevation="8dp"
-                android:id="@+id/eCardview"
-                >
+                app:cardElevation="8dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -146,6 +151,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/oCardview"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_columnWeight="1"
@@ -155,8 +161,7 @@
                 android:layout_rowWeight="1"
                 app:cardBackgroundColor="#cead00"
                 app:cardCornerRadius="8dp"
-                app:cardElevation="8dp"
-                android:id="@+id/oCardview">
+                app:cardElevation="8dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -210,7 +215,7 @@
             android:id="@+id/toolbar2"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#fff"
+
             android:minHeight="?attr/actionBarSize"
             app:title="Course"
             android:textAlignment="center"
@@ -218,6 +223,19 @@
             >
 
         </android.support.v7.widget.Toolbar>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Toegepaste Informatica"
+            android:padding="20dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="22sp"
+            android:textAlignment="center"
+            android:layout_below="@id/toolbar2"
+            android:id="@+id/Richting"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -234,7 +252,7 @@
                 android:layout_width="120dp"
                 android:layout_marginRight="20dp"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/odiseezwart" />
+                app:srcCompat="@drawable/odiseewhite2" />
 
             <ImageView
                 android:id="@+id/imageView6"

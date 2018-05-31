@@ -67,6 +67,8 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
         holder.vakImage.setImageResource(R.drawable.booksstackofthreeeen);
         holder.optnemenVakken.setImageResource(R.drawable.vakkenbeschikbaar);
         holder.nietGeslaagdVal.setImageResource(R.drawable.vakkenopnieuwdoen);
+        holder.again.setImageResource(R.drawable.geslaagdvak);
+        holder.succeed.setImageResource(R.drawable.again_course);
         holder.tvNietgeslaagd.setText("ONBEKEND");
 
         if(vak.isChecked()) {
@@ -78,10 +80,12 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
             holder.tvCredit.setTextColor(Color.WHITE);
             holder.tvNietgeslaagd.setVisibility(View.INVISIBLE);
             holder.tvId.setTypeface(null,Typeface.BOLD_ITALIC);
+            holder.again.setVisibility(View.INVISIBLE);
+            holder.succeed.setVisibility(View.INVISIBLE);
             holder.tvId.setTextColor(Color.WHITE);
             holder.nietGeslaagdVal.setVisibility(View.INVISIBLE);
             holder.optnemenVakken.setVisibility(View.GONE);
-            /**/
+
 
         }else{
             holder.check.setVisibility(View.GONE);
@@ -90,6 +94,8 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
             holder.tvCourse.setTypeface(null,Typeface.NORMAL);
             holder.tvCourse.setTextColor(Color.rgb(34,41,43));
             holder.tvCredit.setTypeface(null,Typeface.NORMAL);
+            holder.again.setVisibility(View.INVISIBLE);
+            holder.succeed.setVisibility(View.INVISIBLE);
             holder.tvCredit.setTextColor(Color.argb(135,34,41,43));
             holder.tvId.setTypeface(null,Typeface.NORMAL);
             holder.nietGeslaagdVal.setVisibility(View.INVISIBLE);
@@ -101,26 +107,33 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
             scoreVak.put(vak.getCourse(),vak.getScore());
 
             Integer value = scoreVak.get(vak.getCourse());
-
-            if(value == 0 )
+            if (vak.isGeslaagd())
             {
-                holder.optnemenVakken.setVisibility(View.VISIBLE);
-            } else if (value < 10)
-            {
-                holder.nietGeslaagdVal.setVisibility(View.VISIBLE);
-                holder.tvNietgeslaagd.setText("NIET GESLAAGD");
-                holder.tvNietgeslaagd.setTextColor(Color.rgb(204,0,0));
-                holder.optnemenVakken.setVisibility(View.INVISIBLE);
-            }
-            else if(value >= 10 || value <= 20){
+                holder.again.setVisibility(View.INVISIBLE);
+                holder.succeed.setVisibility(View.VISIBLE);
                 holder.vakImage.setVisibility(View.INVISIBLE);
                 holder.tvNietgeslaagd.setText("GESLAAGD");
                 holder.tvNietgeslaagd.setTextColor(Color.rgb(34,139,34));
                 holder.optnemenVakken.setVisibility(View.INVISIBLE);
+                holder.tvCredit.setText(vak.getCreditPunten() + " credit");
+
             }
+            else{
+
+                if(value > 0)
+                {
+                    holder.again.setVisibility(View.VISIBLE);
+                    holder.succeed.setVisibility(View.INVISIBLE);
+                    holder.nietGeslaagdVal.setVisibility(View.VISIBLE);
+                    holder.tvNietgeslaagd.setText("NIET GESLAAGD");
+                    holder.vakImage.setVisibility(View.INVISIBLE);
+                    holder.tvNietgeslaagd.setTextColor(Color.rgb(204,0,0));
+                    holder.optnemenVakken.setVisibility(View.INVISIBLE);
+                }
+            }
+
+
         }
-
-
 
 
 
@@ -174,6 +187,8 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
         public ImageView nietGeslaagdVal;
         public ImageView check;
         public ImageView optnemenVakken;
+        public ImageView again;
+        public ImageView succeed;
         public CardView cardViewList;
 
 
@@ -192,6 +207,8 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
             check = (ImageView) itemView.findViewById(R.id.checkImage);
             vakImage = (ImageView) itemView.findViewById(R.id.Beschikbaarvakken);
             nietGeslaagdVal = (ImageView) itemView.findViewById(R.id.nietgeslaagevakken);
+            again = (ImageView) itemView.findViewById(R.id.again);
+            succeed = (ImageView) itemView.findViewById(R.id.succeed);
             optnemenVakken = (ImageView) itemView.findViewById(R.id.optenemenVakken);
             cardViewList = (CardView) itemView.findViewById(R.id.listCardview);
             itemView.setEnabled(true);
