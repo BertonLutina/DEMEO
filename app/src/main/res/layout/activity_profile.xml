@@ -32,7 +32,7 @@
         app:titleTextColor="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark"
+        android:background="#00274b"
         android:minHeight="?attr/actionBarSize"
         android:textAlignment="center"
         android:id="@+id/toolbarPr"
@@ -62,7 +62,7 @@
                 android:clickable="true"
                 android:padding="5dp"
                 android:src="@drawable/fotoberre"
-                app:civ_border_color="@color/Orange"
+                app:civ_border_color="#487486"
                 app:civ_border_width="2dp" />
 
             <LinearLayout
@@ -93,7 +93,7 @@
                     android:padding="2dp"
                     android:text="berton.lutinamulamba@student.odisee.be"
                     android:textColor="@color/Orange"
-                    android:textColorLink="@color/Orange"
+                    android:textColorLink="#487486"
                     android:textSize="14dp" />
             </LinearLayout>
         </LinearLayout>
@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginTop="3dp"
-            android:background="@color/Orange"
+            android:background="#00274b"
             android:padding="5dp"
             android:text="R0282865"
             android:textAlignment="center"

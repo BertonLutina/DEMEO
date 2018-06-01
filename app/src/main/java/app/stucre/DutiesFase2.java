@@ -38,6 +38,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +50,7 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
   private RecyclerView recyclerViewDF2;
   private courseAdapter cA2;
 
-  private List<Vak> Vakken2;
+  private List<Vak> Vakken2 = new ArrayList<>();
   private List<Vak> Vakken2_send = new ArrayList<>();
 
     private ProgressWheel progressWheelFase2;
@@ -62,10 +63,13 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
     private Switch selectall3;
 
     EventBus bus = EventBus.getDefault();
+    EventBus bus2 = EventBus.getDefault();
+
     private HashMap<String,Integer> scoreVak = new HashMap<String, Integer>();
     private int clicks = 0;
     private int clickbutton = 0;
     private boolean checked;
+    private int score = 0;
 
 
     public DutiesFase2(){
@@ -100,12 +104,6 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
         recyclerViewDF2.setHasFixedSize(true);
         recyclerViewDF2.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // object aanmaken
-
-
-
-
-        Vakken2 = new ArrayList<>();
 
 
         VakkenDatabase();
@@ -130,10 +128,11 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
                         vak.setChecked(true);
                         Vakken2_send.add(vak);
                         boolean checked = vak.isChecked();
-                        String point = vak.getCreditPunten();
+                        Integer point = vak.getCreditPunten();
                         // count = Integer.parseInt(point);
                         //count++;
-                        count =+ 42;
+                        count += point;
+
                         int percent = 360;
                         progressWheelFase2.setProgress(percent);
                         progressWheelFase2.setText(Integer.toString(count)+" sp");
@@ -141,6 +140,7 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
 
 
                     }
+
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -150,8 +150,11 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
 
+
                                     Intent change = new Intent(getActivity(),electivesModules.class);
-                                    change.putExtra("VK2",(ArrayList<Vak>) Vakken2_send);
+                                    change.putExtra("Vaken",count);
+                                    change.putExtra("D2",(ArrayList<Vak>)Vakken2);
+
                                     startActivity(change);
 
                                 }
@@ -164,16 +167,15 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
                     AlertDialog dialog = builder.create();
                     dialog.show();
 
+
                     Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
                 }else{
                     for (Vak vak : Vakken2) {
                         vak.setChecked(false);
                         Vakken2_send.remove(vak);
                         boolean checked = vak.isChecked();
-                        String point = vak.getCreditPunten();
-                        //count = Integer.parseInt(point);
-                        //count--;
-                        count = 0;
+                        Integer point = vak.getCreditPunten();
+                        count -= point;
                         int percent = 0;
                         progressWheelFase2.setProgress(percent);
                         progressWheelFase2.setText(Integer.toString(count) + " sp");
@@ -284,9 +286,12 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
 
                   Object course_id = child.child("COURSE_ID").getValue(Object.class);
                   Object course = child.child("COURSE").getValue(Object.class);
-                  Object credit = child.child("CREDITS").getValue(Object.class);
-                  Object creditPunten = child.child("CREDITS").getValue(Object.class);
-                  //Vakken2.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+                  Object credit = child.child("CREDIT").getValue(Object.class);
+                  Object creditPunten = child.child("CREDITPOINT").getValue(Object.class);
+                  Object fase = child.child("FASE").getValue(Object.class);
+                  Object score = child.child("SCORE").getValue(Object.class);
+                  Object succeeded = child.child("SUCCEEDED").getValue(Object.class);
+                  Vakken2.add(new Vak(course_id.toString(), course.toString(), credit.toString(),Integer.parseInt(creditPunten.toString()),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
                   cA2.notifyDataSetChanged();
 
 
@@ -306,7 +311,7 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
 
 
               //String plaats = Vakken1.get(position).getCourse();
-              String point = Vakken2.get(position).getCreditPunten();
+              Integer point = Vakken2.get(position).getCreditPunten();
               boolean checked = Vakken2.get(position).isChecked();
 
               //btnSend.setEnabled(false);
@@ -314,7 +319,7 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
               if(!checked) {
                   Vakken2.get(position).setChecked(true);
                   if( !(count>= 42)){
-                      count += Integer.parseInt(point);
+                      count += point;
                       int percent = (360/42) * count;
                       progressWheelFase2.setProgress(percent);
                       progressWheelFase2.setText(Integer.toString(count)+" sp");
@@ -333,7 +338,9 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
                           @Override
                           public void onClick(DialogInterface dialogInterface, int i) {
 
-                              Intent change = new Intent(getActivity(),profile.class);
+                              Intent change = new Intent(getActivity(),electivesModules.class);
+                              change.putExtra("Vaken",count);
+                              change.putExtra("D2",(ArrayList<Vak>)Vakken2);
                               startActivity(change);
 
                           }
@@ -356,7 +363,7 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
               }else{
                   Vakken2.get(position).setChecked(false);
                   if(!(count < 0)){
-                      count -= Integer.parseInt(point);
+                      count -= point;
                       int percent = (360/60) * count;
                       progressWheelFase2.setProgress(percent);
                       progressWheelFase2.setText(Integer.toString(count)+" sp");
@@ -394,10 +401,6 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
 
               scoreVak.put(course,getScore);
               Integer value = scoreVak.get(course);
-
-
-
-
 
               if(value == 0)
               {
@@ -573,4 +576,6 @@ public class DutiesFase2 extends Fragment implements android.support.v7.widget.S
 
         dialog.show();
     }
+
+
 }

@@ -1,15 +1,12 @@
 package app.stucre;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,10 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +31,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.todddavies.components.progressbar.ProgressWheel;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,9 +45,7 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
 
     private RecyclerView recyclerViewEmB;
     private courseAdapter cAEMB;
-
-    private ArrayList<Vak> VakkenEmB = new ArrayList<>();
-
+    private List<Vak> VakkenEmB = new ArrayList<>();
     private ProgressWheel progressWheelEMB;
     private View dutiesLayout;
     private int count = 0;
@@ -60,6 +55,13 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
     private int clicks =0;
     private HashMap<String,Integer> scoreVak = new HashMap<String, Integer>();
     private boolean checked ;
+    private int percent;
+    private List <String> vakkenText = new ArrayList<>();
+    private List <String> vakkenText2 = new ArrayList<>();
+    private List<Vak> newVakkenFase2 = new ArrayList<>();
+    private List<Vak> newVakkenFase3 = new ArrayList<>();
+    EventBus bus = EventBus.getDefault();
+    private int tellen = 0;
 
     public ElectivesModulesOptionB(){
 
@@ -67,6 +69,38 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference EMdatabases = database.getReference("Bedrijfskunde/TI/Electives Modules/Option B: Manage Internet and Cloud");
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Intent intent = getActivity().getIntent();
+
+        if(null != (ArrayList<Vak>) intent.getSerializableExtra("D2") ){
+            newVakkenFase2 = (ArrayList<Vak>) intent.getSerializableExtra("D2");
+            for(Vak vakD2 : newVakkenFase2){
+
+                vakkenText.add(vakD2.getCourse());
+
+            }
+
+            count += intent.getIntExtra("Vaken",0);
+        }
+
+        if(null != (ArrayList<Vak>) intent.getSerializableExtra("D3") ){
+            newVakkenFase3 = (ArrayList<Vak>) intent.getSerializableExtra("D3");
+            for(Vak vakD2 : newVakkenFase3){
+
+                vakkenText2.add(vakD2.getCourse());
+
+            }
+
+            tellen += intent.getIntExtra("Vaken2",0);
+
+        }
+        percent += 6 * count;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,42 +133,7 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
 
         // Click
         clickOnVakken();
-        selectall = (Switch) getActivity().findViewById(R.id.selectAllSwitchEMB);
 
-        selectall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if(b){
-                    for (Vak vak : VakkenEmB){
-                        vak.setChecked(true);
-                        boolean checked = vak.isChecked();
-                        String point = vak.getCreditPunten();
-                        count =+ Integer.parseInt(point);
-                        count++;
-                        int percent = (360/60) * (count+1);
-                        progressWheelEMB.setProgress(percent);
-                        progressWheelEMB.setText(Integer.toString(count)+" sp");
-                        cAEMB.notifyDataSetChanged();
-                    }
-                    Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
-                }else{
-                    for (Vak vak : VakkenEmB) {
-                        vak.setChecked(false);
-                        boolean checked = vak.isChecked();
-                        String point = vak.getCreditPunten();
-                        count = -Integer.parseInt(point);
-                        count--;
-                        int percent = (360 / 60) * (count + 1);
-                        progressWheelEMB.setProgress(percent);
-                        progressWheelEMB.setText(Integer.toString(count) + " sp");
-                        cAEMB.notifyDataSetChanged();
-                    }
-
-                }
-
-            }
-        });
     }
 
     @Override
@@ -233,7 +232,7 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
                             Object fa = kid.child("FASE").getValue(Object.class);
                             Object score = kid.child("SCORE").getValue(Object.class);
                             Object succeeded = kid.child("SUCCEEDED").getValue(Object.class);
-                            VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString(),creditPunten.toString(),Integer.parseInt(fa.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
+                            VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString(),Integer.parseInt(creditPunten.toString()),Integer.parseInt(fa.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
 
                             cAEMB.notifyDataSetChanged();
 
@@ -252,7 +251,7 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
                             Object fa = kid.child("FASE").getValue(Object.class);
                             Object score = kid.child("SCORE").getValue(Object.class);
                             Object succeeded = kid.child("SUCCEEDED").getValue(Object.class);
-                            VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString(),creditPunten.toString(),Integer.parseInt(fa.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
+                            VakkenEmB.add(new Vak(course_id.toString(), course.toString(), credit.toString(),Integer.parseInt(creditPunten.toString()),Integer.parseInt(fa.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
 
                             cAEMB.notifyDataSetChanged();
 
@@ -278,15 +277,53 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
 
 
                 //String plaats = Vakken1.get(position).getCourse();
-                String point = VakkenEmB.get(position).getCreditPunten();
+                Integer point = VakkenEmB.get(position).getCreditPunten();
                 boolean checked = VakkenEmB.get(position).isChecked();
 
                 if(!checked){
                     VakkenEmB.get(position).setChecked(true);
+                    vakkenText.add(VakkenEmB.get(position).getCourse());
                     if(!(count> 60)) {
-                        count += Integer.parseInt(point);
-                        int percent = (360/60) * (count+1);
+                        count += point;
+                        percent = (360/60) * (count+1);
                         Toasty.custom(getContext(), "+ "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
+                        if(VakkenEmB.get(position).getFase() == 2){
+                            bus.post(new electivesModules.OpgenomenVakken(vakkenText));
+                            bus.post(new electivesModules.VakkenSturen(newVakkenFase2));
+                        }else
+                        {
+                            Toasty.warning(getContext(),"This course is for the fase 3", Toast.LENGTH_SHORT).show();
+                        }
+
+                        if(VakkenEmB.get(position).getFase() == 3){
+                            tellen += VakkenEmB.get(position).getCreditPunten();
+                            vakkenText2.add(VakkenEmB.get(position).getCourse());
+                            if(tellen == 30){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                                builder.setMessage("Would like to continue?")
+                                        .setTitle("Go to Electives")
+                                        .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                Intent EleMb = new Intent(getActivity(),electives.class);
+                                                EleMb.putExtra("D3E",tellen);
+                                                EleMb.putExtra("CELE3B",(ArrayList<String>) vakkenText2);
+                                                EleMb.putExtra("Vakken3B",(ArrayList<Vak>) newVakkenFase3);
+                                                startActivity(EleMb);
+
+                                            }
+                                        }).setNegativeButton("Stop", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        return;
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                        }
                         progressWheelEMB.setProgress(percent);
                         progressWheelEMB.setText(Integer.toString(count)+" sp");
                     } else{
@@ -305,11 +342,13 @@ public class ElectivesModulesOptionB extends Fragment implements SearchView.OnQu
                     }else if (count >= 0 && count < 15) {
                         progressWheelEMB.setBarColor(Color.	rgb(255,215,0));
                     }
+                    bus.post(new electivesModules.OpgenomenVakken(vakkenText));
                 }else{
                     VakkenEmB.get(position).setChecked(false);
+                    vakkenText.remove(VakkenEmB.get(position).getCourse());
 
                     if(!(count < 0)) {
-                        count -= Integer.parseInt(point);
+                        count -= point;
                         int percent = (360/60) * (count+1);
                         Toasty.custom(getContext(), "* "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
                         progressWheelEMB.setProgress(percent);

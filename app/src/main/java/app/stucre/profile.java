@@ -55,7 +55,7 @@ public class profile extends AppCompatActivity implements NavigationView.OnNavig
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.colorP));
+            window.setStatusBarColor(this.getResources().getColor(R.color.Blauw));
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPr);

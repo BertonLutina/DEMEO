@@ -100,40 +100,7 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
         progressWheelOptionFase3 = (ProgressWheel) lay.findViewById(R.id.count_progressBar);
         setHasOptionsMenu(true);
         clickOnVakken();
-        selectall = (Switch) getActivity().findViewById(R.id.selectAllSwitch);
 
-        selectall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if(b){
-                    for (Vak vak : VakkenOF3){
-                        vak.setChecked(true);
-                        boolean checked = vak.isChecked();
-                        String point = vak.getCreditPunten();
-                        count = Integer.parseInt(point);
-                        count++;
-                        int percent = (360/60) * (count+1);
-                        progressWheelOptionFase3.setProgress(percent);
-                        progressWheelOptionFase3.setText(Integer.toString(count)+" sp");
-                    }
-                    Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
-                }else{
-                    for (Vak vak : VakkenOF3) {
-                        vak.setChecked(false);
-                        boolean checked = vak.isChecked();
-                        String point = vak.getCreditPunten();
-                        count = Integer.parseInt(point);
-                        count--;
-                        int percent = (360 / 60) * (count + 1);
-                        progressWheelOptionFase3.setProgress(percent);
-                        progressWheelOptionFase3.setText(Integer.toString(count) + " sp");
-                    }
-                    cAOF3.notifyDataSetChanged();
-                }
-
-            }
-        });
 
     }
 
@@ -230,9 +197,9 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                             Object credit = kid.child("CREDIT").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITPOINT").getValue(Object.class);
                             Object fase = kid.child("FASE").getValue(Object.class);
-                            Object score = kid.child("FASE").getValue(Object.class);
+                            Object score = kid.child("SCORE").getValue(Object.class);
                             Object succeeded = kid.child("SUCCEEDED").getValue(Object.class);
-                            VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString(),creditPunten.toString(),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
+                            VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString(),Integer.parseInt(creditPunten.toString()),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
                             cAOF3.notifyDataSetChanged();
                         }}
                     else if (TextUtils.equals(vakken_hm ,"Optie 5: Studiemobiliteit in Europa KORT"))
@@ -245,9 +212,9 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                             Object credit = kid.child("CREDIT").getValue(Object.class);
                             Object creditPunten = kid.child("CREDITPOINT").getValue(Object.class);
                             Object fase = kid.child("FASE").getValue(Object.class);
-                            Object score = kid.child("FASE").getValue(Object.class);
+                            Object score = kid.child("SCORE").getValue(Object.class);
                             Object succeeded = kid.child("SUCCEEDED").getValue(Object.class);
-                            VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString(),creditPunten.toString(),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
+                            VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString(),Integer.parseInt(creditPunten.toString()),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
                             cAOF3.notifyDataSetChanged();
                         }
                     }
@@ -261,7 +228,7 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                     Object fase = kid.child("FASE").getValue(Object.class);
                     Object score = kid.child("SCORE").getValue(Object.class);
                     Object succeeded = kid.child("SUCCEEDED").getValue(Object.class);
-                    VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString(),creditPunten.toString(),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
+                    VakkenOF3.add(new Vak(course_id.toString(), course.toString(), credit.toString(),Integer.parseInt(creditPunten.toString()),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
 
                     cAOF3.notifyDataSetChanged();}
                 }
@@ -281,13 +248,13 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
 
 
                 //String plaats = Vakken1.get(position).getCourse();
-                String point = VakkenOF3.get(position).getCreditPunten();
+               Integer point = VakkenOF3.get(position).getCreditPunten();
                 boolean checked = VakkenOF3.get(position).isChecked();
 
                 if(!checked){
                     VakkenOF3.get(position).setChecked(true);
                     if(!(count> 60)){
-                        count += Integer.parseInt(point);
+                        count += point;
                         int percent = (360/60) * count;
                         progressWheelOptionFase3.setProgress(percent);
                         progressWheelOptionFase3.setText(Integer.toString(count)+" sp");
@@ -311,7 +278,7 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                 }else{
                     VakkenOF3.get(position).setChecked(false);
                     if(!(count < 0)) {
-                        count -= Integer.parseInt(point);
+                        count -= point;
                         int percent = (360/60) * count;
                         progressWheelOptionFase3.setProgress(percent);
                         progressWheelOptionFase3.setText(Integer.toString(count)+" sp");
@@ -358,16 +325,19 @@ public class OptionsIntership extends Fragment implements SearchView.OnQueryText
                 Integer value = scoreVak.get(course);
 
 
+                if(value == 0)
+                {
 
-
-
-                if(value == 0 || value < 10)
+                    NietGeslaagdeVakken(pos,course,geslaagd);
+                }
+                else if (value < 10 )
                 {
 
                     NietGeslaagdeVakken(pos,course,geslaagd);
                 }
                 else if (value>= 10 || value <= 20)
                 {
+
                     Vakken(pos, geslaagd);
                 }
 

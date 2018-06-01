@@ -51,7 +51,7 @@ public class electives extends AppCompatActivity implements NavigationView.OnNav
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.colorE));
+            window.setStatusBarColor(this.getResources().getColor(R.color.Blauw));
         }
 
         slideView = findViewById(R.id.slideUpCreditsView);

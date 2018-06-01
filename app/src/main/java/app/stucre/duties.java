@@ -33,6 +33,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mancj.slideup.SlideUp;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +55,7 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
     private View slideView;
     private View dimDuties;
     private FloatingActionButton floatDuties;
+    EventBus bus = EventBus.getDefault();
 
     private TextView tvCourse;
 
@@ -59,7 +64,7 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
     private List<Vak> Vakken2;
     private List<Vak> Vakken3;
 
-    private List<Vak> Vakken1_Dialog;
+    private List<String> Vakken1_Dialog = new ArrayList<>();
     private List<Vak> Vakken2_Dialog;
     private List<Vak> Vakken3_Dialog;
 
@@ -73,20 +78,44 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
     private Switch selectall;
     private Switch selectall2;
     private Switch selectall3;
-    private List<Vak> OpgenomenCourse;
+    private List<Vak> OpgenomenCourse = new ArrayList<>();
+
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent (duties.OpgenomenVakken event){
+
+        Vakken1_Dialog = event.vak;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent2 (duties.OpgenomenCourse event){
+
+        OpgenomenCourse = event.vak;
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        bus.unregister(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_duties);
+        bus.register(this);
+
+
 
 
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.colorD));
+            window.setStatusBarColor(this.getResources().getColor(R.color.Blauw));
         }
 
 
@@ -122,40 +151,29 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDuties);
         setSupportActionBar(toolbar);
 
-        // Versturen van de gegeven naar een dialoog ---------------------------------
 
-        final Intent duties_from_DutiesFase1 = getIntent();
-        Vakken1_Dialog = (ArrayList<Vak>) duties_from_DutiesFase1.getSerializableExtra("FaseEen");
-        //Vakken2_Dialog = (ArrayList<Vak>) duties_from_DutiesFase1.getSerializableExtra("FaseTwee");
-        //Vakken3_Dialog = (ArrayList<Vak>) duties_from_DutiesFase1.getSerializableExtra("FaseDrie");
-
-
-        for (Vak course : Vakken1_Dialog) {
-            opgenomenVakken.add(course.getCourse());
-            Log.d("duties", opgenomenVakken.toString());
-        }
-
-        course_array = new String[opgenomenVakken.size()];
-        opgenomenVakken.toArray(course_array);
-
-// Cursus zien die je gebruikt.
 
         btnSend = (Button) slideView.findViewById(R.id.versturen_credits);
         btnSend.setEnabled(true);
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                course_array = new String[Vakken1_Dialog.size()];
+                course_array = Vakken1_Dialog.toArray(course_array);
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(duties.this);
                 builder.setTitle("Included Courses")
                         .setItems(course_array, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // The 'which' argument contains the index position
-                                // of the selected item
+
+
                             }
                         }).setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        Intent dutiesToProfiel = new Intent(duties.this, profile.class);
+                        dutiesToProfiel.putExtra("dtp", (ArrayList<Vak>) OpgenomenCourse);
+                        startActivity(dutiesToProfiel);
                     }
                 });
 
@@ -295,6 +313,7 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
     }
 
 
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -333,6 +352,32 @@ public class duties extends AppCompatActivity implements NavigationView.OnNaviga
             this.vakpositie = vakpositie;
         }
     }
+
+    public static class OpgenomenVakken {
+        List <String> vak;
+
+        public OpgenomenVakken(List <String> vak) {
+            this.vak = vak;
+        }
+    }
+
+    public static class OpgenomenCourse {
+        List <Vak> vak;
+
+        public OpgenomenCourse(List <Vak> vak) {
+            this.vak = vak;
+        }
+    }
+
+    public static class FaseTweeNaarEM {
+        int credit;
+
+        public FaseTweeNaarEM(int credit) {
+            this.credit = credit;
+        }
+    }
+
+
 
 }
 

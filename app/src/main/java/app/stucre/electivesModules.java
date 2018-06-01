@@ -24,6 +24,10 @@ import android.widget.Switch;
 
 import com.mancj.slideup.SlideUp;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,27 +45,50 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
     private View dimEM;
     private FloatingActionButton floatEM;
     private List<String> opgenomenVakken = new ArrayList<>();
-    private List<Vak> EMA;
-    private List<Vak> EMB;
-    private List<Vak> EMA_Duties;
-    private List<Vak> EMB_Duties;
+    private List<Vak> eMtoProfiel = new ArrayList<>();
+
     private String[] course_array;
 
     private static final String TAG ="duties";
     private Button btnSend;
     private Switch selectallB;
     private Switch selectallA;
+    EventBus bus = EventBus.getDefault();
+
+    private int count = 0;
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(electivesModules.OpgenomenVakken event){
+
+        opgenomenVakken = event.vak;
+
+    }
+
+    @Subscribe
+    public void onEvent2(electivesModules.VakkenSturen event){
+
+        eMtoProfiel = event.vakList;
+
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        bus.unregister(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_electives_modules);
+        bus.register(this);
+
 
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.colorEM));
+            window.setStatusBarColor(this.getResources().getColor(R.color.Blauw));
         }
 
         slideView = findViewById(R.id.slideUpCreditsView);
@@ -93,25 +120,14 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
                 }
             }
         });
-
-        /*
-        Intent intent = getIntent();
-        EMA = (ArrayList<Vak>) intent.getSerializableExtra("EMA");
-
-        if(EMA != null){
-            for (Vak course : EMA){
-                opgenomenVakken.add(course.getCourse());
-            }
-
-
-            course_array = new String[opgenomenVakken.size()];
-            opgenomenVakken.toArray(course_array);
-
             btnSend = (Button) slideView.findViewById(R.id.versturen_credits);
             btnSend.setEnabled(true);
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    course_array = new String[opgenomenVakken.size()];
+                    course_array =opgenomenVakken.toArray(course_array);
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(electivesModules.this);
                     builder.setTitle("Included Courses")
                             .setItems(course_array, new DialogInterface.OnClickListener() {
@@ -123,42 +139,9 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
-                        }
-                    });
-
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                }
-
-            });
-        }else{
-
-           /* EMA_Duties = (ArrayList<Vak>) intent.getSerializableExtra("VK2");
-
-            for (Vak course : EMA_Duties){
-                opgenomenVakken.add(course.getCourse());
-            }
-
-
-            course_array = new String[opgenomenVakken.size()];
-            opgenomenVakken.toArray(course_array);
-
-            btnSend = (Button) slideView.findViewById(R.id.versturen_credits);
-            btnSend.setEnabled(true);
-
-            btnSend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(electivesModules.this);
-                    builder.setTitle("Included Courses")
-                            .setItems(course_array, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // The 'which' argument contains the index position
-                                    // of the selected item
-                                }
-                            }).setPositiveButton("Accept", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent sendToProfiel = new Intent(electivesModules.this, profile.class);
+                            sendToProfiel.putExtra("FP",(ArrayList<Vak>) eMtoProfiel);
+                            startActivity(sendToProfiel);
 
                         }
                     });
@@ -168,8 +151,6 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
                 }
 
             });
-        }*/
-
 
 
 
@@ -190,7 +171,7 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
         selectallB = (Switch) findViewById(R.id.selectAllSwitchEMB);
 
         selectallB.setVisibility(View.GONE);
-        selectallA.setVisibility(View.VISIBLE);
+        selectallA.setVisibility(View.GONE);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -199,10 +180,10 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
                 if(tab.getPosition() == 0){
 
                     selectallB.setVisibility(View.GONE);
-                    selectallA.setVisibility(View.VISIBLE);
+                    selectallA.setVisibility(View.GONE);
                 }else if(tab.getPosition() == 1){
 
-                    selectallB.setVisibility(View.VISIBLE);
+                    selectallB.setVisibility(View.GONE);
                     selectallA.setVisibility(View.GONE);
 
                 }
@@ -296,6 +277,52 @@ public class electivesModules extends AppCompatActivity implements NavigationVie
             default:
                 return false;
 
+        }
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public static class Voltwaardigheden {
+        Vak vakpositie;
+
+        public Voltwaardigheden(Vak vakpositie) {
+            this.vakpositie = vakpositie;
+        }
+    }
+
+    public static class OpgenomenVakken {
+        List <String> vak;
+
+        public OpgenomenVakken(List <String> vak) {
+            this.vak = vak;
+        }
+    }
+
+    public static class FaseTweeNaarEM {
+        int credit;
+
+        public FaseTweeNaarEM(int credit) {
+            this.credit = credit;
+        }
+    }
+
+    public  static class VakkenSturen{
+
+        List <Vak> vakList;
+
+        public VakkenSturen(List <Vak> vakList){
+            this.vakList = vakList;
+        }
+    }
+
+    public  static class VakkenSturen3{
+
+        List <Vak> vakList;
+
+        public VakkenSturen3(List <Vak> vakList){
+            this.vakList = vakList;
         }
     }
 }

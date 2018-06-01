@@ -64,7 +64,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
         holder.tvId.setText(vak.getId());
         holder.tvCredit.setText(vak.getCredit());
         holder.check.setImageResource(R.drawable.donetick);
-        holder.vakImage.setImageResource(R.drawable.booksstackofthreeeen);
+        holder.vakImage.setImageResource(R.drawable.booksstackofthreeen);
         holder.optnemenVakken.setImageResource(R.drawable.vakkenbeschikbaar);
         holder.nietGeslaagdVal.setImageResource(R.drawable.vakkenopnieuwdoen);
         holder.again.setImageResource(R.drawable.geslaagdvak);
@@ -73,7 +73,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
 
         if(vak.isChecked()) {
             holder.check.setVisibility(View.VISIBLE);
-            holder.cardViewList.setCardBackgroundColor(Color.argb(200,40, 50, 50));
+            holder.cardViewList.setCardBackgroundColor(Color.argb(200,0, 39, 75));
             holder.tvCourse.setTypeface(null,Typeface.BOLD_ITALIC);
             holder.tvCourse.setTextColor(Color.WHITE);
             holder.tvCredit.setTypeface(null,Typeface.BOLD_ITALIC);
@@ -92,16 +92,16 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
             holder.cardViewList.setCardBackgroundColor(Color.WHITE);
             holder.vakImage.setVisibility(View.VISIBLE);
             holder.tvCourse.setTypeface(null,Typeface.NORMAL);
-            holder.tvCourse.setTextColor(Color.rgb(34,41,43));
+            holder.tvCourse.setTextColor(Color.rgb(0, 39, 75));
             holder.tvCredit.setTypeface(null,Typeface.NORMAL);
             holder.again.setVisibility(View.INVISIBLE);
             holder.succeed.setVisibility(View.INVISIBLE);
             holder.tvCredit.setTextColor(Color.argb(135,34,41,43));
             holder.tvId.setTypeface(null,Typeface.NORMAL);
             holder.nietGeslaagdVal.setVisibility(View.INVISIBLE);
-            holder.tvNietgeslaagd.setVisibility(View.VISIBLE);
+            holder.tvNietgeslaagd.setVisibility(View.INVISIBLE);
 
-            holder.tvId.setTextColor(Color.rgb(210, 100, 40));
+            holder.tvId.setTextColor(Color.rgb(26, 75, 121));
             holder.optnemenVakken.setVisibility(View.VISIBLE);
 
             scoreVak.put(vak.getCourse(),vak.getScore());
@@ -109,6 +109,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
             Integer value = scoreVak.get(vak.getCourse());
             if (vak.isGeslaagd())
             {
+                holder.tvNietgeslaagd.setVisibility(View.VISIBLE);
                 holder.again.setVisibility(View.INVISIBLE);
                 holder.succeed.setVisibility(View.VISIBLE);
                 holder.vakImage.setVisibility(View.INVISIBLE);
@@ -122,6 +123,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
 
                 if(value > 0)
                 {
+                    holder.tvNietgeslaagd.setVisibility(View.VISIBLE);
                     holder.again.setVisibility(View.VISIBLE);
                     holder.succeed.setVisibility(View.INVISIBLE);
                     holder.nietGeslaagdVal.setVisibility(View.VISIBLE);
@@ -129,6 +131,7 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
                     holder.vakImage.setVisibility(View.INVISIBLE);
                     holder.tvNietgeslaagd.setTextColor(Color.rgb(204,0,0));
                     holder.optnemenVakken.setVisibility(View.INVISIBLE);
+
                 }
             }
 
@@ -245,9 +248,6 @@ public class courseAdapter extends RecyclerView.Adapter<courseAdapter.ViewHolder
                         if(position != RecyclerView.NO_POSITION){
                             if(!isClickable || !isEnable)
                                 return false;
-
-
-
 
                             mLongListener.onItemLongClick(position);
                             notifyDataSetChanged();

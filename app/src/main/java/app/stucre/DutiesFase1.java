@@ -54,10 +54,11 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
   private RecyclerView recyclerViewDF1;
   private courseAdapter cA1;
   private CardView fase1;
-  private List<Vak> Vakken1;
+  private List<Vak> Vakken1 = new ArrayList<>();
   public SearchView searchViewFase1;
   private ProgressWheel progressWheelFase1;
   private View LayoutCredits;
+  private List <String> VakkenDialog = new ArrayList<>();
 
 
 
@@ -98,6 +99,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
 
     View vFase1 = inflater.inflate(R.layout.fragment_duties_fase1, container, false);
 
+    VakkenDatabase();
 
     return vFase1;
 
@@ -120,9 +122,9 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
       recyclerViewDF1.setHasFixedSize(true);
       recyclerViewDF1.setLayoutManager(new LinearLayoutManager(getContext()));
 
-      Vakken1 = new ArrayList<>();
 
-      VakkenDatabase();
+
+
 
       cA1 = new courseAdapter(getActivity(),Vakken1);
       recyclerViewDF1.setAdapter(cA1);
@@ -153,29 +155,38 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
                   for (Vak vak : Vakken1){
                       vak.setChecked(true);
                       boolean checked = vak.isChecked();
-                      String point = vak.getCreditPunten();
+                      Integer point = vak.getCreditPunten();
                       //count = Integer.parseInt(point);
                       //count++;
                       count =+ 60;
                       int percent = 360;
+                      VakkenDialog.add(vak.getCourse());
+                      vakken_te_Versturen.add(vak);
                       progressWheelFase1.setProgress(percent);
                       progressWheelFase1.setText(Integer.toString(count)+" sp");
                       cA1.notifyDataSetChanged();
+
                   }
+                bus.post(new duties.OpgenomenVakken(VakkenDialog));
+                bus.post(new duties.OpgenomenCourse(vakken_te_Versturen));
                   Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
               }else{
                   for (Vak vak : Vakken1) {
                       vak.setChecked(false);
                       boolean checked = vak.isChecked();
-                      String point = vak.getCreditPunten();
+                      Integer point = vak.getCreditPunten();
                       //count =Integer.parseInt(point);
                       //count--;
                       count = 0;
                       int percent = count;
+                      VakkenDialog.remove(vak.getCourse());
+                      vakken_te_Versturen.remove(vak);
                       progressWheelFase1.setProgress(percent);
                       progressWheelFase1.setText(Integer.toString(count) + " sp");
                       cA1.notifyDataSetChanged();
                   }
+
+
 
               }
 
@@ -279,10 +290,12 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
         for (DataSnapshot child: children) {
           Object course_id = child.child("COURSE_ID").getValue(Object.class);
           Object course = child.child("COURSE").getValue(Object.class);
-          Object credit = child.child("CREDITS").getValue(Object.class);
-          Object creditPunten = child.child("CREDITS").getValue(Object.class);
-          //Vakken.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
-          //Vakken1.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+          Object credit = child.child("CREDIT").getValue(Object.class);
+          Object creditPunten = child.child("CREDITPOINT").getValue(Object.class);
+          Object fase = child.child("FASE").getValue(Object.class);
+          Object score = child.child("SCORE").getValue(Object.class);
+          Object succeeded = child.child("SUCCEEDED").getValue(Object.class);
+          Vakken1.add(new Vak(course_id.toString(), course.toString(), credit.toString(),Integer.parseInt(creditPunten.toString()),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
           cA1.notifyDataSetChanged();
         }
 
@@ -305,7 +318,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
       @Override
       public void onItemClick(int position) {
         //String plaats = Vakken1.get(position).getCourse();
-        String point = Vakken1.get(position).getCreditPunten();
+        Integer point = Vakken1.get(position).getCreditPunten();
         Vak course_to_send = Vakken1.get(position);
         boolean checked = Vakken1.get(position).isChecked();
 
@@ -315,7 +328,9 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
           int x = (int) cA1.getItemId(position);
 
           if(!(count> 60)){
-            count += Integer.parseInt(point);
+            VakkenDialog.add(Vakken1.get(point).getCourse());
+            vakken_te_Versturen.add(Vakken1.get(position));
+            count += point;
             int percent = (360/60) * count;
             Toasty.custom(getContext(), "+ "+ point+" sp. ->  "+"Total: "+count , getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
             progressWheelFase1.setProgress(percent);
@@ -323,6 +338,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
             vakken_te_Versturen.add(course_to_send);
             Log.d("DutiesFase1", vakken_te_Versturen.toString());
             bus.post(new duties.Voltwaardigheden(course_to_send));
+            bus.post(new duties.OpgenomenCourse(vakken_te_Versturen));
             Log.d("DutiesFase1", course_to_send.getCourse());
 
             if (count == 60) {
@@ -344,12 +360,13 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
             count = count + 0;
           }
 
+          bus.post(new duties.OpgenomenVakken(VakkenDialog));
         }else{
 
           Vakken1.get(position).setChecked(false);
-
+          VakkenDialog.remove(Vakken1.get(point).getCourse());
           if(!(count < 0)){
-            count -= Integer.parseInt(point);
+            count -= point;
             int percent = (360/60) * count;
             Toasty.custom(getContext(), "- "+ point+" sp. ->  "+"Total: "+count, getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
             progressWheelFase1.setProgress(percent);
@@ -376,6 +393,8 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
 
 
         }
+
+
 
       }
     });
@@ -522,11 +541,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
         if(scoreVak == null)
           Toasty.error(getContext(), "Er werd geen vak geselecteerd", Toast.LENGTH_SHORT).show();
 
-        if (clicks > 4)
-        {
-          Toasty.error(getContext(), "Je mag maar 3 keren uw score veranderen!!", Toast.LENGTH_SHORT).show();
-          return;
-        }
+
 
 
 
@@ -553,4 +568,7 @@ public class DutiesFase1 extends Fragment implements SearchView.OnQueryTextListe
 
     dialog.show();
   }
+
+
+
 }

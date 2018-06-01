@@ -15,6 +15,7 @@
     <color name="colorYellow">#FFFF00</color>
     <color name="Orange">#d26428</color>
     <color name="BlauwDark">#263238</color>
+    <color name="Blauw">#001830</color>
 
     <color name="disable_forground_grey">#42221f1f</color>
     <color name="disable_thumb_grey">#1c000000</color>

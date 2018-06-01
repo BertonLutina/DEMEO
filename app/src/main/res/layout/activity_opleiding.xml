@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Opleiding"
-    android:background="#00407a"
+    android:background="#dec6c6c6"
     android:alignmentMode="alignMargins"
     android:columnCount="1"
     android:layoutMode="clipBounds"
@@ -22,7 +22,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="1dp"
         android:layout_rowWeight="1"
-        app:cardBackgroundColor="#274d69"
+        app:cardBackgroundColor="#27694b"
         app:cardCornerRadius="8dp"
         app:cardElevation="8dp">
 
@@ -31,17 +31,17 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:orientation="vertical"
-            android:background="@drawable/opleiding_bm2">
+            >
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="BM"
+                android:text="Bedrijfsmanagement"
                 android:textAlignment="center"
                 android:textColor="#fff"
-                android:background="#c82e2e2e"
-                android:textSize="23dp"
+                android:background="#772e2e2e"
+                android:textSize="16dp"
                 android:textStyle="bold" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
@@ -64,17 +64,17 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:orientation="vertical"
-            android:background="@drawable/opleiding_fa">
+            >
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="FM"
+                android:text="Facilitair Management"
                 android:textAlignment="center"
                 android:textColor="#fff"
-                android:background="#c82c1551"
-                android:textSize="23sp"
+                android:background="#7b2c1551"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
@@ -97,17 +97,17 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:orientation="vertical"
-            android:background="@drawable/opleiding_off">
+            >
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="OM"
+                android:text="Office Management"
                 android:textAlignment="center"
                 android:textColor="#fff"
-                android:background="#c8291c02"
-                android:textSize="23sp"
+                android:background="#7a291c02"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
@@ -130,19 +130,21 @@
         android:layout_height="match_parent"
         android:layout_margin="5dp"
         android:orientation="vertical"
-        android:background="@drawable/opleiding_it">
+        >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="IT"
-
+            android:text="Toegepaste Informatica"
             android:textAlignment="center"
             android:textColor="#fff"
-            android:background="#c81e3e4b"
-            android:textSize="23sp"
+            android:background="#791e3e4b"
+            android:textSize="16sp"
             android:textStyle="bold" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>
+
+
 </GridLayout>
+

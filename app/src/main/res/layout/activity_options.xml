@@ -40,31 +40,19 @@
             app:titleTextColor="#ffffff"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
+            android:background="#00274b"
             android:minHeight="?attr/actionBarSize"
             android:textAlignment="center"
             android:id="@+id/toolbarOptions"
             ></android.support.v7.widget.Toolbar>
 
-            <Switch
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Select All"
-                android:textAlignment="textEnd"
-                android:paddingRight="10dp"
-                android:switchPadding="14.5dp"
-                android:padding="10dp"
-                android:id="@+id/selectAllSwitch"
-                android:theme="@style/SCBSwitch"
-                android:textColor="#fff"
-                android:textColorHint="#fff"
-                />
+
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabsOptions"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorPrimary">
+                android:background="#00274b">
 
 
             </android.support.design.widget.TabLayout>
@@ -102,7 +90,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="30dp"
         app:srcCompat="@android:drawable/ic_menu_sort_by_size"
-        app:backgroundTint="@color/Orange"
+        app:backgroundTint="#00274b"
         android:id="@+id/floatBtnOptions"/>
     </FrameLayout>
     <android.support.design.widget.NavigationView

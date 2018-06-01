@@ -1,6 +1,7 @@
 package app.stucre;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,14 +9,14 @@ import java.util.List;
  * Created by TI_Laptop-008 on 15/03/2018.
  */
 
-public class Vak {
+public class Vak implements Serializable {
 
 
     private String id;
     private String course;
     private String credit;
     private boolean checked;
-    private String creditPunten;
+    private Integer creditPunten;
     private boolean geslaagd = false;
     private int chance;
     private final static int chanceMax = 4;
@@ -36,7 +37,7 @@ public class Vak {
 
 
 
-    public Vak(String id, String course, String credit, String creditPunten, int fase, boolean geslaagd, boolean clickable) {
+    public Vak(String id, String course, String credit, Integer creditPunten, int fase, boolean geslaagd, boolean clickable) {
         this.id = id;
         this.course = course;
         this.credit = credit;
@@ -46,7 +47,7 @@ public class Vak {
         this.clickable = clickable;
         this.voltijdigheden = new  String[]{};
     }
-    public Vak(String id, String course, String credit, String creditPunten, int fase, int score ,boolean geslaagd, boolean clickable) {
+    public Vak(String id, String course, String credit, Integer creditPunten, int fase, int score ,boolean geslaagd, boolean clickable) {
         this.id = id;
         this.course = course;
         this.credit = credit;
@@ -58,7 +59,7 @@ public class Vak {
         this.voltijdigheden = new  String[]{};
     }
 
-    public Vak(String id, String course, String credit, String creditPunten, int fase, boolean geslaagd,String [] voltijdigheden, boolean clickable) {
+    public Vak(String id, String course, String credit, Integer creditPunten, int fase, boolean geslaagd,String [] voltijdigheden, boolean clickable) {
         this.id = id;
         this.course = course;
         this.credit = credit;
@@ -69,7 +70,7 @@ public class Vak {
         this.clickable = clickable;
     }
 
-    public Vak(String id, String course, String credit, String creditPunten, int fase, int score,boolean geslaagd,String [] voltijdigheden, boolean clickable) {
+    public Vak(String id, String course, String credit, Integer creditPunten, int fase, int score,boolean geslaagd,String [] voltijdigheden, boolean clickable) {
         this.id = id;
         this.course = course;
         this.credit = credit;
@@ -81,7 +82,7 @@ public class Vak {
         this.score = score;
     }
 
-    public Vak(String id, String course, String credit, boolean checked, String creditPunten,int fase, boolean geslaagd,String [] voltijdigheden, boolean clickable) {
+    public Vak(String id, String course, String credit, boolean checked, Integer creditPunten,int fase, boolean geslaagd,String [] voltijdigheden, boolean clickable) {
         this.id = id;
         this.course = course;
         this.credit = credit;
@@ -91,7 +92,7 @@ public class Vak {
         this.clickable = clickable;
     }
 
-    public Vak(String id, String course, String credit, boolean checked, String creditPunten, boolean geslaagd, int chance, int score, int fase, boolean isEnabled, String [] voltijdigheden,boolean clickable) {
+    public Vak(String id, String course, String credit, boolean checked, Integer creditPunten, boolean geslaagd, int chance, int score, int fase, boolean isEnabled, String [] voltijdigheden,boolean clickable) {
         this.id = id;
         this.course = course;
         this.credit = credit;
@@ -106,7 +107,7 @@ public class Vak {
         this.clickable = clickable;
     }
 
-    public Vak(String id, String course, String credit, boolean checked, String creditPunten, int fase, boolean geslaagd, int score, int chance, String [] voltijdigheden, boolean clickable) {
+    public Vak(String id, String course, String credit, boolean checked, Integer creditPunten, int fase, boolean geslaagd, int score, int chance, String [] voltijdigheden, boolean clickable) {
         this.id = id;
         this.course = course;
         this.credit = credit;
@@ -144,11 +145,11 @@ public class Vak {
     }
 
 
-    public String getCreditPunten() {
+    public Integer getCreditPunten() {
         return creditPunten;
     }
 
-    public void setCreditPunten(String creditPunten) {
+    public void setCreditPunten(Integer creditPunten) {
         this.creditPunten = creditPunten;
     }
 
@@ -229,13 +230,8 @@ public class Vak {
         return clickable;
     }
 
-
-
     public void setClickable(boolean clickable) {
         this.clickable = clickable;
     }
 
-    public void PassValueToDataBase(){
-
-    }
 }

@@ -101,51 +101,7 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
 
         clickOnVakken();
 
-        selectall = (Switch) getActivity().findViewById(R.id.selectAllSwitch);
 
-        selectall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if(b){
-                    for (Vak vak : VakkenEF3){
-                        vak.setChecked(true);
-                    }
-                    Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
-                }else{
-                    for (Vak vak : VakkenEF3){
-                        vak.setChecked(false);
-                    }
-                    Toasty.custom(getContext(), "- "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
-                }
-                cAEF3.notifyDataSetChanged();
-
-                if(b){
-                    for (Vak vak : VakkenEF3){
-                        boolean checked = vak.isChecked();
-                        String point = vak.getCreditPunten();
-                        count = Integer.parseInt(point);
-                        count++;
-                        int percent = (360/60) * (count+1);
-                        progressWheelElectivesFase3.setProgress(percent);
-                        progressWheelElectivesFase3.setText(Integer.toString(count)+" sp");
-                    }
-                    Toasty.custom(getContext(), "+ "+ count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
-                }else{
-                    for (Vak vak : VakkenEF3){
-                        boolean checked = vak.isChecked();
-                        String point = vak.getCreditPunten();
-                        count = Integer.parseInt(point);
-                        count--;
-                        int percent = (360/60) * (count+1);
-                        progressWheelElectivesFase3.setProgress(percent);
-                        progressWheelElectivesFase3.setText(Integer.toString(count)+" sp");
-                    }
-                    Toasty.custom(getContext(), "- "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
-                }
-
-            }
-        });
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
 
@@ -237,7 +193,8 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
                     Object fase = child.child("FASE").getValue(Object.class);
                     Object score = child.child("SCORE").getValue(Object.class);
                     Object succeeded = child.child("SUCCEEDED").getValue(Object.class);
-                    VakkenEF3.add(new Vak(course_id.toString(), course.toString(), credit.toString(),creditPunten.toString(),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
+                    VakkenEF3.add(new Vak(course_id.toString(), course.toString(), credit.toString(),Integer.parseInt(creditPunten.toString()),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
+
                     cAEF3.notifyDataSetChanged();
                 }
             }
@@ -255,12 +212,12 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
 
 
                 //String plaats = Vakken1.get(position).getCourse();
-                String point = VakkenEF3.get(position).getCreditPunten();
+               Integer point = VakkenEF3.get(position).getCreditPunten();
                 boolean checked = VakkenEF3.get(position).isChecked();
                 if(!checked){
                     VakkenEF3.get(position).setChecked(true);
                     if(!(count> 60)){
-                        count += Integer.parseInt(point);
+                        count += point;
                         Toasty.custom(getContext(), "+ "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.DKGRAY,Toast.LENGTH_SHORT,true,true).show();
                         int percent = (360/60) * count;
                         progressWheelElectivesFase3.setProgress(percent);
@@ -285,7 +242,7 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
                 }else{
                     VakkenEF3.get(position).setChecked(false);
                     if(!(count < 0)){
-                        count -= Integer.parseInt(point);
+                        count -= point;
                         Toasty.custom(getContext(), "- "+count+" sp.", getResources().getDrawable(R.drawable.booksstacktwee), Color.rgb(204,204,0),Toast.LENGTH_SHORT,true,true).show();
                         int percent = (360/60) * count;
                         progressWheelElectivesFase3.setProgress(percent);
@@ -347,7 +304,6 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
 
                     Vakken(pos, geslaagd);
                 }
-
 
 
 
@@ -446,13 +402,6 @@ public class ElectivesFase3 extends Fragment implements SearchView.OnQueryTextLi
                 checked = true;
                 if(scoreVak == null)
                     Toasty.error(getContext(), "Er werd geen vak geselecteerd", Toast.LENGTH_SHORT).show();
-
-                if (clicks > 4)
-                {
-                    Toasty.error(getContext(), "Je mag maar 3 keren uw score veranderen!!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
 
 
                 VakkenEF3.get(pos).setScore(Integer.parseInt(inputText.getText().toString()));

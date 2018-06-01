@@ -44,7 +44,8 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
 
     private RecyclerView recyclerViewDF3;
     private courseAdapter cA3;
-    private ArrayList<Vak> Vakken3;
+    private List<Vak> Vakken3 = new ArrayList<>();
+    private List<Vak> newVakken3 = new ArrayList<>();
     private ProgressWheel progressWheelFase3;
     private View dutiesLayout;
 
@@ -57,6 +58,7 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
     private int clicks = 0;
     private int input = 0;
     private boolean checked;
+
     private HashMap <String, Integer>scoreVak = new HashMap<String, Integer>();
 
 
@@ -70,6 +72,7 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vFase3 = inflater.inflate(R.layout.fragment_duties_fase3, container, false);
 
+        VakkenDatabase();
 
         return vFase3;
     }
@@ -82,9 +85,7 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
         recyclerViewDF3.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
-        //Real Data
-        Vakken3 = new ArrayList<>();
-        VakkenDatabase();
+
 
         cA3 = new courseAdapter(getContext(),Vakken3);
         recyclerViewDF3.setAdapter(cA3);
@@ -110,17 +111,18 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
                     for (Vak vak : Vakken3){
                         vak.setChecked(true);
                         boolean checked = vak.isChecked();
-                        String point = vak.getCreditPunten();
+                        Integer point = vak.getCreditPunten();
                         //count = Integer.parseInt(point);
                         //count++;
-                        count =+ 9;
-                        int percent = 360;
+                        count += point;
+                        int percent = 40 * point;
                         progressWheelFase3.setProgress(percent);
                         progressWheelFase3.setText(Integer.toString(count)+" sp");
                         cA3.notifyDataSetChanged();
 
                     }
 
+                    newVakken3 = Vakken3;
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                     builder.setMessage("Would like to continue?")
@@ -129,7 +131,9 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
 
-                                    Intent change = new Intent(getActivity(),profile.class);
+                                    Intent change = new Intent(getActivity(),electivesModules.class);
+                                    change.putExtra("Vaken2",count);
+                                    change.putExtra("D3",(ArrayList<Vak>)newVakken3);
                                     startActivity(change);
 
                                 }
@@ -147,16 +151,18 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
                     for (Vak vak : Vakken3) {
                         vak.setChecked(false);
                         boolean checked = vak.isChecked();
-                        String point = vak.getCreditPunten();
-                        //count = Integer.parseInt(point);
+                        Integer point = vak.getCreditPunten();
+                        count -= point;
                         //count--;
-                        count = 0;
+
                         int percent = 0;
                         progressWheelFase3.setProgress(percent);
                         progressWheelFase3.setText(Integer.toString(count) + " sp");
                         cA3.notifyDataSetChanged();
 
                     }
+
+                    newVakken3 = new ArrayList<>();
                 }
 
             }
@@ -254,9 +260,13 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
                 for (DataSnapshot child:children) {
                     Object course_id = child.child("COURSE_ID").getValue(Object.class);
                     Object course = child.child("COURSE").getValue(Object.class);
-                    Object credit = child.child("CREDITS").getValue(Object.class);
-                    Object creditPunten = child.child("CREDITS").getValue(Object.class);
-                    //Vakken3.add(new Vak(course_id.toString(),course.toString(),credit.toString()+" sp.",creditPunten.toString()));
+                    Object credit = child.child("CREDIT").getValue(Object.class);
+                    Object creditPunten = child.child("CREDITPOINT").getValue(Object.class);
+                    Object fase = child.child("FASE").getValue(Object.class);
+                    Object score = child.child("SCORE").getValue(Object.class);
+                    Object succeeded = child.child("SUCCEEDED").getValue(Object.class);
+                    Vakken3.add(new Vak(course_id.toString(), course.toString(), credit.toString(),Integer.parseInt(creditPunten.toString()),Integer.parseInt(fase.toString()),Integer.parseInt(score.toString()),Boolean.valueOf(succeeded.toString()),false));
+
                     cA3.notifyDataSetChanged();
                 }
             }
@@ -274,15 +284,16 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
 
 
                 //String plaats = Vakken1.get(position).getCourse();
-                String point = Vakken3.get(position).getCreditPunten();
+                Integer point = Vakken3.get(position).getCreditPunten();
                 boolean checked = Vakken3.get(position).isChecked();
 
                 //btnSend.setEnabled(false);
 
                 if(!checked) {
                     Vakken3.get(position).setChecked(true);
+                    newVakken3.add(Vakken3.get(position));
                     if(!(count> 60)){
-                        count += Integer.parseInt(point);
+                        count += point;
                         int percent = (360/9) * count;
                         progressWheelFase3.setProgress(percent);
                         progressWheelFase3.setText(Integer.toString(count)+" sp");
@@ -322,8 +333,9 @@ public class DutiesFase3 extends Fragment implements android.support.v7.widget.S
                     }
                 }else{
                     Vakken3.get(position).setChecked(false);
+                    newVakken3.remove(Vakken3.get(position));
                     if(!(count <= 0)){
-                        count -= Integer.parseInt(point);
+                        count -= point;
                         int percent = (360/9) * count;
                         progressWheelFase3.setProgress(percent);
                         progressWheelFase3.setText(Integer.toString(count)+" sp");

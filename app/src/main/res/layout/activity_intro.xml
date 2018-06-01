@@ -51,7 +51,7 @@
             android:id="@+id/Signinbtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Login with Google"
+            android:text="Login with Phone number"
             android:layout_marginBottom="10dp"
             android:background="#96c71610"
             android:textColor="#FFFF"
@@ -70,7 +70,7 @@
             android:id="@+id/SigninEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="login with EMail"
+            android:text="Test Login"
             android:background="#96ea9f0d"
             android:textColor="#FFFF"/>
 

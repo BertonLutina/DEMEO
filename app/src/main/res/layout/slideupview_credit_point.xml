@@ -10,14 +10,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="350dp"
         android:gravity="center"
         android:layout_centerVertical="true"
         android:id="@+id/Progress_bar_points">
 
         <com.todddavies.components.progressbar.ProgressWheel
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_width="350dp"
+            android:layout_height="match_parent"
             ProgressWheel:pwTextColor="@color/colorPrimaryDark"
             ProgressWheel:pwTextSize="40sp"
             ProgressWheel:pwRimColor="#fff"
@@ -26,7 +26,7 @@
             ProgressWheel:pwBarWidth="50dp"
             ProgressWheel:pwRimWidth="1dp"
             ProgressWheel:pwText="0 sp"
-            android:layout_marginBottom="30dp"
+
             ProgressWheel:pwContourColor="@color/colorPrimaryDark"
             ProgressWheel:pwContourSize="0.5dp"
             android:id="@+id/count_progressBar"
@@ -40,9 +40,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="170dp"
+        android:layout_below="@id/Progress_bar_points"
         android:gravity="center"
         android:id="@+id/creditstxt">
 
@@ -50,20 +48,19 @@
             android:id="@+id/text_Credit_fase3"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
+            android:layout_margin="20dp"
             android:text="Credits"
             android:textAlignment="center"
-            android:textSize="16sp" />
+            android:textSize="19sp" />
 
 
     </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_below="@id/Progress_bar_points"
+    android:layout_below="@id/creditstxt"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:layout_marginTop="30dp"
     android:descendantFocusability="blocksDescendants">
     <Button
         android:id="@+id/versturen_credits"
@@ -84,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="49dp"
+        android:layout_marginTop="100dp"
         android:gravity="center"
         android:text="SWIPE DOWN TO GO BACK..."
         android:textSize="18sp"
@@ -98,8 +95,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
-        app:srcCompat="?android:attr/findOnPageNextDrawable" />
+        android:layout_marginTop="80dp"/>
+
 
     <ImageView
         android:id="@+id/imageView8"
@@ -108,7 +105,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="106dp"
-        app:srcCompat="?android:attr/findOnPageNextDrawable"
+
          />
 
 

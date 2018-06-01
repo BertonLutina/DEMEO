@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -59,6 +61,13 @@ public class Opleiding extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opleiding);
 
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(R.color.Blauw));
+        }
+
 
 
         oplBM = findViewById(R.id.opleidingBM);
@@ -106,24 +115,24 @@ public class Opleiding extends AppCompatActivity {
 
     private void VakkenDutiesFase1(){
         Vakken1 = new ArrayList<>();
-        Vakken1.add(new Vak("HBI09B","ICT Organisation 1", "4 sp","4",1,0,false,true));
-        Vakken1.add(new Vak("HBI10B","ICT Organisation 2", "4 sp","4",1,0,false,true));
-        Vakken1.add(new Vak("HBI18B","Mobile en internet 1", "3 sp","3",1,0,false,true));
-        Vakken1.add(new Vak("HBI19B","Mobile en internet 2", "3 sp","3",1,0,false,true));
-        Vakken1.add(new Vak("HBI20B","System Management 1", "3 sp","3",1,0,false,true));
-        Vakken1.add(new Vak("HBI21B","System Management 2", "3 sp","3",1,0,false,true));
-        Vakken1.add(new Vak("HBI22B","Network Management 1", "3 sp","3",1,0,false,true));
-        Vakken1.add(new Vak("HBI23B","Network Management 2", "3 sp","3",1,0,false,true));
-        Vakken1.add(new Vak("HBI59B","Communicatietraining 1", "4 sp","4",1,0,false,true));
-        Vakken1.add(new Vak("HBI60B","Communicatietraining 2", "4 sp","4",1,0,false,true));
-        Vakken1.add(new Vak("HBI61B","Information management 1", "3 sp","3",1,0,false,true));
-        Vakken1.add(new Vak("HBI62B","Information management 2", "3 sp","3",1,0,false,true));
-        Vakken1.add(new Vak("HBI63B","Database development 1", "3 sp","3",1,0,false,true));
-        Vakken1.add(new Vak("HBI64B","Database development 2", "3 sp","3",1,0,false,true));
-        Vakken1.add(new Vak("HBI65B","Application development 1", "4 sp","4",1,0,false,true));
-        Vakken1.add(new Vak("HBI66B","Application development 2", "4 sp","4",1,0,false,true));
-        Vakken1.add(new Vak("HBI77B","Software engineering 1", "3 sp","3",1,0,false,true));
-        Vakken1.add(new Vak("HBI78B","Software engineering 2", "3 sp","3",1,0,false,true));
+        Vakken1.add(new Vak("HBI09B","ICT Organisation 1", "4 sp",4,1,0,false,true));
+        Vakken1.add(new Vak("HBI10B","ICT Organisation 2", "4 sp",4,1,0,false,true));
+        Vakken1.add(new Vak("HBI18B","Mobile en internet 1", "3 sp",3,1,0,false,true));
+        Vakken1.add(new Vak("HBI19B","Mobile en internet 2", "3 sp",3,1,0,false,true));
+        Vakken1.add(new Vak("HBI20B","System Management 1", "3 sp",3,1,0,false,true));
+        Vakken1.add(new Vak("HBI21B","System Management 2", "3 sp",3,1,0,false,true));
+        Vakken1.add(new Vak("HBI22B","Network Management 1", "3 sp",3,1,0,false,true));
+        Vakken1.add(new Vak("HBI23B","Network Management 2", "3 sp",3,1,0,false,true));
+        Vakken1.add(new Vak("HBI59B","Communicatietraining 1", "4 sp",4,1,0,false,true));
+        Vakken1.add(new Vak("HBI60B","Communicatietraining 2", "4 sp",4,1,0,false,true));
+        Vakken1.add(new Vak("HBI61B","Information management 1", "3 sp",3,1,0,false,true));
+        Vakken1.add(new Vak("HBI62B","Information management 2", "3 sp",3,1,0,false,true));
+        Vakken1.add(new Vak("HBI63B","Database development 1", "3 sp",3,1,0,false,true));
+        Vakken1.add(new Vak("HBI64B","Database development 2", "3 sp",3,1,0,false,true));
+        Vakken1.add(new Vak("HBI65B","Application development 1", "4 sp",4,1,0,false,true));
+        Vakken1.add(new Vak("HBI66B","Application development 2", "4 sp",4,1,0,false,true));
+        Vakken1.add(new Vak("HBI77B","Software engineering 1", "3 sp",3,1,0,false,true));
+        Vakken1.add(new Vak("HBI78B","Software engineering 2", "3 sp",3,1,0,false,true));
 
 
 
@@ -142,66 +151,66 @@ public class Opleiding extends AppCompatActivity {
         mobile3 = new String []{"Mobile en internet 2"};
 
         Vakken1_voltijdigheid = new ArrayList<>();
-        Vakken2.add(new Vak("HBI02C","ICT Organisation 4", "4 sp","4",2,0,false,true));
-        Vakken2.add(new Vak("HBI25B","ICT Organisation 3", "4 sp","4",2,0,false,ict3,true));
-        Vakken2.add(new Vak("HBI34B","Mobile en internet 3", "3 sp ","3",2,0,false,mobile3,true));
-        Vakken2.add(new Vak("HBI36B","System Management 3", "3 sp","3",2,0,false,system3,true));
-        Vakken2.add(new Vak("HBI38B","Network Management 3", "3 sp","3",2,0,false,netwerk3,true));
-        Vakken2.add(new Vak("HBI68B","Communicatietraining 4", "4 sp","4",2,0,false,true));
-        Vakken2.add(new Vak("HBI69B","Information management 3", "3sp","3",2,0,false,true));
-        Vakken2.add(new Vak("HBI70B","Information management 4", "3sp","3",2,0,false,true));
-        Vakken2.add(new Vak("HBI71B","Database development 3", "3 sp","3",2,0,false,database3,true));
-        Vakken2.add(new Vak("HBI73B","Application development 3", "3 sp","3",2,0,false,application3,true));
-        Vakken2.add(new Vak("OH3100","Software Engineering 3", "3 sp","3",2,0,false,software3,true));
-        Vakken2.add(new Vak("OH4100","Communicatietraining 3", "6 sp","6",2,0,false,true));
+        Vakken2.add(new Vak("HBI02C","ICT Organisation 4", "4 sp",4,2,0,false,true));
+        Vakken2.add(new Vak("HBI25B","ICT Organisation 3", "4 sp",4,2,0,false,ict3,true));
+        Vakken2.add(new Vak("HBI34B","Mobile en internet 3", "3 sp ",3,2,0,false,mobile3,true));
+        Vakken2.add(new Vak("HBI36B","System Management 3", "3 sp",3,2,0,false,system3,true));
+        Vakken2.add(new Vak("HBI38B","Network Management 3", "3 sp",3,2,0,false,netwerk3,true));
+        Vakken2.add(new Vak("HBI68B","Communicatietraining 4", "4 sp",4,2,0,false,true));
+        Vakken2.add(new Vak("HBI69B","Information management 3", "3sp",3,2,0,false,true));
+        Vakken2.add(new Vak("HBI70B","Information management 4", "3sp",3,2,0,false,true));
+        Vakken2.add(new Vak("HBI71B","Database development 3", "3 sp",3,2,0,false,database3,true));
+        Vakken2.add(new Vak("HBI73B","Application development 3", "3 sp",3,2,0,false,application3,true));
+        Vakken2.add(new Vak("OH3100","Software Engineering 3", "3 sp",3,2,0,false,software3,true));
+        Vakken2.add(new Vak("OH4100","Communicatietraining 3", "6 sp",6,2,0,false,true));
     }
     private void VakkenDutiesFase3(){
         Vakken3 = new ArrayList<>();
-        Vakken3.add(new Vak("HBI04C","IM 5 - Big Data", "3 sp","3",3,0,false,true));
-        Vakken3.add(new Vak("HBI07C","Business Ethics", "3 sp","3",3,0,false,true));
-        Vakken3.add(new Vak("HBI12C","ICT 5: Creative Entrepreneurship", "3 sp","3",3,0,false,true));
+        Vakken3.add(new Vak("HBI04C","IM 5 - Big Data", "3 sp",3,3,0,false,true));
+        Vakken3.add(new Vak("HBI07C","Business Ethics", "3 sp",3,3,0,false,true));
+        Vakken3.add(new Vak("HBI12C","ICT 5: Creative Entrepreneurship", "3 sp",3,3,0,false,true));
     }
     private void VakkenEMA(){
         VakkenEmA = new ArrayList<>();
-        VakkenEmA.add(new Vak("OH3101","Software Engineering 4", "6 sp","6",2,0,false,true));
-        VakkenEmA.add(new Vak("OH3102","Application Development 4", "6 sp","6",2,0,false,true));
-        VakkenEmA.add(new Vak("OH3103","Database Development 4", "6 sp","6",2,0,false,true));
-        VakkenEmA.add(new Vak("HBI03C","Software Engineering 5: Software testing", "4 sp","4",3,0,false,true));
-        VakkenEmA.add(new Vak("HBI84B","Application Development 5", "4 sp","4",3,0,false,true));
-        VakkenEmA.add(new Vak("OH3107","Usability and Interaction Design", "4 sp","4",3,0,false,true));
-        VakkenEmA.add(new Vak("OH3107","Integration project software", "9 sp","9",3,0,false,true));
+        VakkenEmA.add(new Vak("OH3101","Software Engineering 4", "6 sp",6,2,0,false,true));
+        VakkenEmA.add(new Vak("OH3102","Application Development 4", "6 sp",6,2,0,false,true));
+        VakkenEmA.add(new Vak("OH3103","Database Development 4", "6 sp",6,2,0,false,true));
+        VakkenEmA.add(new Vak("HBI03C","Software Engineering 5: Software testing", "4 sp",4,3,0,false,true));
+        VakkenEmA.add(new Vak("HBI84B","Application Development 5", "4 sp",4,3,0,false,true));
+        VakkenEmA.add(new Vak("HBI86B","Usability and Interaction Design", "4 sp",4,3,0,false,true));
+        VakkenEmA.add(new Vak("OH3107","Integration project software", "9 sp",9,3,0,false,true));
     }
     private void VakkenEMB(){
         VakkenEmB = new ArrayList<>();
-        VakkenEmB.add(new Vak("OH3104","Mobile and Internet 4", "6 sp","6",2,0,false,true));
-        VakkenEmB.add(new Vak("OH3105","System Management 4", "6 sp","6",2,0,false,true));
-        VakkenEmB.add(new Vak("OH4101","Network Management 4", "6 sp","6",2,0,false,true));
-        VakkenEmB.add(new Vak("HBI87B","System Management 5 : Datacenter and cloud", "4 sp","4",3,0,false,true));
-        VakkenEmB.add(new Vak("HBI97B","Security Management 5 and Information Security", "4 sp","4",3,0,false,true));
-        VakkenEmB.add(new Vak("OH3108","Mobile & Internet 5: Smart App", "4 sp","4",3,0,false,true));
-        VakkenEmB.add(new Vak("OH3109","Integration project Internet and Cloud", "9 sp","9",3,0,false,true));
+        VakkenEmB.add(new Vak("OH3104","Mobile and Internet 4", "6 sp",6,2,0,false,true));
+        VakkenEmB.add(new Vak("OH3105","System Management 4", "6 sp",6,2,0,false,true));
+        VakkenEmB.add(new Vak("OH4101","Network Management 4", "6 sp",6,2,0,false,true));
+        VakkenEmB.add(new Vak("HBI87B","System Management 5 : Datacenter and cloud", "4 sp",4,3,0,false,true));
+        VakkenEmB.add(new Vak("HBI97B","Security Management 5 and Information Security", "4 sp",4,3,0,false,true));
+        VakkenEmB.add(new Vak("OH3108","Mobile & Internet 5: Smart App", "4 sp",4,3,0,false,true));
+        VakkenEmB.add(new Vak("OH3109","Integration project Internet and Cloud", "9 sp",9,3,0,false,true));
     }
     private void VakkenEF3(){
         VakkenEF3 = new ArrayList<>();
-        VakkenEF3.add(new Vak("HBI33A","Sales and Customer interaction", "3 sp","3",3,0,false,true));
-        VakkenEF3.add(new Vak("HBI47B","Content management", "3 sp","3",3,0,false,true));
-        VakkenEF3.add(new Vak("HBI53B","Advanced Switching", "6 sp","6",3,0,false,true));
-        VakkenEF3.add(new Vak("HBI54B","Advanced Routing", "6 sp","6",3,0,false,true));
-        VakkenEF3.add(new Vak("OBI01A","ICT Partner Training", "3 sp","3",3,0,false,true));
-        VakkenEF3.add(new Vak("OBI02A","ICT Partner Training B", "4 sp","4",3,0,false,true));
-        VakkenEF3.add(new Vak("OBI03A","ICT Partner Training C", "5 sp","5",3,0,false,true));
-        VakkenEF3.add(new Vak("OBI04A","ICT Partner Training D", "6 sp","6",3,0,false,true));
+        VakkenEF3.add(new Vak("HBI33A","Sales and Customer interaction", "3 sp",3,3,0,false,true));
+        VakkenEF3.add(new Vak("HBI47B","Content management", "3 sp",3,3,0,false,true));
+        VakkenEF3.add(new Vak("HBI53B","Advanced Switching", "6 sp",6,3,0,false,true));
+        VakkenEF3.add(new Vak("HBI54B","Advanced Routing", "6 sp",6,3,0,false,true));
+        VakkenEF3.add(new Vak("OBI01A","ICT Partner Training", "3 sp",3,3,0,false,true));
+        VakkenEF3.add(new Vak("OBI02A","ICT Partner Training B", "4 sp",4,3,0,false,true));
+        VakkenEF3.add(new Vak("OBI03A","ICT Partner Training C", "5 sp",5,3,0,false,true));
+        VakkenEF3.add(new Vak("OBI04A","ICT Partner Training D", "6 sp",6,3,0,false,true));
     }
     private void VakkenOption(){
         VakkenOF3 = new ArrayList<>();
-        VakkenOF3.add(new Vak("OBI07A","Intercommunautaire stagemobiliteit","24 sp","24",3,0,false,true));
-        VakkenOF3.add(new Vak("HBI89B","Stagemobiliteit in Vlaanderen","24 sp", "24",3,0,false,true));
-        VakkenOF3.add(new Vak("HBI90B","Stagemobiliteit in Europa","24 sp","24",3,0,false,true));
-        VakkenOF3.add(new Vak("HBI91B","Stagemobiliteit buiten Europa","24 sp","24",3,0,false,true));
-        VakkenOF3.add(new Vak("OS3000","Buiten Europa: voorbereid op stage","3 sp","3",3,0,false,true));
-        VakkenOF3.add(new Vak("HBI92B","Studiemobiliteit in of buiten Europa", "3 sp", "3",3,0,false,true));
-        VakkenOF3.add(new Vak("OBI05A","Werkplekleren: ICT Partner Training","12 sp","12",3,0,false,true));
-        VakkenOF3.add(new Vak("OBI06A", "Stageproject","12 sp","12",3,0,false,true));
+        VakkenOF3.add(new Vak("OBI07A","Intercommunautaire stagemobiliteit","24 sp",24,3,0,false,true));
+        VakkenOF3.add(new Vak("HBI89B","Stagemobiliteit in Vlaanderen","24 sp", 24,3,0,false,true));
+        VakkenOF3.add(new Vak("HBI90B","Stagemobiliteit in Europa","24 sp",24,3,0,false,true));
+        VakkenOF3.add(new Vak("HBI91B","Stagemobiliteit buiten Europa","24 sp",24,3,0,false,true));
+        VakkenOF3.add(new Vak("OS3000","Buiten Europa: voorbereid op stage","3 sp",3,3,0,false,true));
+        VakkenOF3.add(new Vak("HBI92B","Studiemobiliteit in of buiten Europa", "3 sp", 3,3,0,false,true));
+        VakkenOF3.add(new Vak("OBI05A","Werkplekleren: ICT Partner Training","12 sp",12,3,0,false,true));
+        VakkenOF3.add(new Vak("OBI06A", "Stageproject","12 sp",12,3,0,false,true));
     }
 
 
@@ -213,45 +222,45 @@ public class Opleiding extends AppCompatActivity {
         VakkenDutiesFase3();
 
         Map<String,String> map = new HashMap<>();
-        for(final Vak ef3 : Vakken1){
-            String id = ef3.getId();
-            map.put("COURSE_ID",ef3.getId());
-            map.put("COURSE",ef3.getCourse());
-            map.put("CREDIT",ef3.getCredit());
-            map.put("CREDITPOINT",ef3.getCreditPunten());
-            map.put("SCORE",String.valueOf(ef3.getScore()));
-            map.put("FASE",String.valueOf(ef3.getFase()));
-            map.put("SUCCEEDED",String.valueOf(ef3.isGeslaagd()));
+        for(final Vak d1 : Vakken1){
+            String id = d1.getId();
+            map.put("COURSE_ID",d1.getId());
+            map.put("COURSE",d1.getCourse());
+            map.put("CREDIT",d1.getCredit());
+            map.put("CREDITPOINT",String.valueOf(d1.getCreditPunten()));
+            map.put("SCORE",String.valueOf(d1.getScore()));
+            map.put("FASE",String.valueOf(d1.getFase()));
+            map.put("SUCCEEDED",String.valueOf(d1.isGeslaagd()));
 
             Modules.child("Bedrijfskunde").child("TI").child("Duties").child("fase 1").child(id).setValue(map);
 
         }
 
         Map<String,String> map2 = new HashMap<>();
-        for(final Vak ef3 : Vakken2){
-            String id = ef3.getId();
-            map2.put("COURSE_ID",ef3.getId());
-            map2.put("COURSE",ef3.getCourse());
-            map2.put("CREDIT",ef3.getCredit());
-            map2.put("CREDITPOINT",ef3.getCreditPunten());
-            map2.put("SCORE",String.valueOf(ef3.getScore()));
-            map2.put("FASE",String.valueOf(ef3.getFase()));
-            map2.put("SUCCEEDED",String.valueOf(ef3.isGeslaagd()));
+        for(final Vak d2 : Vakken2){
+            String id = d2.getId();
+            map2.put("COURSE_ID",d2.getId());
+            map2.put("COURSE",d2.getCourse());
+            map2.put("CREDIT",d2.getCredit());
+            map2.put("CREDITPOINT",String.valueOf(d2.getCreditPunten()));
+            map2.put("SCORE",String.valueOf(d2.getScore()));
+            map2.put("FASE",String.valueOf(d2.getFase()));
+            map2.put("SUCCEEDED",String.valueOf(d2.isGeslaagd()));
 
             Modules.child("Bedrijfskunde").child("TI").child("Duties").child("fase 2").child(id).setValue(map2);
 
         }
 
         Map<String,String> map3 = new HashMap<>();
-        for(final Vak ef3 : Vakken3){
-            String id = ef3.getId();
-            map3.put("COURSE_ID",ef3.getId());
-            map3.put("COURSE",ef3.getCourse());
-            map3.put("CREDIT",ef3.getCredit());
-            map3.put("CREDITPOINT",ef3.getCreditPunten());
-            map3.put("SCORE",String.valueOf(ef3.getScore()));
-            map3.put("FASE",String.valueOf(ef3.getFase()));
-            map3.put("SUCCEEDED",String.valueOf(ef3.isGeslaagd()));
+        for(final Vak d3 : Vakken3){
+            String id = d3.getId();
+            map3.put("COURSE_ID",d3.getId());
+            map3.put("COURSE",d3.getCourse());
+            map3.put("CREDIT",d3.getCredit());
+            map3.put("CREDITPOINT",String.valueOf(d3.getCreditPunten()));
+            map3.put("SCORE",String.valueOf(d3.getScore()));
+            map3.put("FASE",String.valueOf(d3.getFase()));
+            map3.put("SUCCEEDED",String.valueOf(d3.isGeslaagd()));
 
             Modules.child("Bedrijfskunde").child("TI").child("Duties").child("fase 3").child(id).setValue(map3);
 
@@ -262,41 +271,68 @@ public class Opleiding extends AppCompatActivity {
         VakkenEMA();
         VakkenEMB();
         Map<String,String> map = new HashMap<>();
+        Map<String,String> map4 = new HashMap<>();
         for(final Vak Ema : VakkenEmA){
 
+            if(Ema.getFase() == 2){
             String id = Ema.getId();
             map.put("COURSE_ID",Ema.getId());
             map.put("COURSE",Ema.getCourse());
             map.put("CREDIT",Ema.getCredit());
-            map.put("CREDITPOINT",Ema.getCreditPunten());
+            map.put("CREDITPOINT",String.valueOf(Ema.getCreditPunten()));
             map.put("SCORE",String.valueOf(Ema.getScore()));
             map.put("FASE",String.valueOf(Ema.getFase()));
             map.put("SUCCEEDED",String.valueOf(Ema.isGeslaagd()));
 
-            if(Ema.getFase() == 2){
+
             Modules.child("Bedrijfskunde").child("TI").child("Electives Modules").child("Option A: Design and Build Software").child("fase 2").child(id).setValue(map);
-            }
-            Modules.child("Bedrijfskunde").child("TI").child("Electives Modules").child("Option A: Design and Build Software").child("fase 3").child(id).setValue(map);
+            }else if(Ema.getFase() == 3){
+
+                    String id = Ema.getId();
+                    map4.put("COURSE_ID",Ema.getId());
+                    map4.put("COURSE",Ema.getCourse());
+                    map4.put("CREDIT",Ema.getCredit());
+                    map4.put("CREDITPOINT",String.valueOf(Ema.getCreditPunten()));
+                    map4.put("SCORE",String.valueOf(Ema.getScore()));
+                    map4.put("FASE",String.valueOf(Ema.getFase()));
+                    map4.put("SUCCEEDED",String.valueOf(Ema.isGeslaagd()));
+                    Modules.child("Bedrijfskunde").child("TI").child("Electives Modules").child("Option A: Design and Build Software").child("fase 3").child(id).setValue(map4);
+
+        }
+
 
 
         }
 
+
+
         Map<String,String> map2 = new HashMap<>();
+        Map<String,String> map3 = new HashMap<>();
         for(final Vak Emb : VakkenEmB){
 
+            if(Emb.getFase() == 2){
             String id = Emb.getId();
             map2.put("COURSE_ID",Emb.getId());
             map2.put("COURSE",Emb.getCourse());
             map2.put("CREDIT",Emb.getCredit());
-            map2.put("CREDITPOINT",Emb.getCreditPunten());
+            map2.put("CREDITPOINT",String.valueOf(Emb.getCreditPunten()));
             map2.put("SCORE",String.valueOf(Emb.getScore()));
             map2.put("FASE",String.valueOf(Emb.getFase()));
             map2.put("SUCCEEDED",String.valueOf(Emb.isGeslaagd()));
-
-            if(Emb.getFase() == 2){
                 Modules.child("Bedrijfskunde").child("TI").child("Electives Modules").child("Option B: Manage Internet and Cloud").child("fase 2").child(id).setValue(map2);
             }
-            Modules.child("Bedrijfskunde").child("TI").child("Electives Modules").child("Option B: Manage Internet and Cloud").child("fase 3").child(id).setValue(map2);
+            else if(Emb.getFase() == 3)
+            {
+                String id = Emb.getId();
+                map3.put("COURSE_ID",Emb.getId());
+                map3.put("COURSE",Emb.getCourse());
+                map3.put("CREDIT",Emb.getCredit());
+                map3.put("CREDITPOINT",String.valueOf(Emb.getCreditPunten()));
+                map3.put("SCORE",String.valueOf(Emb.getScore()));
+                map3.put("FASE",String.valueOf(Emb.getFase()));
+                map3.put("SUCCEEDED",String.valueOf(Emb.isGeslaagd()));
+            Modules.child("Bedrijfskunde").child("TI").child("Electives Modules").child("Option B: Manage Internet and Cloud").child("fase 3").child(id).setValue(map3);
+            }
 
         }
     }
@@ -310,7 +346,7 @@ public class Opleiding extends AppCompatActivity {
             map.put("COURSE_ID",ef3.getId());
             map.put("COURSE",ef3.getCourse());
             map.put("CREDIT",ef3.getCredit());
-            map.put("CREDITPOINT",ef3.getCreditPunten());
+            map.put("CREDITPOINT",String.valueOf(ef3.getCreditPunten()));
             map.put("SCORE",String.valueOf(ef3.getScore()));
             map.put("FASE",String.valueOf(ef3.getFase()));
             map.put("SUCCEEDED",String.valueOf(ef3.isGeslaagd()));
@@ -329,7 +365,7 @@ public class Opleiding extends AppCompatActivity {
             map.put("COURSE_ID",Of3.getId());
             map.put("COURSE",Of3.getCourse());
             map.put("CREDIT",Of3.getCredit());
-            map.put("CREDITPOINT",Of3.getCreditPunten());
+            map.put("CREDITPOINT",String.valueOf(Of3.getCreditPunten()));
             map.put("SCORE",String.valueOf(Of3.getScore()));
             map.put("FASE",String.valueOf(Of3.getFase()));
             map.put("SUCCEEDED",String.valueOf(Of3.isGeslaagd()));
